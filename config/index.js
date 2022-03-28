@@ -27,6 +27,7 @@ const MongoStore = require("connect-mongo");
 
 // Connects the mongo uri to maintain the same naming structure
 const MONGO_URI = require("../utils/consts");
+const app = require("../app");
 
 // Middleware configuration
 module.exports = (app) => {
@@ -61,4 +62,6 @@ module.exports = (app) => {
       }),
     })
   );
+  const globalParam = require("../middleware/globalParam");
+  app.use(globalParam)
 };
