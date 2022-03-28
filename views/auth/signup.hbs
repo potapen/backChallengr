@@ -1,9 +1,18 @@
 <form action="/auth/signup" method="POST">
+   <label> email
+      <input type="text" name="email">
+   </label>
    <label> Username
       <input type="text" name="username">
    </label>
    <label> Password
       <input type="password" name="password">
+   </label>
+   <label> pictureUrl
+      <input type="text" name="pictureUrl">
+   </label>
+   <label> isAdmin
+      <input type="Boolean" name="username">
    </label>
 
    <button type="submit">Submit</button>
@@ -12,3 +21,20 @@
 {{#if errorMessage}}
    {{errorMessage}}
 {{/if}}
+
+{{!-- const userSchema = new Schema(
+  {
+    email: {
+      type: String,
+      unique: true,
+    },
+    username: String,
+    password: String,
+    pictureUrl: String,
+    isAdmin: Boolean,
+  },
+  {
+    // this second object adds extra properties: `createdAt` and `updatedAt`
+    timestamps: true,
+  }
+); --}}

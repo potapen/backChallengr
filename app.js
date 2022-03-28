@@ -21,7 +21,8 @@ require("./config")(app);
 const capitalized = require("./utils/capitalized");
 const projectName = "challengr";
 
-app.locals.appTitle = `${capitalized(projectName)} created with IronLauncher`;
+//locals is reachable from hbs views. You can edit add res.locals from the middleware
+app.locals.appTitle = `Project ${capitalized(projectName)} by Ze !Dream Team`;
 
 // 👇 Start handling routes here
 const index = require("./routes/index.routes");
