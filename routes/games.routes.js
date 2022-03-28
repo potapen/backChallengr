@@ -1,10 +1,7 @@
-// starter code in both routes/games.routes.js and routes/Games.routes.js
 const router = require("express").Router();
-const cookieParser = require("cookie-parser");
+
 const Game = require("../models/Game.model");
 const League = require("../models/League.model");
-
-// all your routes here
 
 router.get("/", async (req, res, next) => {
   try {

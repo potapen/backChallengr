@@ -34,6 +34,9 @@ app.use("/auth", authRoutes);
 const gamesRoutes = require("./routes/games.routes");
 app.use("/games", gamesRoutes);
 
+const leaguesRoutes = require("./routes/leagues.routes");
+app.use("/leagues", leaguesRoutes);
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
 
