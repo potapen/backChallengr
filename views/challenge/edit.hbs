@@ -1,0 +1,45 @@
+create challenge
+{{games}}
+<form action="/challenge/edit" method="POST">
+  <label> league
+      <select name="game">
+          {{#each leagues}}
+              <option value="{{id}}">{{name}}</option>
+          {{/each}}
+      </select>
+    {{!-- <input type="text" name="league" value="{{league}}"> --}}
+  </label>
+  <label> game
+      <select name="game">
+          {{#each games}}
+              <option value="{{id}}">{{name}}</option>
+          {{/each}}
+      </select>
+  </label>
+  <label> contenders
+      <select name="contenders" multiple>
+          {{#each users}}
+              <option value="{{id}}">{{username}}</option>
+          {{/each}}
+      </select>
+  </label>
+  <label>stake
+    <input type="Number" name="stake">
+  </label>
+  <label>isCompleted
+    <input type="checkbox" name="isCompleted">
+  </label>
+  <label> winners
+      <select name="winners" multiple>
+          {{#each users}}
+              <option value="{{id}}">{{username}}</option>
+          {{/each}}
+      </select>
+  </label>
+
+  <button type="submit">Edit Your Challenge</button>
+</form>
+
+{{#if errorMessage}}
+   {{errorMessage}}
+{{/if}}

@@ -5,8 +5,34 @@ const League = require("../models/League.model");
 const User = require("../models/User.model");
 
 /* GET home page */
+
 router.get("/", (req, res, next) => {
-  res.send("challenge!");
+  res.send('challenge');
+});
+
+router.get("/list", async (req, res, next) => {
+  console.log('---------------------------------------- req.query: ', req.query);
+  const {league} = req.query;
+  if(league){
+    const challenges = await Challenge.find(
+      {league}
+    ).populate('league')
+    .populate('game')
+    .populate('contenders')
+
+    const data = {
+      challenges,
+    };
+    console.log('---------------------------------------- data: ', data);
+    res.render("challenge/listWithLeagueID", data);
+  }
+  else{
+    const leagues = await League.find();
+    const data = {
+      leagues,
+    }
+    res.render("challenge/list", data);
+  }
 });
 
 router.get("/create", async (req, res, next) => {
@@ -36,10 +62,35 @@ router.get("/create", async (req, res, next) => {
 router.post("/create", async (req, res, next) => {
   console.log('req.body :', req.body)
   const challengeToCreate = req.body
+  console.log('challengeToCreate: ', challengeToCreate)
   const challengeCreated = await Challenge.create(challengeToCreate)
+  console.log('challengeCreated: ', challengeCreated)
   res.send("create post")
 });
 
+router.get("/edit/:challengeID", async (req, res, next) => {
+  const {challengeID} = req.params
+  console.log('---------------------------challengeID: ', challengeID)
+  const challengeToEdit = await Challenge.findById(challengeID)
+  .populate('contenders')
+  .populate('league')
+  .populate('game')
+  .populate('winners')
+  .populate('stake')
+  .populate('isCompleted')
+  console.log(challengeToEdit)
+  
+  const users = await User.find();
+  const leagues = await League.find();
+  const games = await Game.find();
+  const data = {
+    users,
+    leagues,
+    games,
+    challenge: challengeToEdit,
+  }
+  res.render('challenge/edit',data)
+});
 
 module.exports = router;
 
