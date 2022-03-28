@@ -33,9 +33,11 @@ router.get("/create", async (req, res, next) => {
   }
 });
 
-router.post("/create", (req, res, next) => {
+router.post("/create", async (req, res, next) => {
   console.log('req.body :', req.body)
-  res.send("create post");
+  const challengeToCreate = req.body
+  const challengeCreated = await Challenge.create(challengeToCreate)
+  res.send("create post")
 });
 
 
