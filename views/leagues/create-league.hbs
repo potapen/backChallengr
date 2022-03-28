@@ -1,0 +1,22 @@
+<h1>League create</h1>
+<form action="/leagues/create" method="POST">
+        <div>
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name">
+            <label for="description">Description</label>
+            <input type="text" name="description" id="description">
+            <label for="inviteKey">Invite Key</label>
+            <input type="text" name="inviteKey" id="inviteKey">
+        </div>
+        <div>
+            <label for = "members">Members</label>
+            <select name="members" id="members" multiple>
+                {{#each members}}
+                    <option value="{{_id}}">{{username}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div>
+            <input type="submit" value = "Create">
+        </div>
+</form>

@@ -1,0 +1,14 @@
+<h1>Leagues list</h1>
+{{#each leagues}}
+    <div>
+        <h1>{{name}}</h1>
+        <p>{{description}}</p>
+        <p>Team members are : 
+            {{#each members}}
+                {{username}} |
+            {{/each}}
+        </p>
+        <p><a href="/leagues/{{_id}}/edit">Edit league</a></p>
+        <p><a href="/leagues/{{_id}}/delete">Delete league</a></p>
+    </div>
+{{/each}}
