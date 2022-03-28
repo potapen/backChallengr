@@ -1,0 +1,24 @@
+<h1>League edit</h1>
+{{#with league}}
+    <form action="/leagues/{{_id}}/edit" method="POST">
+            <div>
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" value = "{{name}}">
+                <label for="description">Description</label>
+                <input type="text" name="description" id="description" value = "{{description}}">
+                <label for="inviteKey">Invite Key</label>
+                <input type="text" name="inviteKey" id="inviteKey"  value = "{{inviteKey}}">
+            </div>
+            <div>
+                <label for = "members">Members</label>
+                <select name="members" id="members" multiple>
+                    {{#each members}}
+                        <option value="{{_id}}">{{username}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div>
+                <input type="submit" value = "Edit league">
+            </div>
+    </form>
+{{/with}}
