@@ -1,45 +1,133 @@
 // ℹ️ package responsible to make the connection with mongodb
 // https://www.npmjs.com/package/mongoose
 const mongoose = require("mongoose");
-const Celebrity = require("../models/Celebrity.model");
-const Movie = require("../models/Movie.model");
+const User = require("../models/User.model");
+const League = require("../models/League.model");
+const Game = require("../models/Game.model");
+const Challenge = require("../models/Challenge.model");
+const Comment = require("../models/Comment.model");
 
 // ℹ️ Sets the MongoDB URI for our app to have access to it.
 // If no env has been set, we dynamically set it to whatever the folder name was upon the creation of the app
 
-const MONGO_URI =
-  process.env.MONGODB_URI || "mongodb://localhost/lab-movies-celebrities";
+const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost/challengr";
 
-const celebrities = [
+const users = [
   {
-    name: "Brad Pitt",
-    occupation: "Actor",
-    catchPhrase: "I love Tibet",
+    username: "alexandre",
+    email: "alexandre@gmail.com",
+    password: "$2b$10$HaYr5pczWlGBayK1XxoYpuJoarEHbmmc3S6/k.T5/JtR8Jh2Fsh3W", // hashed : password
+    pictureUrl:
+      "https://www.pngkit.com/png/full/336-3369016_attaque-des-titans-png-attack-on-titan-kapten.png",
   },
   {
-    name: "Tom Cruise",
-    occupation: "Actor also",
-    catchPhrase: "I love difficult missions",
+    username: "ahn",
+    email: "ahn@gmail.com",
+    password: "$2b$10$HaYr5pczWlGBayK1XxoYpuJoarEHbmmc3S6/k.T5/JtR8Jh2Fsh3W", // hashed : password
+    pictureUrl:
+      "https://i.skyrock.net/6045/101456045/pics/3303167034_1_2_Ak7g2fQD.png",
   },
   {
-    name: "Uma Turman",
-    occupation: "Actress",
-    catchPhrase: "I love Brad Pitt",
+    username: "brian",
+    email: "brian@gmail.com",
+    password: "$2b$10$HaYr5pczWlGBayK1XxoYpuJoarEHbmmc3S6/k.T5/JtR8Jh2Fsh3W", // hashed : password
+    pictureUrl:
+      "https://nintendolesite.com/images/tests/l_attaque_des_titan_2-0-28gkuhpsjn.png",
   },
 ];
 
-const movies = [
+const leagues = [
   {
-    title: "Mission impossible 1",
-    genre: "Action",
-    plot: "Very difficult missions",
-    cast: [],
+    name: "Clash of titans",
+    members: [],
+    description: "Long live Eldians !",
+    inviteKey: "1234",
   },
   {
-    title: "Mission difficult 2",
-    genre: "Action",
-    plot: "Very impossible missions",
-    cast: [],
+    name: "Clash of clans",
+    members: [],
+    description: "Only one will survive !",
+    inviteKey: "4567",
+  },
+];
+
+const games = [
+  {
+    name: "Beer pong",
+    description: "Le jeu du beerpong, classique",
+    isPrivate: false,
+    emoji: "🍻",
+  },
+  {
+    name: "Torse pong",
+    description: "Utilise ton torse pour mettre la balle dans le gobelet",
+    isPrivate: true,
+    ownerLeagues: [],
+    emoji: "🫁",
+  },
+];
+
+const challenges = [
+  {
+    contenders: [],
+    leagues: [],
+    winners: [],
+    stake: 40,
+    isCompleted: true,
+  },
+  {
+    contenders: [],
+    leagues: [],
+    winners: [],
+    stake: 30,
+    isCompleted: true,
+  },
+  {
+    contenders: [],
+    leagues: [],
+    winners: [],
+    stake: 20,
+    isCompleted: true,
+  },
+  {
+    contenders: [],
+    leagues: [],
+    winners: [],
+    stake: 15,
+    isCompleted: true,
+  },
+  {
+    contenders: [],
+    leagues: [],
+    winners: [],
+    stake: 22,
+    isCompleted: false,
+  },
+  {
+    contenders: [],
+    leagues: [],
+    winners: [],
+    stake: 30,
+    isCompleted: false,
+  },
+];
+
+const comments = [
+  {
+    content: "Awesome ! I'll never lose at this game !",
+    rating: 5,
+  },
+  {
+    content: "Damned ! I suck at beerpong !",
+    rating: 2,
+  },
+  {
+    content: "Oh yeah ! This game was intense",
+    rating: 4,
+  },
+  {
+    content: "Let's do this again soon",
+    rating: 5,
   },
 ];
 
@@ -54,21 +142,94 @@ async function connectToDB() {
 async function seedDB() {
   await connectToDB();
 
-  await Celebrity.deleteMany();
-  console.log("Celebrities deleted");
+  // Empty DB
+  await User.deleteMany();
+  console.log("Users deleted");
+  await League.deleteMany();
+  console.log("Leagues deleted");
+  await Game.deleteMany();
+  console.log("Games deleted");
+  await Challenge.deleteMany();
+  console.log("Challenges deleted");
+  await Comment.deleteMany();
+  console.log("Comments deleted");
 
-  await Movie.deleteMany();
-  console.log("Movies deleted");
+  // Seed Users
+  const usersDoc = await User.insertMany(users);
+  console.log("Users created");
 
-  newCelebrities = await Celebrity.insertMany(celebrities);
-  console.log("Celebrities inserted");
+  // Seed Leagues
+  leagues[0].members.push(usersDoc[0]._id);
+  leagues[0].members.push(usersDoc[1]._id);
+  leagues[0].members.push(usersDoc[2]._id);
+  leagues[1].members.push(usersDoc[0]._id);
+  leagues[1].members.push(usersDoc[1]._id);
+  const leaguesDocs = await League.insertMany(leagues);
+  console.log("Leagues inserted");
 
-  movies[0].cast.push(newCelebrities[0]._id);
-  movies[0].cast.push(newCelebrities[2]._id);
-  movies[1].cast.push(newCelebrities[1]._id);
-  movies[1].cast.push(newCelebrities[2]._id);
-  await Movie.insertMany(movies);
-  console.log("Movies inserted");
+  // Seed Games
+  games[1].ownerLeagues.push(leaguesDocs[1]._id);
+  const GamesDoc = await Game.insertMany(games);
+  console.log("Games inserted");
+
+  // Seed Challenges
+  challenges[0].contenders.push(usersDoc[0]._id);
+  challenges[0].contenders.push(usersDoc[1]._id);
+  challenges[0].contenders.push(usersDoc[2]._id);
+  challenges[0].leagues.push(leaguesDocs[0]._id);
+  challenges[0].leagues.push(leaguesDocs[1]._id);
+  challenges[0].game = GamesDoc[0]._id;
+  challenges[0].winners.push(usersDoc[0]._id);
+
+  challenges[1].contenders.push(usersDoc[0]._id);
+  challenges[1].contenders.push(usersDoc[1]._id);
+  challenges[1].leagues.push(leaguesDocs[1]._id);
+  challenges[1].game = GamesDoc[1]._id;
+  challenges[1].winners.push(usersDoc[0]._id);
+
+  challenges[2].contenders.push(usersDoc[0]._id);
+  challenges[2].contenders.push(usersDoc[1]._id);
+  challenges[2].contenders.push(usersDoc[2]._id);
+  challenges[2].leagues.push(leaguesDocs[0]._id);
+  challenges[2].game = GamesDoc[0]._id;
+  challenges[2].winners.push(usersDoc[0]._id);
+
+  challenges[3].contenders.push(usersDoc[0]._id);
+  challenges[3].contenders.push(usersDoc[1]._id);
+  challenges[3].leagues.push(leaguesDocs[1]._id);
+  challenges[3].game = GamesDoc[1]._id;
+  challenges[3].winners.push(usersDoc[0]._id);
+
+  challenges[4].contenders.push(usersDoc[0]._id);
+  challenges[4].contenders.push(usersDoc[1]._id);
+  challenges[4].contenders.push(usersDoc[2]._id);
+  challenges[4].leagues.push(leaguesDocs[0]._id);
+  challenges[4].leagues.push(leaguesDocs[1]._id);
+  challenges[4].game = GamesDoc[0]._id;
+
+  challenges[5].contenders.push(usersDoc[0]._id);
+  challenges[5].contenders.push(usersDoc[1]._id);
+  challenges[5].leagues.push(leaguesDocs[1]._id);
+  challenges[5].game = GamesDoc[1]._id;
+
+  challengesDocs = await Challenge.insertMany(challenges);
+  console.log("Challenges inserted");
+
+  // Seed Comments
+  comments[0].user = usersDoc[0]._id;
+  comments[0].challenge = challengesDocs[0]._id;
+
+  comments[1].user = usersDoc[1]._id;
+  comments[1].challenge = challengesDocs[0]._id;
+
+  comments[2].user = usersDoc[0]._id;
+  comments[2].challenge = challengesDocs[1]._id;
+
+  comments[3].user = usersDoc[0]._id;
+  comments[3].challenge = challengesDocs[2]._id;
+  await Comment.insertMany(comments);
+  console.log("Comments inserted");
+
   await mongoose.disconnect();
   console.log("DB disconnected");
 }
