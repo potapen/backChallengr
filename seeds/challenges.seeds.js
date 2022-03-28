@@ -70,42 +70,36 @@ const games = [
 const challenges = [
   {
     contenders: [],
-    leagues: [],
     winners: [],
     stake: 40,
     isCompleted: true,
   },
   {
     contenders: [],
-    leagues: [],
     winners: [],
     stake: 30,
     isCompleted: true,
   },
   {
     contenders: [],
-    leagues: [],
     winners: [],
     stake: 20,
     isCompleted: true,
   },
   {
     contenders: [],
-    leagues: [],
     winners: [],
     stake: 15,
     isCompleted: true,
   },
   {
     contenders: [],
-    leagues: [],
     winners: [],
     stake: 22,
     isCompleted: false,
   },
   {
     contenders: [],
-    leagues: [],
     winners: [],
     stake: 30,
     isCompleted: false,
@@ -176,40 +170,38 @@ async function seedDB() {
   challenges[0].contenders.push(usersDoc[0]._id);
   challenges[0].contenders.push(usersDoc[1]._id);
   challenges[0].contenders.push(usersDoc[2]._id);
-  challenges[0].leagues.push(leaguesDocs[0]._id);
-  challenges[0].leagues.push(leaguesDocs[1]._id);
+  challenges[0].league = leaguesDocs[0]._id;
   challenges[0].game = GamesDoc[0]._id;
   challenges[0].winners.push(usersDoc[0]._id);
 
   challenges[1].contenders.push(usersDoc[0]._id);
   challenges[1].contenders.push(usersDoc[1]._id);
-  challenges[1].leagues.push(leaguesDocs[1]._id);
+  challenges[1].league = leaguesDocs[1]._id;
   challenges[1].game = GamesDoc[1]._id;
   challenges[1].winners.push(usersDoc[0]._id);
 
   challenges[2].contenders.push(usersDoc[0]._id);
   challenges[2].contenders.push(usersDoc[1]._id);
   challenges[2].contenders.push(usersDoc[2]._id);
-  challenges[2].leagues.push(leaguesDocs[0]._id);
+  challenges[2].league = leaguesDocs[0]._id;
   challenges[2].game = GamesDoc[0]._id;
   challenges[2].winners.push(usersDoc[0]._id);
 
   challenges[3].contenders.push(usersDoc[0]._id);
   challenges[3].contenders.push(usersDoc[1]._id);
-  challenges[3].leagues.push(leaguesDocs[1]._id);
+  challenges[3].league = leaguesDocs[1]._id;
   challenges[3].game = GamesDoc[1]._id;
   challenges[3].winners.push(usersDoc[0]._id);
 
   challenges[4].contenders.push(usersDoc[0]._id);
   challenges[4].contenders.push(usersDoc[1]._id);
   challenges[4].contenders.push(usersDoc[2]._id);
-  challenges[4].leagues.push(leaguesDocs[0]._id);
-  challenges[4].leagues.push(leaguesDocs[1]._id);
+  challenges[4].league = leaguesDocs[0]._id;
   challenges[4].game = GamesDoc[0]._id;
 
   challenges[5].contenders.push(usersDoc[0]._id);
   challenges[5].contenders.push(usersDoc[1]._id);
-  challenges[5].leagues.push(leaguesDocs[1]._id);
+  challenges[5].league = leaguesDocs[1]._id;
   challenges[5].game = GamesDoc[1]._id;
 
   challengesDocs = await Challenge.insertMany(challenges);
