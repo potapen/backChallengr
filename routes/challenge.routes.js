@@ -61,7 +61,8 @@ router.get("/create", async (req, res, next) => {
 
 router.post("/create", async (req, res, next) => {
   console.log('req.body :', req.body)
-  const challengeToCreate = req.body
+  const {league, game, users, stake} = req.body
+  const challengeToCreate = {league, game, contenders: users, stake}
   console.log('challengeToCreate: ', challengeToCreate)
   const challengeCreated = await Challenge.create(challengeToCreate)
   console.log('challengeCreated: ', challengeCreated)
@@ -78,9 +79,18 @@ router.get("/edit/:challengeID", async (req, res, next) => {
   .populate('winners')
   .populate('stake')
   .populate('isCompleted')
-  console.log(challengeToEdit)
+  console.log('---------------------------challengeToEdit: ',challengeToEdit)
   
   const users = await User.find();
+  users.forEach(person1 => {
+    // const isSelected = movie.cast.some(person2 => {
+    //     const isSame = JSON.stringify(person1._id) === JSON.stringify(person2._id)
+    //     console.log(`person1._id: ${JSON.stringify(person1._id)} person2._id: ${JSON.stringify(person2._id)} : ${isSame}`)
+    //     return isSame
+    // })
+    // person1.selected = isSelected
+  })
+
   const leagues = await League.find();
   const games = await Game.find();
   const data = {
