@@ -6,8 +6,6 @@
                 <input type="text" name="name" id="name" value = "{{name}}">
                 <label for="description">Description</label>
                 <input type="text" name="description" id="description" value = "{{description}}">
-                <label for="inviteKey">Invite Key</label>
-                <input type="text" name="inviteKey" id="inviteKey"  value = "{{inviteKey}}">
             </div>
             <div>
                 <label for = "members">Members</label>
@@ -19,6 +17,17 @@
             </div>
             <div>
                 <input type="submit" value = "Edit league">
+            </div>
+            <div>
+                <p><strong><a href="/leagues/{{_id}}/delete">Delete league</a></strong></p>
+            </div>
+                    
+            <h2>Invite your friends</h2>
+            <div>
+                Send this key to your friends so they can join the league : {{inviteKey}}
+            </div>
+            <div>
+                Share this link for your friends to join the league : <a href="/leagues/join/{{inviteKey}}">Invitation link</a>
             </div>
     </form>
 {{/with}}

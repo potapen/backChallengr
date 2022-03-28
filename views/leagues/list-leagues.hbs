@@ -1,4 +1,6 @@
 <h1>Leagues list</h1>
+<h2><a href="/leagues/create">(+) Create a new league</a></h2>
+<h2><a href="/leagues/join">(+) Join a league</a></h2>
 {{#each leagues}}
     <div>
         <h1>{{name}}</h1>
@@ -8,7 +10,7 @@
                 {{username}} |
             {{/each}}
         </p>
+        <p><a href="/leagues/{{_id}}/invite">Invite friends</a></p>
         <p><a href="/leagues/{{_id}}/edit">Edit league</a></p>
-        <p><a href="/leagues/{{_id}}/delete">Delete league</a></p>
     </div>
 {{/each}}

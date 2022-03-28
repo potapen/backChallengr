@@ -1,0 +1,10 @@
+<h1>Join a league</h1>
+<form action="/leagues/join" method="POST">
+        <div>
+            <label for="inviteKey">Invitation key</label>
+            <input type="text" name="inviteKey" id="inviteKey" value = "{{#if inviteKey}}{{inviteKey}}{{/if}}">
+        </div>
+        <div>
+            <input type="submit" value = "Join league">
+        </div>
+</form>

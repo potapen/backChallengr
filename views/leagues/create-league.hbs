@@ -5,16 +5,9 @@
             <input type="text" name="name" id="name">
             <label for="description">Description</label>
             <input type="text" name="description" id="description">
-            <label for="inviteKey">Invite Key</label>
-            <input type="text" name="inviteKey" id="inviteKey">
         </div>
         <div>
-            <label for = "members">Members</label>
-            <select name="members" id="members" multiple>
-                {{#each members}}
-                    <option value="{{_id}}">{{username}}</option>
-                {{/each}}
-            </select>
+            An invitation key will be generated once you have created the league
         </div>
         <div>
             <input type="submit" value = "Create">
