@@ -5,7 +5,17 @@ const League = require("../models/League.model");
 
 router.get("/", async (req, res, next) => {
   try {
-    const games = await Game.find().populate("ownerLeagues");
+    userLeagues = await League.find({
+      members: req.session.user._id,
+    }).select("_id");
+    leagueIdsArray = userLeagues.map((league) => league._id);
+
+    const games = await Game.find({
+      $or: [
+        { isPrivate: false },
+        { ownerLeagues: { $elemMatch: { $in: leagueIdsArray } } },
+      ],
+    }).populate("ownerLeagues");
     res.render("games/list-games", { games });
   } catch {
     next();
@@ -14,7 +24,9 @@ router.get("/", async (req, res, next) => {
 
 router.get("/create", async (req, res, next) => {
   try {
-    const leagues = await League.find();
+    const leagues = await League.find({
+      members: req.session.user._id,
+    });
     res.render("games/create-game", { leagues });
   } catch {
     next();
@@ -44,7 +56,9 @@ router.post("/create", async (req, res, next) => {
 
 router.get("/:id/edit", async (req, res, next) => {
   try {
-    const leagues = await League.find();
+    const leagues = await League.find({
+      members: req.session.user._id,
+    });
     const id = req.params.id;
     const game = await Game.findById(id);
     res.render("games/edit-game", { game, leagues });
@@ -76,7 +90,6 @@ router.post("/:id/edit", async (req, res, next) => {
 router.get("/:id/delete", async (req, res, next) => {
   try {
     const id = req.params.id;
-    console.log(id);
     const game = await Game.findByIdAndDelete(id);
     res.redirect("/games");
   } catch (error) {
