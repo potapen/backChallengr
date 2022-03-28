@@ -83,12 +83,12 @@ router.get("/edit/:challengeID", async (req, res, next) => {
   
   const users = await User.find();
   users.forEach(person1 => {
-    // const isSelected = movie.cast.some(person2 => {
-    //     const isSame = JSON.stringify(person1._id) === JSON.stringify(person2._id)
-    //     console.log(`person1._id: ${JSON.stringify(person1._id)} person2._id: ${JSON.stringify(person2._id)} : ${isSame}`)
-    //     return isSame
-    // })
-    // person1.selected = isSelected
+    const isSelected = challengeToEdit.contenders.some(person2 => {
+        const isSame = JSON.stringify(person1._id) === JSON.stringify(person2._id)
+        console.log(`person1._id: ${JSON.stringify(person1._id)} person2._id: ${JSON.stringify(person2._id)} : ${isSame}`)
+        return isSame
+    })
+    person1.selected = isSelected
   })
 
   const leagues = await League.find();

@@ -19,7 +19,11 @@ create challenge
   <label> contenders
       <select name="contenders" multiple>
           {{#each users}}
+            {{#if selected}}
+              <option selected value="{{id}}">{{username}}</option>
+            {{else}}
               <option value="{{id}}">{{username}}</option>
+            {{/if}}
           {{/each}}
       </select>
   </label>
