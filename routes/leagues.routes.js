@@ -6,7 +6,9 @@ const isLoggedIn = require("../middleware/isLoggedIn");
 
 router.get("/", isLoggedIn, async (req, res, next) => {
   try {
-    const leagues = await League.find().populate("members");
+    const leagues = await League.find({
+      members: req.session.user._id,
+    }).populate("members");
     res.render("leagues/list-leagues", { leagues });
   } catch {
     next();
