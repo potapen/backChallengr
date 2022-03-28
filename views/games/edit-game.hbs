@@ -1,0 +1,30 @@
+<h1>Game edit</h1>
+{{#with game}}
+<form action="/games/{{_id}}/edit" method="POST">
+        <div>
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" value = "{{name}}">
+        </div>
+         <div>
+            <label for="description">Description</label>
+            <input type="text" name="description" id="description" value = "{{description}}">
+         </div>
+          <div>
+            <label for="emoji">Emoji</label>
+            <input type="text" name="emoji" id="emoji" value = "{{emoji}}">
+        </div>
+        <div>
+            <label for="isPrivate">is Private ?</label>
+            <input type="checkbox" name="isPrivate" id="isPrivate" {{#if isPrivate}}checked = true{{/if}}>
+            <label for = "ownerLeagues">Owner Leagues</label>
+            <select name="ownerLeagues" id="ownerLeagues" multiple>
+                {{#each ../leagues}}
+                    <option value="{{_id}}">{{name}}</option>
+                {{/each}}
+        </select>
+        </div>
+        <div>
+            <input type="submit" value = "Edit game">
+        </div>
+</form>
+{{/with}}

@@ -1,0 +1,24 @@
+<h1>Game create</h1>
+<form action="/games/create" method="POST">
+        <div>
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name">
+            <label for="description">Description</label>
+            <input type="text" name="description" id="description">
+            <label for="emoji">Emoji</label>
+            <input type="text" name="emoji" id="emoji">
+        </div>
+        <div>
+            <label for="isPrivate">is Private ?</label>
+            <input type="checkbox" name="isPrivate" id="isPrivate">
+            <label for = "ownerLeagues">Owner Leagues</label>
+            <select name="ownerLeagues" id="ownerLeagues" multiple>
+                {{#each leagues}}
+                    <option value="{{_id}}">{{name}}</option>
+                {{/each}}
+        </select>
+        </div>
+        <div>
+            <input type="submit" value = "Create">
+        </div>
+</form>
