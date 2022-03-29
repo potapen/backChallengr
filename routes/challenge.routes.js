@@ -152,6 +152,24 @@ router.get("/edit/:challengeID", async (req, res, next) => {
   res.render('challenge/edit',data);
 });
 
+
+router.get("/delete/:challengeID", async (req, res, next) => {
+  const {challengeID} = req.params
+  console.log('---------------------------challengeID: ', challengeID)
+  const challenge = await Challenge.findById(challengeID)
+  console.log('--------------------------------challenge:', challenge)
+  data = {challenge};
+  res.render('challenge/delete', data);
+});
+
+router.post("/delete/:challengeID", async (req, res, next) => {
+  const {challengeID} = req.body
+  console.log('---------------------------challengeID: ', challengeID)
+  const challengeDeleted = await Challenge.findByIdAndDelete(challengeID)
+  console.log('--------------------------------challengeDeleted:', challengeDeleted)
+  res.send(challengeDeleted);
+});
+
 module.exports = router;
 
 

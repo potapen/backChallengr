@@ -1,1 +1,12 @@
 delete challenge
+{{#with challenge}}
+<form action="/challenge/delete/{{_id}}" method="POST">
+  <label> challenge
+    <input type="text" name="challengeID" value="{{_id}}">
+  </label>
+  <button type="submit">Confirm Deletion</button>
+</form>
+{{/with}}
+{{#if errorMessage}}
+   {{errorMessage}}
+{{/if}}
