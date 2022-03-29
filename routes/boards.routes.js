@@ -4,19 +4,28 @@ const Challenge = require("../models/Challenge.model");
 const League = require("../models/League.model");
 const User = require("../models/User.model");
 
-router.get("/main", async (req, res, next) => {
+const isLoggedIn = require("../middleware/isLoggedIn");
+const { redirect } = require("express/lib/response");
+
+router.get("/main", isLoggedIn, async (req, res, next) => {
   try {
-    user = await User.findById(req.session.user._id);
-    console.log(user);
+    res.redirect(`/boards/${req.session.user._id}`);
+  } catch {
+    next();
+  }
+});
+
+router.get("/:id", isLoggedIn, async (req, res, next) => {
+  try {
+    let id = req.params.id;
+    user = await User.findById(id);
 
     userLeagues = await League.find({
       members: req.session.user._id,
     }).select("_id");
     const leagueIdsArray = userLeagues.map((league) => league._id);
-    console.log(leagueIdsArray);
 
     const statsPerLeague = [];
-
     for (let i = 0; i < leagueIdsArray.length; i++) {
       // Stats per League
       let leagueID = leagueIdsArray[i];
@@ -119,11 +128,74 @@ router.get("/main", async (req, res, next) => {
         path: "_id.league",
       });
 
-      statsPerLeague.push({ countPerLeague, countPerUser, countPerWinner });
+      // Ranking
+      let rankingPerLeague = await Challenge.aggregate([
+        {
+          $match: {
+            $and: [{ league: leagueID }],
+          },
+        },
+        {
+          $unwind: {
+            path: "$winners",
+            preserveNullAndEmptyArrays: false,
+          },
+        },
+        {
+          $group: {
+            _id: {
+              winners: "$winners",
+              league: "$league",
+            },
+            count: {
+              $count: {},
+            },
+            totalStake: {
+              $sum: "$stake",
+            },
+          },
+        },
+        {
+          $sort: {
+            totalStake: -1,
+          },
+        },
+      ]);
+      rankingPerLeague = await League.populate(rankingPerLeague, {
+        path: "_id.league",
+      });
+      rankingPerLeague = await User.populate(rankingPerLeague, {
+        path: "_id.winners",
+      });
+      const winnersArray = rankingPerLeague.map((user) => user._id.winners._id);
+      const league = await League.findById(leagueID);
+      const membersArray = league.members.map((member) => member._id);
+
+      const noWinners = await User.find({
+        $and: [
+          {
+            _id: {
+              $in: membersArray,
+            },
+          },
+          {
+            _id: {
+              $nin: winnersArray,
+            },
+          },
+        ],
+      });
+
+      statsPerLeague.push({
+        countPerLeague,
+        countPerUser,
+        countPerWinner,
+        rankingPerLeague,
+        noWinners,
+      });
     }
 
-    console.log(statsPerLeague);
-    res.render("boards/main", { statsPerLeague });
+    res.render("boards/main", { user, statsPerLeague });
   } catch (error) {
     console.log(error);
     next();
