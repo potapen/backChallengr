@@ -6,6 +6,7 @@ const League = require("../models/League.model");
 const Game = require("../models/Game.model");
 const Challenge = require("../models/Challenge.model");
 const Comment = require("../models/Comment.model");
+const Contender = require("../models/Contender.model");
 
 // ℹ️ Sets the MongoDB URI for our app to have access to it.
 // If no env has been set, we dynamically set it to whatever the folder name was upon the creation of the app
@@ -69,37 +70,31 @@ const games = [
 
 const challenges = [
   {
-    contenders: [],
     winners: [],
     stake: 40,
     isCompleted: true,
   },
   {
-    contenders: [],
     winners: [],
     stake: 30,
     isCompleted: true,
   },
   {
-    contenders: [],
     winners: [],
     stake: 20,
     isCompleted: true,
   },
   {
-    contenders: [],
     winners: [],
     stake: 15,
     isCompleted: true,
   },
   {
-    contenders: [],
     winners: [],
     stake: 22,
     isCompleted: false,
   },
   {
-    contenders: [],
     winners: [],
     stake: 30,
     isCompleted: false,
@@ -125,6 +120,8 @@ const comments = [
   },
 ];
 
+const contenders = [];
+
 async function connectToDB() {
   return mongoose.connect(MONGO_URI).then((x) => {
     console.log(
@@ -145,6 +142,8 @@ async function seedDB() {
   console.log("Games deleted");
   await Challenge.deleteMany();
   console.log("Challenges deleted");
+  await Contender.deleteMany();
+  console.log("Contenders deleted");
   await Comment.deleteMany();
   console.log("Comments deleted");
 
@@ -173,45 +172,95 @@ async function seedDB() {
   console.log("Games inserted");
 
   // Seed Challenges
-  challenges[0].contenders.push(usersDoc[0]._id);
-  challenges[0].contenders.push(usersDoc[1]._id);
-  challenges[0].contenders.push(usersDoc[2]._id);
   challenges[0].league = leaguesDocs[0]._id;
   challenges[0].game = GamesDoc[0]._id;
   challenges[0].winners.push(usersDoc[0]._id);
 
-  challenges[1].contenders.push(usersDoc[0]._id);
-  challenges[1].contenders.push(usersDoc[1]._id);
   challenges[1].league = leaguesDocs[1]._id;
   challenges[1].game = GamesDoc[1]._id;
   challenges[1].winners.push(usersDoc[0]._id);
 
-  challenges[2].contenders.push(usersDoc[0]._id);
-  challenges[2].contenders.push(usersDoc[1]._id);
-  challenges[2].contenders.push(usersDoc[2]._id);
   challenges[2].league = leaguesDocs[0]._id;
   challenges[2].game = GamesDoc[0]._id;
   challenges[2].winners.push(usersDoc[0]._id);
 
-  challenges[3].contenders.push(usersDoc[0]._id);
-  challenges[3].contenders.push(usersDoc[1]._id);
   challenges[3].league = leaguesDocs[1]._id;
   challenges[3].game = GamesDoc[1]._id;
   challenges[3].winners.push(usersDoc[0]._id);
 
-  challenges[4].contenders.push(usersDoc[0]._id);
-  challenges[4].contenders.push(usersDoc[1]._id);
-  challenges[4].contenders.push(usersDoc[2]._id);
   challenges[4].league = leaguesDocs[0]._id;
   challenges[4].game = GamesDoc[0]._id;
 
-  challenges[5].contenders.push(usersDoc[0]._id);
-  challenges[5].contenders.push(usersDoc[1]._id);
   challenges[5].league = leaguesDocs[1]._id;
   challenges[5].game = GamesDoc[1]._id;
 
   challengesDocs = await Challenge.insertMany(challenges);
   console.log("Challenges inserted");
+
+  // Seed Contenders
+  contenders.push({
+    challenge: challengesDocs[0]._id,
+    contender: usersDoc[0]._id,
+  });
+  contenders.push({
+    challenge: challengesDocs[0]._id,
+    contender: usersDoc[1]._id,
+  });
+  contenders.push({
+    challenge: challengesDocs[0]._id,
+    contender: usersDoc[2]._id,
+  });
+
+  contenders.push({
+    challenge: challengesDocs[1]._id,
+    contender: usersDoc[0]._id,
+  });
+  contenders.push({
+    challenge: challengesDocs[1]._id,
+    contender: usersDoc[1]._id,
+  });
+
+  contenders.push({
+    challenge: challengesDocs[2]._id,
+    contender: usersDoc[0]._id,
+  });
+  contenders.push({
+    challenge: challengesDocs[2]._id,
+    contender: usersDoc[1]._id,
+  });
+  contenders.push({
+    challenge: challengesDocs[2]._id,
+    contender: usersDoc[2]._id,
+  });
+
+  contenders.push({
+    challenge: challengesDocs[3]._id,
+    contender: usersDoc[0]._id,
+  });
+  contenders.push({
+    challenge: challengesDocs[3]._id,
+    contender: usersDoc[1]._id,
+  });
+
+  contenders.push({
+    challenge: challengesDocs[4]._id,
+    contender: usersDoc[0]._id,
+  });
+  contenders.push({
+    challenge: challengesDocs[4]._id,
+    contender: usersDoc[1]._id,
+  });
+
+  contenders.push({
+    challenge: challengesDocs[5]._id,
+    contender: usersDoc[0]._id,
+  });
+  contenders.push({
+    challenge: challengesDocs[5]._id,
+    contender: usersDoc[1]._id,
+  });
+  await Contender.insertMany(contenders);
+  console.log("Contenders inserted");
 
   // Seed Comments
   comments[0].user = usersDoc[0]._id;
