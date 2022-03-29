@@ -119,7 +119,7 @@ router.post("/create", async (req, res, next) => {
 */
 router.post("/edit/:challengeID", async (req, res, next) => {
   try{
-    const {challengeID, contenders, league, game, winners,stake, isCompleted} = req.body
+    const {challengeID, contenders, league, game, winners,stake, isCompleted} = req.body;
     const challengeToEdit = {
       contenders,
       league,
@@ -141,35 +141,34 @@ router.post("/edit/:challengeID", async (req, res, next) => {
 
 router.get("/edit/:challengeID", async (req, res, next) => {
   try{
-    const {challengeID} = req.params
-    console.log('---------------------------challengeID: ', challengeID)
+    const {challengeID} = req.params;
     const challengeToEdit = await Challenge.findById(challengeID)
     .populate('contenders')
     .populate('league')
     .populate('game')
     .populate('winners')
     .populate('stake')
-    .populate('isCompleted')
+    .populate('isCompleted');
     // console.log('---------------------------challengeToEdit: ',challengeToEdit)
     
     const usersContender = await User.find(); //pas besoin de .lean()...c'est magigue...
     usersContender.forEach(person1 => {
       const isSelected = challengeToEdit.contenders.some(person2 => {
-          const isSame = JSON.stringify(person1._id) === JSON.stringify(person2._id)
+          const isSame = JSON.stringify(person1._id) === JSON.stringify(person2._id);
           // console.log(`person1._id: ${JSON.stringify(person1._id)} person2._id: ${JSON.stringify(person2._id)} : ${isSame}`)
-          return isSame
+          return isSame;
       })
-      person1.selected = isSelected
+      person1.selected = isSelected;
     })
     
     const usersWinner = await User.find(); //pas besoin de .lean()...c'est magigue...
     usersWinner.forEach(person1 => {
       const isSelected = challengeToEdit.winners.some(person2 => {
-          const isSame = JSON.stringify(person1._id) === JSON.stringify(person2._id)
+          const isSame = JSON.stringify(person1._id) === JSON.stringify(person2._id);
           // console.log(`person1._id: ${JSON.stringify(person1._id)} person2._id: ${JSON.stringify(person2._id)} : ${isSame}`)
-          return isSame
+          return isSame;
       })
-      person1.selected = isSelected
+      person1.selected = isSelected;
     })
   
     const leagues = await League.find({
@@ -177,19 +176,31 @@ router.get("/edit/:challengeID", async (req, res, next) => {
     }); //pas besoin de .lean()...c'est magigue...
   
     leagues.forEach(league1 => {
-      league2 = challengeToEdit.league
-      const isSame = JSON.stringify(league1._id) === JSON.stringify(league2._id)
+      league2 = challengeToEdit.league;
+      const isSame = JSON.stringify(league1._id) === JSON.stringify(league2._id);
       //console.log(`league1._id: ${JSON.stringify(league1._id)} league2._id: ${JSON.stringify(league2._id)} : ${isSame}`)
       if(isSame){
         league1.selected = true;
       }
       });
     
-    
-    const games = await Game.find().lean(); //.lean() permet de modifier l'objet retourne sans avoir à MaJ le schema
+    const userLeagues = await League.find({
+      members: req.session.user._id,
+    }).select("_id");
+    console.log('------------------userLeagues: ', userLeagues);
+    leagueIdsArray = userLeagues.map((league) => league._id);
+    console.log('------------------leagueIdsArray: ', leagueIdsArray);
+
+    const games = await Game.find({
+      $or: [
+        { isPrivate: false },
+        // { ownerLeagues: { $elemMatch: { $in: leagueIdsArray } } },
+        { ownerLeagues: { $in: leagueIdsArray } },
+      ],
+    }).lean(); //.lean() permet de modifier l'objet retourne sans avoir à MaJ le schema
     games.forEach(game1 => {
-      game2 = challengeToEdit.game
-      const isSame = JSON.stringify(game1._id) === JSON.stringify(game2._id)
+      game2 = challengeToEdit.game;
+      const isSame = JSON.stringify(game1._id) === JSON.stringify(game2._id);
       //console.log(`league1._id: ${JSON.stringify(league1._id)} league2._id: ${JSON.stringify(league2._id)} : ${isSame}`)
       if(isSame){
         game1.selected = true;
@@ -203,7 +214,7 @@ router.get("/edit/:challengeID", async (req, res, next) => {
       games,
       challenge: challengeToEdit,
     };
-    console.log('-----------------------------------------data: ', data)
+    console.log('-----------------------------------------data: ', data);
     res.render('challenge/edit',data);
   }
   catch(error){
@@ -213,22 +224,41 @@ router.get("/edit/:challengeID", async (req, res, next) => {
   }
 });
 
-
+/*
+----------------------------------------------------------------------------------------------------------------
+-----  EDIT/:challengeID
+----------------------------------------------------------------------------------------------------------------
+*/
 router.get("/delete/:challengeID", async (req, res, next) => {
-  const {challengeID} = req.params
-  console.log('---------------------------challengeID: ', challengeID)
-  const challenge = await Challenge.findById(challengeID)
-  console.log('--------------------------------challenge:', challenge)
-  data = {challenge};
-  res.render('challenge/delete', data);
+  try{
+    const {challengeID} = req.params;
+    console.log('---------------------------challengeID: ', challengeID);
+    const challenge = await Challenge.findById(challengeID);
+    console.log('--------------------------------challenge:', challenge);
+    data = {challenge};
+    res.render('challenge/delete', data);
+  }
+  catch(error){
+    console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee get /delete/:challengeID');
+    console.error(error);
+    next();
+  }
 });
 
 router.post("/delete/:challengeID", async (req, res, next) => {
-  const {challengeID} = req.body
-  console.log('---------------------------challengeID: ', challengeID)
-  const challengeDeleted = await Challenge.findByIdAndDelete(challengeID)
-  console.log('--------------------------------challengeDeleted:', challengeDeleted)
-  res.send(challengeDeleted);
+  try{
+    const {challengeID} = req.body;
+    console.log('---------------------------challengeID: ', challengeID);
+    const challengeDeleted = await Challenge.findByIdAndDelete(challengeID);
+    console.log('--------------------------------challengeDeleted:', challengeDeleted);
+    res.render('challenge/done');
+  }
+  catch(error){
+    console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee post /delete/:challengeID');
+    console.error(error);
+    next();
+  }
+
 });
 
 module.exports = router;
