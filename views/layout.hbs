@@ -10,21 +10,16 @@
 
   <body>
   <nav>
-      <a href="/auth/signup">signup</a>
-      <a href="/auth/login">login</a>
-      <a href="/auth/logout">logout</a>
-      <p> you are logged in as {{user.username}}</p>
+    <div id="navTop">
       <div>
-        <a href="/games">List of games</a>
+        <p> you are : {{user.username}}</p>
       </div>
       <div>
-        <a href="/leagues">List of leagues</a>
+        <a href="/auth/signup">signup</a>
+        <a href="/auth/login">login</a>
+        <a href="/auth/logout">logout</a>
       </div>
-      <div>
-        Challenge: 
-        <a href="/challenge/list">list</a>
-        <a href="/challenge/create">create</a>
-      </div>
+    </div>
   </nav>
   
     {{{body}}}
