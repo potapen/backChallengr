@@ -1,38 +1,68 @@
 create challenge
-{{games}}
-<form action="/challenge/edit" method="POST">
+<p>----------------</p>
+{{#each games}}
+  <p>{{_id}}</p>
+{{/each}}
+<p>----------------</p>
+
+<form action="/challenge/edit/{{challenge.id}}" method="POST">
+  <label> challenge
+    <input type="text" name="challengeID" value="{{challenge.id}}">
+  </label>
   <label> league
-      <select name="game">
+      <select name="league">
           {{#each leagues}}
+            {{#if selected}}
+              <option selected value="{{id}}">{{name}}</option>
+            {{else}}
               <option value="{{id}}">{{name}}</option>
+            {{/if}}
           {{/each}}
       </select>
-    {{!-- <input type="text" name="league" value="{{league}}"> --}}
+
   </label>
   <label> game
       <select name="game">
           {{#each games}}
-              <option value="{{id}}">{{name}}</option>
+            {{#if selected}}
+            {{!-- si on met seulement id, ca ne passe pas ici --}}
+              <option selected value="{{_id}}">{{name}}</option> 
+            {{else}}
+              <option value="{{_id}}">{{name}}</option>
+            {{/if}}
           {{/each}}
       </select>
   </label>
   <label> contenders
       <select name="contenders" multiple>
-          {{#each users}}
+          {{#each usersContender}}
+            {{#if selected}}
+              <option selected value="{{id}}">{{username}}</option>
+            {{else}}
               <option value="{{id}}">{{username}}</option>
+            {{/if}}
           {{/each}}
       </select>
   </label>
   <label>stake
-    <input type="Number" name="stake">
+    <input type="Number" name="stake" value="{{challenge.stake}}">
   </label>
   <label>isCompleted
-    <input type="checkbox" name="isCompleted">
+    {{#if challenge.isCompleted}}
+      <input type="checkbox" name="isCompleted" checked>
+    {{else}}
+      <input type="checkbox" name="isCompleted">
+    {{/if}}
   </label>
+
   <label> winners
       <select name="winners" multiple>
-          {{#each users}}
+          {{#each usersWinner}}
+            {{#if selected}}
+              <option selected value="{{id}}">{{username}}</option>
+            {{else}}
               <option value="{{id}}">{{username}}</option>
+            {{/if}}
           {{/each}}
       </select>
   </label>
