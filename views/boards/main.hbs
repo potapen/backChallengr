@@ -1,0 +1,18 @@
+<h1>Your leagues</h1>
+<h2>Your are part of {{statsPerLeague.length}} leagues</h2>
+{{#each statsPerLeague}}
+    <div>
+        <h1>{{countPerLeague._id.name}}</h1>
+        <div>
+            <h2>Global KPI</h2>
+            <p>Number of members : {{countPerLeague._id.members.length}}</p>
+            <p>Number of challenges : {{countPerLeague.count}}</p>
+            <p>Total stake : {{countPerLeague.totalStake}}</p>
+        </div>
+        <div>
+            <h2>Your KPI</h2>
+            <p>You won {{countPerWinner.count}} challenges out of {{countPerUser.count}} challenges you took </p>
+            <p>You won {{countPerWinner.totalStake}} out of {{countPerUser.totalStake}} you staked </p>
+        </div>
+    </div>
+{{/each}}
