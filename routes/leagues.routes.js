@@ -86,6 +86,23 @@ router.get("/:id/delete", isLoggedIn, async (req, res, next) => {
   }
 });
 
+router.get("/:id/leave", isLoggedIn, async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    console.log(id);
+    const league = await League.findById(id);
+    league.members = league.members.filter(
+      (member) => !member.equals(req.session.user._id)
+    );
+    const updatedLeague = await League.findByIdAndUpdate(id, league);
+
+    res.redirect("/leagues");
+  } catch (error) {
+    console.log(error);
+    next();
+  }
+});
+
 router.get("/:id/invite", isLoggedIn, async (req, res, next) => {
   try {
     const id = req.params.id;

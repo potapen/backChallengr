@@ -47,7 +47,7 @@ const leagues = [
     name: "Clash of clans",
     members: [],
     description: "Only one will survive !",
-    inviteKey: "4567",
+    inviteKey: "1234",
   },
 ];
 
@@ -158,8 +158,14 @@ async function seedDB() {
   leagues[0].members.push(usersDoc[2]._id);
   leagues[1].members.push(usersDoc[0]._id);
   leagues[1].members.push(usersDoc[1]._id);
-  const leaguesDocs = await League.insertMany(leagues);
+  let leaguesDocs = await League.insertMany(leagues);
   console.log("Leagues inserted");
+
+  leaguesDocs = await League.find();
+  leaguesDocs.forEach((league) => (league.inviteKey = league._id));
+  await League.deleteMany();
+  leaguesDocs = await League.insertMany(leaguesDocs);
+  console.log("Leagues inserted with invite key");
 
   // Seed Games
   games[1].ownerLeagues.push(leaguesDocs[1]._id);
