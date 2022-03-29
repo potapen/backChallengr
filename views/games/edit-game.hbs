@@ -16,16 +16,11 @@
         <div>
             <label for="isPrivate">is Private ?</label>
             <input type="checkbox" name="isPrivate" id="isPrivate" {{#if isPrivate}}checked = true{{/if}}>
-            {{#if isPrivate}}
             <label for = "ownerLeagues">Owner Leagues</label>
             <select name="ownerLeagues" id="ownerLeagues" multiple>
-                {{#each ../selectedLeagues}}
-                    <option selected value="{{_id}}">{{name}}</option>
-                {{/each}}
-                {{#each ../unselectedLeagues}}
+                {{#each ../leagues}}
                     <option value="{{_id}}">{{name}}</option>
                 {{/each}}
-            {{/if}}
         </select>
         </div>
         <div>
