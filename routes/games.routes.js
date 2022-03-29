@@ -13,7 +13,8 @@ router.get("/", async (req, res, next) => {
     const games = await Game.find({
       $or: [
         { isPrivate: false },
-        { ownerLeagues: { $elemMatch: { $in: leagueIdsArray } } },
+        // { ownerLeagues: { $elemMatch: { $in: leagueIdsArray } } },
+        { ownerLeagues: { $in: leagueIdsArray } },
       ],
     }).populate("ownerLeagues");
     res.render("games/list-games", { games });

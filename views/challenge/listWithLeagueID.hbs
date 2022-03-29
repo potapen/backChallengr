@@ -1,14 +1,17 @@
+<h1>List of Challenges</h1>
 {{#each challenges}}
-    <p>{{id}}</p>
-    <p>league: {{league.name}}</p>
-    <p>game: {{game.name}}</p>
-    <ul>
-        {{#each contenders}}
-            <li>{{username}}</li>
-        {{/each}}
-    </ul>
-    <p>stack: {{stake}}</p>
-    <p>isCompleted: {{isCompleted}}</p>
-    <a href="/challenge/edit/{{id}}">edit challenge</a>
-    <a href="/challenge/delete/{{id}}">delete challenge</a>
+    <div>
+        <h2>game: {{game.name}}</h2>
+        <p>{{id}}</p>
+        <p>league: {{league.name}}</p>
+        <ul>
+            {{#each contenders}}
+                <li>{{username}}</li>
+            {{/each}}
+        </ul>
+        <p>stack: {{stake}}</p>
+        <p>isCompleted: {{isCompleted}}</p>
+        <a href="/challenge/edit/{{id}}">edit challenge</a>
+        <a href="/challenge/delete/{{id}}">delete challenge</a>
+    </div>
 {{/each}}
