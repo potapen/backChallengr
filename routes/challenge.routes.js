@@ -11,80 +11,132 @@ router.get("/", (req, res, next) => {
   res.send('challenge');
 });
 
+/*
+----------------------------------------------------------------------------------------------------------------
+-----  LIST
+----------------------------------------------------------------------------------------------------------------
+*/
 router.get("/list", async (req, res, next) => {
-  console.log('---------------------------------------- req.query: ', req.query);
-  const {league} = req.query;
-  if(league){
-    const challenges = await Challenge.find(
-      {league}
-    ).populate('league')
-    .populate('game')
-    .populate('contenders')
-
-    const data = {
-      challenges,
-    };
-    console.log('---------------------------------------- data: ', data);
-    res.render("challenge/listWithLeagueID", data);
-  }
-  else{
-    const leagues = await League.find();
-    const data = {
-      leagues,
+  try{
+    //if there a league in the query, we can show all the challenges of that league
+    console.log('---------------------------------------- req.query: ', req.query);
+    const {league} = req.query;
+    if(league){
+      const challenges = await Challenge.find(
+        {league}
+      ).populate('league')
+      .populate('game')
+      .populate('contenders')
+  
+      const data = {
+        challenges,
+      };
+      console.log('---------------------------------------- data: ', data);
+      res.render("challenge/listWithLeagueID", data);
     }
-    res.render("challenge/list", data);
+    else{
+      //show a page to click on a league first. Once the user selects a league, there is a get with league in the query
+      //ex: http://localhost:3000/challenge/list?league=6242e8b08c623fa3f3698e12
+      const leagues = await League.find({
+        members: req.session.user._id,
+      });
+      const data = {
+        leagues,
+      }
+      res.render("challenge/list", data);
+    }
   }
+  catch(error){
+    console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee get /list');
+    console.error(error);
+    next();
+  }
+
 });
 
+/*
+----------------------------------------------------------------------------------------------------------------
+-----  CREATE
+----------------------------------------------------------------------------------------------------------------
+*/
 router.get("/create", async (req, res, next) => {
-  console.log('req.query: ', req.query)
-  const {league} = req.query
-  if(league){
-    const games = await Game.find(
-      {ownerLeagues: league}
-    );
-    const users = await User.find();
-    const data = {
-      games,
-      users,
-      league,
+  try{
+    //if there a league in the query, we can show the right options for that league
+    console.log('req.query: ', req.query)
+    const {league} = req.query
+    if(league){
+      const games = await Game.find(
+        {ownerLeagues: league}
+      );
+      const users = await User.find();
+      const data = {
+        games,
+        users,
+        league,
+      }
+      res.render("challenge/createWithLeagueID", data);
     }
-    res.render("challenge/createWithLeagueID", data);
-  }
-  else{
-    const leagues = await League.find();
-    const data = {
-      leagues,
+    else{
+      //show a page to click on a league first. Once the user selects a league, there is a get with league in the query
+      const leagues = await League.find({
+        members: req.session.user._id,
+      });
+      const data = {
+        leagues,
+      }
+      res.render("challenge/create", data);
     }
-    res.render("challenge/create", data);
   }
+  catch(error){
+    console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee get /create');
+    console.error(error);
+  }
+
 });
 
 router.post("/create", async (req, res, next) => {
-  console.log('req.body :', req.body)
-  const {league, game, users, stake} = req.body
-  const challengeToCreate = {league, game, contenders: users, stake}
-  console.log('challengeToCreate: ', challengeToCreate)
-  const challengeCreated = await Challenge.create(challengeToCreate)
-  console.log('challengeCreated: ', challengeCreated)
-  res.send("create post")
+  try{
+    console.log('req.body :', req.body);
+    const {league, game, users, stake} = req.body;
+    const challengeToCreate = {league, game, contenders: users, stake};
+    console.log('challengeToCreate: ', challengeToCreate);
+    const challengeCreated = await Challenge.create(challengeToCreate);
+    console.log('challengeCreated: ', challengeCreated);
+    res.render('challenge/done');
+  }
+  catch(error){
+    console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee post /create');
+    console.error(error);
+    next();
+  }
 });
 
+
+/*
+----------------------------------------------------------------------------------------------------------------
+-----  EDIT/:challengeID
+----------------------------------------------------------------------------------------------------------------
+*/
 router.post("/edit/:challengeID", async (req, res, next) => {
-  const {challengeID, contenders, league, game, winners,stake, isCompleted} = req.body
-  const challengeToEdit = {
-    contenders,
-    league,
-    game,
-    winners,
-    stake,
-    isCompleted: Boolean(isCompleted)
+  try{
+    const {challengeID, contenders, league, game, winners,stake, isCompleted} = req.body
+    const challengeToEdit = {
+      contenders,
+      league,
+      game,
+      winners,
+      stake,
+      isCompleted: Boolean(isCompleted)
+    }
+    const challengeUpdated = await Challenge.findByIdAndUpdate(challengeID,challengeToEdit, {new: true});
+    // res.send(challengeUpdated);
+    res.render('challenge/done');
   }
-  // console.log('------------------------challengeToEdit:', challengeToEdit)
-  console.log('------------------------challengeID: ', challengeID);
-  // const challengeUpdated = Challenge.findById(mongoose.Types.ObjectId(challengeID))
-  const challengeUpdated = await Challenge.findByIdAndUpdate(challengeID,challengeToEdit, {new: true});
-  res.send(challengeUpdated);
+  catch(error){
+    console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee post /edit/:challengeID');
+    console.error(error);
+    next();
+  }
 });
 
 router.get("/edit/:challengeID", async (req, res, next) => {
