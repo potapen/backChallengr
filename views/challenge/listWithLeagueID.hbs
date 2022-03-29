@@ -1,17 +1,31 @@
-<h1>List of Challenges</h1>
+<h3>List of Challenges</h3>
 {{#each challenges}}
-    <div>
-        <h2>game: {{game.name}}</h2>
-        <p>{{id}}</p>
-        <p>league: {{league.name}}</p>
-        <ul>
-            {{#each contenders}}
-                <li>{{username}}</li>
-            {{/each}}
-        </ul>
-        <p>stack: {{stake}}</p>
-        <p>isCompleted: {{isCompleted}}</p>
-        <a href="/challenge/edit/{{id}}">edit challenge</a>
-        <a href="/challenge/delete/{{id}}">delete challenge</a>
+    <div class="card" style="width: 20rem;">
+        <img src="{{game.imageUrl}}" alt="Card example image">
+
+        <div class="card-body">
+            <h4 class="card-title">{{game.name}}</h4>
+            <h6 class="card-subtitle">{{id}}</h6>
+            <h6 class="card-subtitle">{{league.name}}</h6>
+            <p class="card-text">{{game.description}}</p>
+            <p>
+                {{#each contenders}}
+                    {{username}} |
+                {{/each}}
+            </p>
+            <p>stack: {{stake}}</p>
+            <div class="progress margin-bottom">
+                <div class="bar danger striped w-{{stake}}"></div>
+            </div>
+            {{#if isCompleted}}
+                <p class="badge">It's Over...</p>
+            {{else}}
+                <p class="badge success">Ongoing!</p>
+            {{/if}}
+            <div class="row">
+                <a href="/challenge/edit/{{id}}" class="paper-btn">edit challenge</a>
+                <a href="/challenge/delete/{{id}}" class="paper-btn">delete challenge</a>
+            </div>
+        </div>
     </div>
 {{/each}}
