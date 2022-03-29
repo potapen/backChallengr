@@ -9,7 +9,7 @@
             </div>
             <div>
                 <label for = "members">Members</label>
-                <select class ="selectpicker" name="members" id="members" multiple>
+                <select name="members" id="members" multiple>
                     {{#each members}}
                         <option selected value="{{_id}}">{{username}}</option>
                     {{/each}}
