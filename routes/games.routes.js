@@ -56,12 +56,22 @@ router.post("/create", async (req, res, next) => {
 
 router.get("/:id/edit", async (req, res, next) => {
   try {
-    const leagues = await League.find({
-      members: req.session.user._id,
-    });
     const id = req.params.id;
     const game = await Game.findById(id);
-    res.render("games/edit-game", { game, leagues });
+
+    const selectedLeagues = await League.find({
+      $and: [
+        { members: req.session.user._id },
+        { _id: { $in: game.ownerLeagues } },
+      ],
+    });
+    const unselectedLeagues = await League.find({
+      $and: [
+        { members: req.session.user._id },
+        { _id: { $nin: game.ownerLeagues } },
+      ],
+    });
+    res.render("games/edit-game", { game, selectedLeagues, unselectedLeagues });
   } catch {
     next();
   }
