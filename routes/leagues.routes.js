@@ -3,6 +3,8 @@ const router = require("express").Router();
 const League = require("../models/League.model");
 const User = require("../models/User.model");
 const isLoggedIn = require("../middleware/isLoggedIn");
+const fileUploader = require("../config/cloudinary.config");
+const cloudinary = require("cloudinary").v2;
 
 router.get("/", isLoggedIn, async (req, res, next) => {
   try {
@@ -23,29 +25,48 @@ router.get("/create", isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.post("/create", isLoggedIn, async (req, res, next) => {
-  try {
-    let { name, description } = req.body;
-    const newLeague = {
-      name,
-      description,
-      members: [],
-    };
+router.post(
+  "/create",
+  fileUploader.single("coverPicture"),
+  isLoggedIn,
+  async (req, res, next) => {
+    try {
+      let { name, description } = req.body;
 
-    const user = await User.findById(req.session.user._id);
-    newLeague.members.push(user._id);
+      const newLeague = {
+        name,
+        description,
+        members: [],
+      };
 
-    newLeagueDoc = await League.create(newLeague);
-    newLeague.inviteKey = newLeagueDoc._id;
+      if (req.file) {
+        let newImageUrl = cloudinary.url(req.file.filename, {
+          width: 500,
+          height: 500,
+          gravity: "faces",
+          crop: "fill",
+        });
+        newLeague.imageUrl = newImageUrl;
+      }
 
-    newLeagueDoc = await League.findByIdAndUpdate(newLeagueDoc._id, newLeague);
+      const user = await User.findById(req.session.user._id);
+      newLeague.members.push(user._id);
 
-    res.redirect(`/leagues/${newLeagueDoc._id}/invite`);
-  } catch (error) {
-    console.log(error);
-    next();
+      newLeagueDoc = await League.create(newLeague);
+      newLeague.inviteKey = newLeagueDoc._id;
+
+      newLeagueDoc = await League.findByIdAndUpdate(
+        newLeagueDoc._id,
+        newLeague
+      );
+
+      res.redirect(`/leagues/${newLeagueDoc._id}/invite`);
+    } catch (error) {
+      console.log(error);
+      next();
+    }
   }
-});
+);
 
 router.get("/:id/edit", isLoggedIn, async (req, res, next) => {
   try {
@@ -57,22 +78,38 @@ router.get("/:id/edit", isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.post("/:id/edit", isLoggedIn, async (req, res, next) => {
-  try {
-    const id = req.params.id;
-    let { name, members, description } = req.body;
-    const newLeague = {
-      name,
-      members,
-      description,
-    };
+router.post(
+  "/:id/edit",
+  fileUploader.single("coverPicture"),
+  isLoggedIn,
+  async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      let { name, members, description } = req.body;
 
-    await League.findByIdAndUpdate(id, newLeague);
-    res.redirect(`/leagues`);
-  } catch {
-    next();
+      const newLeague = {
+        name,
+        members,
+        description,
+      };
+      let newImageUrl = cloudinary.url(req.file.filename, {
+        width: 500,
+        height: 500,
+        gravity: "faces",
+        crop: "fill",
+      });
+      console.log(newImageUrl);
+      if (newImageUrl) {
+        newLeague.imageUrl = newImageUrl;
+      }
+      await League.findByIdAndUpdate(id, newLeague);
+      res.redirect(`/leagues`);
+    } catch (error) {
+      console.log(error);
+      next();
+    }
   }
-});
+);
 
 router.get("/:id/delete", isLoggedIn, async (req, res, next) => {
   try {
