@@ -42,12 +42,16 @@ const leagues = [
     members: [],
     description: "Long live Eldians !",
     inviteKey: "1234",
+    imageUrl:
+      "http://res.cloudinary.com/dwfrbljbo/image/upload/c_fill,g_faces,h_500,w_500/v1/challengr/sp9x47jts5sb8bgwwiky",
   },
   {
     name: "Clash of clans",
     members: [],
     description: "Only one will survive !",
     inviteKey: "1234",
+    imageUrl:
+      "http://res.cloudinary.com/dwfrbljbo/image/upload/c_fill,g_faces,h_500,w_500/v1/challengr/obvoe2bmigjhkhz9uipn",
   },
 ];
 
