@@ -1,21 +1,19 @@
-<h4>Edit challenge</h4>
-
 <form action="/challenge/edit/{{challenge.id}}" method="POST">
-  <label for="challengeID">
-    <input hidden type="text" name="challengeID" id="challengeID" value="{{challenge.id}}">
+  <label> challenge
+    <input type="text" name="challengeID" value="{{challenge.id}}">
   </label>
-  <label for="league"> league </label>
-  <select name="league" id="league">
-      {{#each leagues}}
-        {{#if selected}}
-          <option selected value="{{id}}">{{name}}</option>
-        {{else}}
-          <option value="{{id}}">{{name}}</option>
-        {{/if}}
-      {{/each}}
-  </select>
+  <label> league
+      <select name="league">
+          {{#each leagues}}
+            {{#if selected}}
+              <option selected value="{{id}}">{{name}}</option>
+            {{else}}
+              <option value="{{id}}">{{name}}</option>
+            {{/if}}
+          {{/each}}
+      </select>
 
-
+  </label>
   <label> game
       <select name="game">
           {{#each games}}
