@@ -4,7 +4,7 @@ const Game = require("../models/Game.model");
 const League = require("../models/League.model");
 const User = require("../models/User.model");
 const mongoose = require("mongoose");
-
+const isLoggedIn = require("../middleware/isLoggedIn");
 /* GET home page */
 
 router.get("/", (req, res, next) => {
@@ -16,7 +16,7 @@ router.get("/", (req, res, next) => {
 -----  LIST
 ----------------------------------------------------------------------------------------------------------------
 */
-router.get("/list", async (req, res, next) => {
+router.get("/list",isLoggedIn, async (req, res, next) => {
   try{
     //if there a league in the query, we can show all the challenges of that league
     console.log('---------------------------------------- req.query: ', req.query);

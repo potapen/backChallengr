@@ -1,7 +1,4 @@
-<form action="/challenge/edit/{{challenge.id}}" method="POST">
-  <label for="challengeID">
-    <input hidden type="text" name="challengeID" id="challengeID" value="{{challenge.id}}">
-  </label>
+
 
   <div>
     <span class="badge secondary">{{challenge.game.name}}</span>
@@ -10,27 +7,33 @@
     <p></p>
   </div>
 
-  <label> Who won?
-      <select name="winners" multiple>
-        {{#each contenders}}
-            <option selected value="{{id}}">{{username}}</option>
-        {{/each}}
-      </select>
-  </label>
-  <p></p>
+  <div class="card" style="width: 20rem;">
+    <div class="card-body">
+      <form action="/challenge/edit/{{challenge.id}}" method="POST">
+        <label for="challengeID">
+          <input hidden type="text" name="challengeID" id="challengeID" value="{{challenge.id}}">
+        </label>
+        <label> Who won?
+            <select name="winners" multiple>
+              {{#each contenders}}
+                  <option selected value="{{id}}">{{username}}</option>
+              {{/each}}
+            </select>
+        </label>
+        <p></p>
 
-  <label> Are You Done?
-    {{#if challenge.isCompleted}}
-      <input type="checkbox" name="isCompleted" checked>
-    {{else}}
-      <input type="checkbox" name="isCompleted">
-    {{/if}}
-  </label>
-    <p></p>
+        <label for="isCompleted">
+            <input hidden type="checkbox" name="isCompleted" id="isCompleted" checked>
+        </label>
+        <p></p>
 
 
-  <button type="submit">Close Your Challenge</button>
-</form>
+        <button type="submit">Close Your Challenge</button>
+      </form>
+    </div>
+    <img class="image-bottom" src="https://images.assetsdelivery.com/compings_v2/aquir/aquir1605/aquir160502781.jpg" alt="Card example image">
+  </div>
+
 
 {{#if errorMessage}}
    {{errorMessage}}
