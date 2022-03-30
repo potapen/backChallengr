@@ -93,11 +93,16 @@ router.post("/signup", isLoggedOut, (req, res) => {
 });
 
 router.get("/login", isLoggedOut, (req, res) => {
-  res.render("auth/login");
+  try {
+    const targetUrl = req.query.targetUrl;
+    res.render("auth/login", { targetUrl });
+  } catch {
+    next();
+  }
 });
 
 router.post("/login", isLoggedOut, (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, targetUrl } = req.body;
 
   if (!email) {
     return res.status(400).render("auth/login", {
@@ -131,6 +136,10 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           });
         }
         req.session.user = user;
+
+        if (targetUrl) {
+          return res.redirect(targetUrl);
+        }
         // req.session.user = user._id; // ! better and safer but in this case we saving the entire user object
         // res.locals.user = user.username; //marche pas ici car res correspond seulement à la réponse localse
         return res.redirect("/");
