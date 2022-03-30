@@ -144,7 +144,7 @@ router.post("/join", isLoggedIn, async (req, res, next) => {
     league.members.push(user._id);
     await League.findByIdAndUpdate(inviteKey, league);
 
-    res.redirect("/leagues");
+    res.redirect("/");
   } catch (error) {
     console.log(error);
     next();
