@@ -1,66 +1,35 @@
 <form action="/challenge/edit/{{challenge.id}}" method="POST">
-  <label> challenge
-    <input type="text" name="challengeID" value="{{challenge.id}}">
+  <label for="challengeID">
+    <input hidden type="text" name="challengeID" id="challengeID" value="{{challenge.id}}">
   </label>
-  <label> league
-      <select name="league">
-          {{#each leagues}}
-            {{#if selected}}
-              <option selected value="{{id}}">{{name}}</option>
-            {{else}}
-              <option value="{{id}}">{{name}}</option>
-            {{/if}}
-          {{/each}}
-      </select>
 
-  </label>
-  <label> game
-      <select name="game">
-          {{#each games}}
-            {{#if selected}}
-            {{!-- si on met seulement id, ca ne passe pas ici --}}
-              <option selected value="{{_id}}">{{name}}</option> 
-            {{else}}
-              <option value="{{_id}}">{{name}}</option>
-            {{/if}}
-          {{/each}}
+  <div>
+    <span class="badge secondary">{{challenge.game.name}}</span>
+    <span class="badge warning">{{challenge.league.name}}</span>
+    <span class="badge danger">stake {{challenge.stake}}</span>
+    <p></p>
+  </div>
+
+  <label> Who won?
+      <select name="winners" multiple>
+        {{#each contenders}}
+            <option selected value="{{id}}">{{username}}</option>
+        {{/each}}
       </select>
   </label>
-  <label> contenders
-      <select name="contenders" multiple>
-          {{#each usersContender}}
-            {{#if selected}}
-              <option selected value="{{id}}">{{username}}</option>
-            {{else}}
-              <option value="{{id}}">{{username}}</option>
-            {{/if}}
-          {{/each}}
-      </select>
-  </label>
-  <label>stake
-    <input type="Number" name="stake" value="{{challenge.stake}}">
-  </label>
-  <label>isCompleted
+  <p></p>
+
+  <label> Are You Done?
     {{#if challenge.isCompleted}}
       <input type="checkbox" name="isCompleted" checked>
     {{else}}
       <input type="checkbox" name="isCompleted">
     {{/if}}
   </label>
+    <p></p>
 
-  <label> winners
-      <select name="winners" multiple>
-          {{#each usersWinner}}
-            {{#if selected}}
-              <option selected value="{{id}}">{{username}}</option>
-            {{else}}
-              <option value="{{id}}">{{username}}</option>
-            {{/if}}
-          {{/each}}
-      </select>
-  </label>
 
-  <button type="submit">Edit Your Challenge</button>
+  <button type="submit">Close Your Challenge</button>
 </form>
 
 {{#if errorMessage}}

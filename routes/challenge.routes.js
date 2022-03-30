@@ -238,69 +238,18 @@ router.get("/update/:challengeID", async (req, res, next) => {
     .populate('winners')
     .populate('stake')
     .populate('isCompleted');
-    // console.log('---------------------------challengeToEdit: ',challengeToEdit)
-    
-    const usersContender = await User.find(); //pas besoin de .lean()...c'est magigue...
-    usersContender.forEach(person1 => {
-      const isSelected = challengeToEdit.contenders.some(person2 => {
-          const isSame = JSON.stringify(person1._id) === JSON.stringify(person2._id);
-          // console.log(`person1._id: ${JSON.stringify(person1._id)} person2._id: ${JSON.stringify(person2._id)} : ${isSame}`)
-          return isSame;
-      })
-      person1.selected = isSelected;
-    })
-    
-    const usersWinner = await User.find(); //pas besoin de .lean()...c'est magigue...
-    usersWinner.forEach(person1 => {
-      const isSelected = challengeToEdit.winners.some(person2 => {
-          const isSame = JSON.stringify(person1._id) === JSON.stringify(person2._id);
-          // console.log(`person1._id: ${JSON.stringify(person1._id)} person2._id: ${JSON.stringify(person2._id)} : ${isSame}`)
-          return isSame;
-      })
-      person1.selected = isSelected;
-    })
-  
-    const leagues = await League.find({
-      members: req.session.user._id,
-    }); //pas besoin de .lean()...c'est magigue...
-  
-    leagues.forEach(league1 => {
-      league2 = challengeToEdit.league;
-      const isSame = JSON.stringify(league1._id) === JSON.stringify(league2._id);
-      //console.log(`league1._id: ${JSON.stringify(league1._id)} league2._id: ${JSON.stringify(league2._id)} : ${isSame}`)
-      if(isSame){
-        league1.selected = true;
-      }
-      });
-    
-    const userLeagues = await League.find({
-      members: req.session.user._id,
-    }).select("_id");
-    console.log('------------------userLeagues: ', userLeagues);
-    leagueIdsArray = userLeagues.map((league) => league._id);
-    console.log('------------------leagueIdsArray: ', leagueIdsArray);
+    console.log('---------------------------challengeToEdit: ',challengeToEdit);
 
-    const games = await Game.find({
-      $or: [
-        { isPrivate: false },
-        // { ownerLeagues: { $elemMatch: { $in: leagueIdsArray } } },
-        { ownerLeagues: { $in: leagueIdsArray } },
-      ],
-    }).lean(); //.lean() permet de modifier l'objet retourne sans avoir à MaJ le schema
-    games.forEach(game1 => {
-      game2 = challengeToEdit.game;
-      const isSame = JSON.stringify(game1._id) === JSON.stringify(game2._id);
-      //console.log(`league1._id: ${JSON.stringify(league1._id)} league2._id: ${JSON.stringify(league2._id)} : ${isSame}`)
-      if(isSame){
-        game1.selected = true;
-      }
-      });
+    
+    const contenders = challengeToEdit.contenders;
+  
+  
+
+    
+
   
     const data = {
-      usersContender,
-      usersWinner,
-      leagues,
-      games,
+      contenders,
       challenge: challengeToEdit,
     };
     console.log('-----------------------------------------data: ', data);
