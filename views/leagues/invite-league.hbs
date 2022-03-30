@@ -1,10 +1,24 @@
 {{#with league}}
 <h1>Invite your friends !</h1>
 <div>
-    Send this key to your friends so they can join the league : {{inviteKey}}
+    Send this key or share <a id="invite-link" href="/leagues/join/{{inviteKey}}">invitation link</a> with your friends so they can join the league : {{inviteKey}}
 </div>
-<div>
-    Share this link for your friends to join the league : <a href="/leagues/join/{{inviteKey}}">Invitation link</a>
-</div>
+<button class="paper-btn" onclick="copyInvite()">Copy invitation link</button>
+<div id = "invite-copied" class="alert alert-success" style ="visibility :hidden">Invite link is copied</div>
 {{/with}}
 <div><a href="/leagues">Return to the list of Leagues</a></div>
+
+<script>
+    function copyInvite() {
+        /* Get the text field */
+        const copyUrl = document.querySelector("#invite-link").getAttribute("href");
+        let inviteLink = `${window.location.host}${copyUrl}`
+
+        /* Copy the text inside the text field */
+        navigator.clipboard.writeText(inviteLink);
+        
+        /* Alert the copied text */
+        const alertSuccess= document.getElementById("invite-copied");
+        alertSuccess.style.visibility = 'visible'
+    }
+</script>
