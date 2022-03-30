@@ -4,17 +4,19 @@
   <label for="challengeID">
     <input hidden type="text" name="challengeID" id="challengeID" value="{{challenge.id}}">
   </label>
-  <label for="league"> league </label>
-  <select name="league" id="league">
-      {{#each leagues}}
-        {{#if selected}}
-          <option selected value="{{id}}">{{name}}</option>
-        {{else}}
-          <option value="{{id}}">{{name}}</option>
-        {{/if}}
-      {{/each}}
-  </select>
 
+  <label> league
+      <select name="league">
+          {{#each leagues}}
+            {{#if selected}}
+              <option selected value="{{id}}">{{name}}</option>
+            {{else}}
+              <option value="{{id}}">{{name}}</option>
+            {{/if}}
+          {{/each}}
+      </select>
+  </label>
+  <p></p>
 
   <label> game
       <select name="game">
@@ -28,6 +30,8 @@
           {{/each}}
       </select>
   </label>
+  <p></p>
+
   <label> contenders
       <select name="contenders" multiple>
           {{#each usersContender}}
@@ -39,9 +43,13 @@
           {{/each}}
       </select>
   </label>
+  <p></p>
+
   <label>stake
     <input type="Number" name="stake" value="{{challenge.stake}}">
   </label>
+  <p></p>
+
   <label>isCompleted
     {{#if challenge.isCompleted}}
       <input type="checkbox" name="isCompleted" checked>
@@ -49,6 +57,7 @@
       <input type="checkbox" name="isCompleted">
     {{/if}}
   </label>
+  <p></p>
 
   <label> winners
       <select name="winners" multiple>
@@ -61,6 +70,7 @@
           {{/each}}
       </select>
   </label>
+  <p></p>
 
   <button type="submit">Edit Your Challenge</button>
 </form>

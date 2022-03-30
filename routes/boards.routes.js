@@ -47,11 +47,13 @@ router.get("/:id", isLoggedIn, async (req, res, next) => {
           },
         },
       ]);
+      // console.log('------------------------countPerLeague:', countPerLeague)
       countPerLeague = countPerLeague[0];
       countPerLeague = await League.populate(countPerLeague, {
         path: "_id",
       });
-
+      // console.log('------------------------countPerLeague after populate:', countPerLeague)
+      
       // Stats per User
       let countPerUser = await Challenge.aggregate([
         {

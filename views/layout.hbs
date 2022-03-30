@@ -1,5 +1,6 @@
 <html lang="en">
 
+
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,19 +8,21 @@
     <title>{{appTitle}}</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="/js/layout.js"></script> 
   </head>
 
   <body>
   <nav>
-    <div id="navTop">
-      <div>
-        <p> you are : {{user.username}}</p>
-      </div>
-      <div>
-        <a href="/auth/signup">signup</a>
-        <a href="/auth/login">login</a>
-        <a href="/auth/logout">logout</a>
-      </div>
+    <div class="topnav" id="myTopnav">
+      <a href="/">{{user.username}} Homepage</a>
+      <a href="/auth/signup">signup</a>
+      <a href="/auth/login">login</a>
+      <a href="/auth/logout">logout</a>
+      <a href="/challenge/create">create challenge</a>
+      <a href="/challenge/list">list challenges</a>
+      <a href="/boards/main">dashboards</a>
+      
+      <a id ="menuButton" class="icon"> Menu</a>
     </div>
   </nav>
     <div class = "indexSection">
