@@ -1,19 +1,26 @@
 <h1>Games list</h1>
-<h2><a href="/games/create">(+) Create a new game</a></h2>
+<div class="row">
+<a href="/games/create" class="paper-btn">Create a new game</a>
+</div>
 {{#each games}}
-    <div>
-        <h1>{{name}}</h1>
-        <h2>{{emoji}}</h2>
-        <p>{{description}}</p>
-        {{#if isPrivate}}
-            <p>This game is private and available to : 
-                {{#each ownerLeagues}}
-                    {{name}} |
-                {{/each}}
-            </p>
-        {{else}}
-            <p>This game is public</p>
-        {{/if}}
-        <p><a href="/games/{{_id}}/edit">Edit game</a></p>
+    <div class="card" style="width: 20rem;">
+        <div class="card-body">
+            <h4 class="card-title">{{name}} {{emoji}}</h4>
+            <h6 class="card-subtitle">
+                {{#if isPrivate}}
+                <p>This game is private and available to : 
+                    {{#each ownerLeagues}}
+                        {{name}} |
+                    {{/each}}
+                </p>
+                {{else}}
+                    <p>This game is public</p>
+                {{/if}}
+            </h6>
+            <p class="card-text">{{description}}</p>
+            <div class="row">
+                <a href="/games/{{_id}}/edit" class="paper-btn">Edit game</a>
+            </div>
+        </div>
     </div>
 {{/each}}
