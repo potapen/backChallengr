@@ -57,6 +57,8 @@ const games = [
     description: "Le jeu du beerpong, classique",
     isPrivate: false,
     emoji: "🍻",
+    imageUrl:
+      "https://www.jeux-alcool.com/wp-content/uploads/2017/03/beerPong.jpeg",
   },
   {
     name: "Torse pong",
@@ -64,6 +66,8 @@ const games = [
     isPrivate: true,
     ownerLeagues: [],
     emoji: "🫁",
+    imageUrl:
+      "https://i0.wp.com/godrunkyourself.com/wp-content/uploads/2020/04/AdobeStock_137721763-1-1440x960.jpeg",
   },
 ];
 
