@@ -1,4 +1,13 @@
 <section class="indexSection">
+    {{#if hasNoLeague}}
+    <h4>Don't have a league yet ? </h4>
+    <div class="row">
+        <a href="/leagues/create" class="paper-btn">Create a league</a>
+    </div>
+    <div class="row">
+        <a href="/leagues/join" class="paper-btn">Join a league</a>
+    </div>
+    {{/if}}
     <h4>Challenges!</h4>
     <div class="row">
         <a href="/challenge/create" class="paper-btn">Create a challenge</a>
