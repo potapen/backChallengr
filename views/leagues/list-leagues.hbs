@@ -1,16 +1,21 @@
-<h1>Leagues list</h1>
-<h2><a href="/leagues/create">(+) Create a new league</a></h2>
-<h2><a href="/leagues/join">(+) Join a league</a></h2>
+<h1>Leagues</h1>
+<div class="row">
+<a href="/leagues/create" class="paper-btn">Create a new league</a>
+<a href="/leagues/join" class="paper-btn">Join a league</a>
+</div>
 {{#each leagues}}
-    <div>
-        <h1>{{name}}</h1>
-        <p>{{description}}</p>
-        <p>Team members are : 
+    <div class="card" style="width: 20rem;">
+        <div class="card-body">
+            <h4 class="card-title">{{name}}</h4>
+            <h6 class="card-subtitle">Members : 
             {{#each members}}
                 {{username}} |
-            {{/each}}
-        </p>
-        <p><a href="/leagues/{{_id}}/invite">Invite friends</a></p>
-        <p><a href="/leagues/{{_id}}/edit">Edit league</a></p>
+            {{/each}}</h6>
+            <p class="card-text">{{description}}</p>
+            <div class="row">
+                <a href="/leagues/{{_id}}/invite" class="paper-btn">Invite friends</a>
+                <a href="/leagues/{{_id}}/edit" class="paper-btn">Edit league</a>
+            </div>
+        </div>
     </div>
 {{/each}}
