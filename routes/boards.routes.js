@@ -56,18 +56,18 @@ router.get("/:id", isLoggedIn, async (req, res, next) => {
       let countPerUser = await Challenge.aggregate([
         {
           $match: {
-            $and: [
-              {
-                contenders: user._id,
-              },
-              { league: leagueID },
-            ],
+            $and: [{ league: leagueID }],
           },
         },
         {
           $unwind: {
             path: "$contenders",
             preserveNullAndEmptyArrays: false,
+          },
+        },
+        {
+          $match: {
+            contenders: user._id,
           },
         },
         {
@@ -94,18 +94,22 @@ router.get("/:id", isLoggedIn, async (req, res, next) => {
       let countPerWinner = await Challenge.aggregate([
         {
           $match: {
-            $and: [
-              {
-                winners: user._id,
-              },
-              { league: leagueID },
-            ],
+            $and: [{ league: leagueID }],
           },
         },
         {
           $unwind: {
             path: "$winners",
             preserveNullAndEmptyArrays: false,
+          },
+        },
+        {
+          $match: {
+            $and: [
+              {
+                winners: user._id,
+              },
+            ],
           },
         },
         {
