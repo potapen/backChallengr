@@ -19,19 +19,7 @@ const lineData = {
 const lineConfig = {
   type: "line",
   data: lineData,
-  options: {
-    scales: {
-      xAxes: [
-        {
-          ticks: {
-            autoSkip: false,
-            maxRotation: 90,
-            minRotation: 90,
-          },
-        },
-      ],
-    },
-  },
+  options: {},
 };
 
 //Parameters for the web chart
@@ -126,8 +114,17 @@ updatedAt: "2022-03-31T10:12:45.452Z"
  */
 }
 
+async function checkIfLocalComputer() {
+  const response = await axios({
+    //we need to return a promise
+    method: "GET",
+    url: "http://localhost:3000/challenge",
+  });
+  return (response.data==='challenge')
+}
 window.addEventListener("DOMContentLoaded", async (event) => {
   //otherwise the DOM is not loaded and menuButton returns null
+  console.log('checkIfLocalComputer', checkIfLocalComputer())
   const nameSelectElt = document.querySelector("#nameSelect");
   if (nameSelectElt) {
     //we draw empty chart first
