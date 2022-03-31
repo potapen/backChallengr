@@ -49,6 +49,16 @@ router.get("/leaguestat/:InputLeagueID", isLoggedIn, async (req, res, next) => {
       },
     },
   ]);
+  const stakeOverTimeSimple = stakeOverTime.map(obj => {
+
+    let monString = JSON.stringify(obj._id)
+
+    console.log(monString)
+    monString = monString.substring(6,17)
+    console.log(monString)
+    obj._id = monString
+
+  });
   res.send(stakeOverTime);
 });
 
