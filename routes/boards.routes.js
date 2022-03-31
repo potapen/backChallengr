@@ -1,12 +1,13 @@
 const router = require("express").Router();
 
 const Challenge = require("../models/Challenge.model");
+const Game = require("../models/Game.model");
 const League = require("../models/League.model");
 const User = require("../models/User.model");
 
 const isLoggedIn = require("../middleware/isLoggedIn");
 const { redirect } = require("express/lib/response");
-
+const mongoose = require("mongoose");
 router.get("/main", isLoggedIn, async (req, res, next) => {
   try {
     res.redirect(`/boards/${req.session.user._id}`);
@@ -52,7 +53,6 @@ router.get("/:id", isLoggedIn, async (req, res, next) => {
       countPerLeague = await League.populate(countPerLeague, {
         path: "_id",
       });
-      // console.log('------------------------countPerLeague after populate:', countPerLeague)
       
       // Stats per User
       let countPerUser = await Challenge.aggregate([
@@ -199,6 +199,7 @@ router.get("/:id", isLoggedIn, async (req, res, next) => {
         rankingPerLeague,
         noWinners,
       });
+
     }
 
     res.render("boards/main", { user, statsPerLeague });
@@ -207,5 +208,7 @@ router.get("/:id", isLoggedIn, async (req, res, next) => {
     next();
   }
 });
+
+
 
 module.exports = router;
