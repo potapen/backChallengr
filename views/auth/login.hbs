@@ -1,17 +1,18 @@
 <form action="/auth/login" method="POST">
-   <label> email
+   <div>
+      <label>Email</label>
       <input type="text" name="email">
-   </label>
-   <label> Password
+      <label> Password</label>
       <input type="password" name="password">
-   </label>
-   <input type="hidden" name="targetUrl" value="{{targetUrl}}">
-
-   <button type="submit">Login</button>
+      <input type="hidden" name="targetUrl" value="{{targetUrl}}">
+   </div>
+   <div>
+      <button type="submit">Login</button>
+   </div>
 </form>
 
 <div>
-   You don't have any account yet ?
+   You don't have an account yet ?
 </div>
 <div>
    <button><a href="/auth/signup?targetUrl={{targetUrl}}">Sign up</a></button>

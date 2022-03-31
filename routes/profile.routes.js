@@ -41,21 +41,20 @@ router.post(
       const newUser = {
         username,
       };
-      let newImageUrl = cloudinary.url(req.file.filename, {
-        transformation: [
-          {
-            aspect_ratio: "1.0",
-            gravity: "face",
-            width: "0.6",
-            zoom: "0.7",
-            crop: "thumb",
-          },
-          { radius: "max" },
-          { color: "black", effect: "outline" },
-        ],
-      });
-      console.log(newImageUrl);
-      if (newImageUrl) {
+      if (req.file) {
+        let newImageUrl = cloudinary.url(req.file.filename, {
+          transformation: [
+            {
+              aspect_ratio: "1.0",
+              gravity: "face",
+              width: "0.6",
+              zoom: "0.7",
+              crop: "thumb",
+            },
+            { radius: "max" },
+            { color: "black", effect: "outline" },
+          ],
+        });
         newUser.pictureUrl = newImageUrl;
         req.app.locals.profilePicture = newImageUrl;
       }

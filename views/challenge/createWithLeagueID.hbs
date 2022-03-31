@@ -1,25 +1,23 @@
-create challenge
 
-{{games}}
+<h3>Ready to battle ?</h3>
 <form action="/challenge/create" method="POST">
-  <label> league
-    <input type="text" name="league" value="{{league}}">
-  </label>
-  <label> game
-      <select name="game">
-          {{#each games}}
-              <option value="{{id}}">{{name}}</option>
-          {{/each}}
-      </select>
-  </label>
-  <label> contenders
+    <input type="hidden" type="text" name="league" value="{{league}}">
+  <label> Game </label>
+  <select name="game">
+      {{#each games}}
+          <option value="{{id}}">{{name}}</option>
+      {{/each}}
+  </select>
+  <p>Don't find the right game ? <a href="/games/create">Create a game</a></p>
+  
+  <label> Contenders
       <select name="users" multiple>
           {{#each users}}
               <option value="{{id}}">{{username}}</option>
           {{/each}}
       </select>
   </label>
-  <label>stake
+  <label> Stake
     <input type="Number" name="stake">
   </label>
 

@@ -1,19 +1,18 @@
-<form action="/auth/signup" method="POST">
-   <label> email
+<form action="/auth/signup" method="POST" enctype="multipart/form-data">
+   <div>
+      <label> Email </label>
       <input type="text" name="email">
-   </label>
-   <label> Username
+      <label> Username </label>
       <input type="text" name="username">
-   </label>
-   <label> Password
+      <label> Password
       <input type="password" name="password">
-   </label>
-   <label> pictureUrl
-      <input type="text" name="pictureUrl">
-   </label>
-   <input type="hidden" name="targetUrl" value="{{targetUrl}}">
-
-   <button type="submit">Sign Up</button>
+      <label for="coverPicture">Profile picture</label>
+            <input type="file" name="coverPicture" id="coverPicture">
+            <input type="hidden" name="targetUrl" value="{{targetUrl}}">
+   </div>
+   <div>
+      <button type="submit">Sign Up</button>
+   </div>
 </form>
 
 {{#if errorMessage}}

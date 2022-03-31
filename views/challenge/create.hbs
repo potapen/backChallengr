@@ -1,14 +1,12 @@
-<h4> Create Challenge </h4>
+<h4> Pick a league </h4>
 
 {{games}}
 <form action="/challenge/create" method="GET">
-   <label> league
         <select name="league">
             {{#each leagues}}
                 <option value="{{id}}">{{name}}</option>
             {{/each}}
         </select>
-   </label>
    <button type="submit">Create Your Challenge</button>
 </form>
 

@@ -19,14 +19,16 @@
   <nav>
     <div class="topnav" id="myTopnav">
       <a class = "menu-icon" href="/"><img  src="/images/beer-icon.png" alt="beer icon"></a>
+      {{#if isLoggedIn}}
       <a href="/profile">Profile</a>
       <a href="/challenge/create">Create challenge</a>
       <a href="/challenge/list">List challenges</a>
       <a href="/boards/main">Leader Board</a>
+      <a href="/auth/logout">Logout</a>
+      {{else}}
       <a href="/auth/signup">Signup</a>
       <a href="/auth/login">Login</a>
-      <a href="/auth/logout">Logout</a>
-      
+      {{/if}}
       <a id ="menuButton" class="icon"><img src="{{profilePicture}}" alt=""></a>
     </div>
   </nav>

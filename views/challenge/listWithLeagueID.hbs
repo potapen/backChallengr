@@ -5,25 +5,42 @@
 
         <div class="card-body">
             <h4 class="card-title">{{game.name}}</h4>
-            <h6 class="card-subtitle">{{id}}</h6>
+            <h6 class="card-subtitle">{{createdAt}}</h6>
             <h6 class="card-subtitle">{{league.name}}</h6>
             <p class="card-text">{{game.description}}</p>
-            <p>
+            <h4 class="card-title">Contenders</h4>
+            <div class = "winners-container">
                 {{#each contenders}}
-                    {{username}} |
+                <div>
+                    <img src="{{pictureUrl}}" alt="" style="width: 3rem;border-radius: 50%;">
+                    <h6 class="card-subtitle">{{username}}</h6>
+                </div>
                 {{/each}}
-            </p>
+                </div>
             <p>stack: {{stake}}</p>
             <div class="progress margin-bottom">
                 <div class="bar danger striped w-{{stake}}"></div>
             </div>
             {{#if isCompleted}}
                 <p class="badge">It's Over...</p>
+                <h4 class="card-title">Winners</h4>
+                <div class = "winners-container">
+                {{#each winners}}
+                <div>
+                    <img src="{{pictureUrl}}" alt="" style="width: 3rem;border-radius: 50%;">
+                    <h6 class="card-subtitle">{{username}}</h6>
+                </div>
+                {{/each}}
+                </div>
             {{else}}
+            <div>
                 <p class="badge success">Ongoing!</p>
+            </div>
             {{/if}}
             <div class="row">
+                {{#if isCompleted}}{{else}}
                 <a href="/challenge/update/{{id}}" class="paper-btn">Gameover, decide who won!</a>
+                {{/if}}
                 <a href="/challenge/edit/{{id}}" class="paper-btn">edit challenge</a>
                 <a href="/challenge/delete/{{id}}" class="paper-btn">delete challenge</a>
             </div>
