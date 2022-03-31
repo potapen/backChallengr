@@ -1,4 +1,25 @@
 <section class="indexSection">
+    {{#if ongoingChallenges}}
+            <h4>Current challenges</h4>
+            {{#each ongoingChallenges}}
+            <div class="card" style="width: 20rem;">
+                <div class="card-body">
+                    <div>
+                        <span class="badge secondary">{{game.name}}</span>
+                        <span class="badge warning">{{league.name}}</span>
+                        <span class="badge danger">{{stake}}x💰</span>
+                        <span class="badge success">{{createdAt}}</span>
+                        <p></p>
+                    </div>
+                    <h6 class="card-subtitle">
+                        {{#each contenders}}
+                            {{username}} |
+                        {{/each}}</h6>
+                    <a href="/challenge/update/{{_id}}" class="paper-btn">Gameover ?</a>
+                </div>
+            </div>
+            {{/each}}
+    {{/if}}
     {{#if hasNoLeague}}
     <h4>Don't have a league yet ? </h4>
     <div class="row">
@@ -8,13 +29,18 @@
         <a href="/leagues/join" class="paper-btn">Join a league</a>
     </div>
     {{/if}}
-    <h4>Challenges!</h4>
+    <h4>How good are you?</h4>
+    <div class="row">
+        <a href="/boards/main" class="paper-btn">Leader Board</a>
+    </div>
+    <h4>Challenges</h4>
     <div class="row">
         <a href="/challenge/create" class="paper-btn">Create a challenge</a>
     </div>
     <div class="row">
         <a href="/challenge/list" class="paper-btn">List of Challenges</a>
     </div>
+
     <h4>How good are you?</h4>
     <div class="row">
         <a href="/boards/main" class="paper-btn">Leader Board</a>

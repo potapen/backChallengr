@@ -1,6 +1,7 @@
 console.log("this is graph.js");
-let GlobalLeagueID; //leagueID is a variable set in leagueSelectClick callback of an event listener. I use GlobalLeagueID to make leagueID persist out of the function
 
+let GlobalLeagueID; //leagueID is a variable set in leagueSelectClick callback of an event listener. I use GlobalLeagueID to make leagueID persist out of the function
+// let serverURL = '';
 //Parameters for the line chart
 let lineLabelsArray = [];
 let lineDatasArrayLine = [];
@@ -53,7 +54,7 @@ async function getUsersFromLeague(leagueID) {
   const response = await axios({
     //we need to return a promise
     method: "GET",
-    baseURL: "http://localhost:3000/graphs/leagueobj/",
+    baseURL: "/graphs/leagueobj/",
     url: leagueID,
   });
   const membersObjArray = response.data.members;
@@ -71,7 +72,7 @@ async function getStakeOverTimeFromLeague(leagueID) {
   const response = await axios({
     //we need to return a promise
     method: "GET",
-    baseURL: "http://localhost:3000/graphs/leaguestat/",
+    baseURL: "/graphs/leaguestat/",
     url: leagueID,
   });
   const stakesObjArray = response.data;
@@ -88,7 +89,7 @@ async function getStakePerGameForAGivenUserAndLeague(leagueID, userID) {
   const response = await axios({
     //we need to return a promise
     method: "GET",
-    baseURL: "http://localhost:3000/graphs/userstat/",
+    baseURL: "/graphs/userstat/",
     url: `${leagueID}/${userID}`,
   });
   const stakePerGameObjArray = response.data;
@@ -114,8 +115,20 @@ updatedAt: "2022-03-31T10:12:45.452Z"
  */
 }
 
+async function checkIfLocalComputer() {
+  const response = await axios({
+    //we need to return a promise
+    method: "GET",
+    url: "http://localhost:3000/challenge",
+  });
+  return (response.data==='challenge')
+}
 window.addEventListener("DOMContentLoaded", async (event) => {
   //otherwise the DOM is not loaded and menuButton returns null
+  // const onLocalComputer = await checkIfLocalComputer()
+  // serverURL = onLocalComputer?'http://localhost:3000':'https://ironhackchallengr.herokuapp.com'
+  // console.log('serverURL is :', serverURL)
+  // console.log('onLocalComputer', onLocalComputer)
   const nameSelectElt = document.querySelector("#nameSelect");
   if (nameSelectElt) {
     //we draw empty chart first
