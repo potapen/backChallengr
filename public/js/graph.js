@@ -121,7 +121,7 @@ async function checkIfLocalComputer() {
     method: "GET",
     url: "http://localhost:3000/challenge",
   });
-  return (response.data==='challenge')
+  return response.data === "challenge";
 }
 window.addEventListener("DOMContentLoaded", async (event) => {
   //otherwise the DOM is not loaded and menuButton returns null
@@ -144,7 +144,7 @@ window.addEventListener("DOMContentLoaded", async (event) => {
     When we click on the dropdown selector of league, we fill the line chart with data from the league
     */
     const leagueSelectClick = async (event) => {
-      console.log("inside leagueSelectClick")
+      console.log("inside leagueSelectClick");
       const leagueID = leagueSelectElt.value;
       if (leagueID) {
         //make a check otherwise the below code will try to run in other views
@@ -205,7 +205,7 @@ window.addEventListener("DOMContentLoaded", async (event) => {
         webChart.update();
       }
     };
-    leagueSelectElt.addEventListener("click", leagueSelectClick);
-    nameSelectElt.addEventListener("click", nameSelectClick);
+    leagueSelectElt.addEventListener("change", leagueSelectClick);
+    nameSelectElt.addEventListener("change", nameSelectClick);
   }
 });
