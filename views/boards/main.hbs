@@ -1,28 +1,25 @@
-<h1>{{user.username}}</h1>
-<h2>Leagues:{{statsPerLeague.length}}</h2>
+<h3><img src="{{user.pictureUrl}}" alt="" style="width: 4rem;border-radius: 50%;"></h3>
+<h3>{{user.username}}</h3>
 {{#each statsPerLeague}}
-    <div>
-        <h1>{{countPerLeague._id.name}}</h1>
-        <div>
-            <p>Number of members : {{countPerLeague._id.members.length}}</p>
-            <p>Number of challenges : {{countPerLeague.count}}</p>
-            <p>Total stake : {{countPerLeague.totalStake}}</p>
-        </div>
-         <div>
-            <h2>Leaderboard</h2>
+    <div class="card" style="width: 20rem;">
+        <img src="{{countPerLeague._id.imageUrl}}" alt="{{name}} image">
+        <div class="card-body">
+            <h3 class="card-title">{{countPerLeague._id.name}}</h3>
+            <h6 class="card-subtitle">Members: {{countPerLeague._id.members.length}}x👤</h6>
+            <h6 class="card-subtitle">Challenges: {{countPerLeague.count}}x🎲</h6>
+            <h6 class="card-subtitle">Stake: {{countPerLeague.totalStake}}x💰</h6>
+            <h4 class="card-text">Personal</h4>
+            <p class="card-text">{{#if countPerWinner}}{{countPerWinner.count}}{{else}}0{{/if}}x🎲 winned out of {{countPerUser.count}}x🎲</p>
+            <p class="card-text"">{{#if countPerWinner}}{{countPerWinner.totalStake}}{{else}}0{{/if}}x💰 earned out of {{countPerUser.totalStake}}x💰</p>
+            <h4 class="card-text">Leader board</h4>
             <ol>
             {{#each rankingPerLeague}}
-                <li>{{_id.winners.username}} | Stake won : {{totalStake}} | Challenges won : {{count}} | <a href="/boards/{{_id.winners._id}}">See stats</a></li>
+                <li><img src="{{_id.winners.pictureUrl}}" alt="" style="width: 3rem;border-radius: 50%;">{{_id.winners.username}} ({{totalStake}} x 💰| {{count}} x 🎲 | <a href="/boards/{{_id.winners._id}}">see stats</a>)</li>
             {{/each}}
             {{#each noWinners}}
-                <li>{{username}} | Stake won : 0 | Challenges won : 0 | <a href="/boards/{{_id}}">See stats</a></li>
+                <li><img src="{{pictureUrl}}" alt="" style="width: 3rem;border-radius: 50%;">{{username}}  (0 x 💰| 0  x 🎲 | <a href="/boards/{{_id}}">see stats</a>)</li>
             {{/each}}
             </ol>
-        </div>
-        <div>
-            <h2>Your KPI</h2>
-           <p>You won {{#if countPerWinner}}{{countPerWinner.count}}{{else}}0{{/if}} challenges out of {{countPerUser.count}} challenges you took </p>
-            <p>You won {{#if countPerWinner}}{{countPerWinner.totalStake}}{{else}}0{{/if}} out of {{countPerUser.totalStake}} you staked </p>
         </div>
     </div>
 {{/each}}
