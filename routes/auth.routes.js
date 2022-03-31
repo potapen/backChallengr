@@ -16,11 +16,16 @@ const isLoggedIn = require("../middleware/isLoggedIn");
 const app = require("../app");
 
 router.get("/signup", isLoggedOut, (req, res) => {
-  res.render("auth/signup");
+  try {
+    const targetUrl = req.query.targetUrl;
+    res.render("auth/signup", { targetUrl });
+  } catch {
+    next();
+  }
 });
 
 router.post("/signup", isLoggedOut, (req, res) => {
-  const { email, username, password, pictureUrl } = req.body;
+  const { email, username, password, pictureUrl, targetUrl } = req.body;
 
   if (!email) {
     return res.status(400).render("auth/signup", {
@@ -52,7 +57,7 @@ router.post("/signup", isLoggedOut, (req, res) => {
     if (found) {
       return res
         .status(400)
-        .render("auth.signup", { errorMessage: "email already taken." });
+        .render("auth/signup", { errorMessage: "email already taken." });
     }
 
     // if user is not found, create a new user - start with hashing the password
@@ -71,7 +76,11 @@ router.post("/signup", isLoggedOut, (req, res) => {
       .then((user) => {
         // Bind the user to the session object
         req.session.user = user;
-        res.redirect("/");
+
+        if (targetUrl) {
+          return res.redirect(targetUrl);
+        }
+        return res.redirect("/");
       })
       .catch((error) => {
         if (error instanceof mongoose.Error.ValidationError) {

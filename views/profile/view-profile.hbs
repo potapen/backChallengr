@@ -1,0 +1,17 @@
+<h1>Profile</h1>
+{{#with user}}
+    <div class="card" style="width: 20rem;">
+        <img src="{{pictureUrl}}" alt="{{username}} image">
+        <div class="card-body">
+            <h4 class="card-title">{{username}}</h4>
+                        <h6 class="card-subtitle">Leagues : 
+            {{#each ../leagues}}
+                {{name}} |
+            {{/each}}</h6>
+            <p class="card-text">email : {{email}}</p>
+            <div class="row">
+                <a href="/profile/edit" class="paper-btn">Edit</a>
+            </div>
+        </div>
+    </div>
+{{/with}}

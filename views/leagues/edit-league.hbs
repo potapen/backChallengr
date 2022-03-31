@@ -1,11 +1,13 @@
 <h1>League edit</h1>
 {{#with league}}
-    <form action="/leagues/{{_id}}/edit" method="POST">
+    <form action="/leagues/{{_id}}/edit" method="POST" enctype="multipart/form-data">
             <div>
                 <label for="name">Name</label>
                 <input type="text" name="name" id="name" value = "{{name}}">
                 <label for="description">Description</label>
                 <input type="text" name="description" id="description" value = "{{description}}">
+                <label for="coverPicture">Picture</label>
+                <input type="file" name="coverPicture" id="coverPicture">
             </div>
             <div>
                 <label for = "members">Members</label>

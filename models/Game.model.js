@@ -7,7 +7,7 @@ const gameSchema = new Schema(
     isPrivate: { type: Boolean },
     ownerLeagues: [{ type: Schema.Types.ObjectId, ref: "League" }],
     emoji: { type: String, maxLength: 2 },
-    imageUrl : { type: String }, //ALV EDIT<--------------------------------------------------
+    imageUrl: { type: String },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

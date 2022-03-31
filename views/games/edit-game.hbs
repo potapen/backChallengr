@@ -1,6 +1,6 @@
 <h1>Game edit</h1>
 {{#with game}}
-<form action="/games/{{_id}}/edit" method="POST">
+<form action="/games/{{_id}}/edit" method="POST" enctype="multipart/form-data">
         <div>
             <label for="name">Name</label>
             <input type="text" name="name" id="name" value = "{{name}}">
@@ -12,6 +12,8 @@
           <div>
             <label for="emoji">Emoji</label>
             <input type="text" name="emoji" id="emoji" value = "{{emoji}}">
+            <label for="coverPicture">Picture</label>
+                <input type="file" name="coverPicture" id="coverPicture">
         </div>
         <div>
             <label for="isPrivate">is Private ?</label>

@@ -2,6 +2,8 @@ const router = require("express").Router();
 
 const Game = require("../models/Game.model");
 const League = require("../models/League.model");
+const fileUploader = require("../config/cloudinary.config");
+const cloudinary = require("cloudinary").v2;
 
 router.get("/", async (req, res, next) => {
   try {
@@ -34,26 +36,43 @@ router.get("/create", async (req, res, next) => {
   }
 });
 
-router.post("/create", async (req, res, next) => {
-  try {
-    let { name, emoji, description, isPrivate, ownerLeagues } = req.body;
-    isPrivate = isPrivate === "on";
-    const newGame = {
-      name,
-      description,
-      isPrivate,
-      ownerLeagues,
-      emoji,
-    };
+router.post(
+  "/create",
+  fileUploader.single("coverPicture"),
+  async (req, res, next) => {
+    try {
+      let { name, emoji, description, isPrivate, ownerLeagues } = req.body;
+      isPrivate = isPrivate === "on";
+      const newGame = {
+        name,
+        description,
+        isPrivate,
+        ownerLeagues,
+        emoji,
+      };
 
-    await Game.create(newGame);
+      if (req.file) {
+        let newImageUrl = cloudinary.url(req.file.filename, {
+          width: 400,
+          height: 260,
+          gravity: "auto",
+          crop: "fill",
+        });
+        newGame.imageUrl = newImageUrl;
+      } else {
+        newGame.imageUrl =
+          "https://res.cloudinary.com/dwfrbljbo/image/upload/v1648648579/challengr/i7xfdmnxgwaf7yv0qogm.jpg";
+      }
 
-    res.redirect("/games");
-  } catch (error) {
-    console.log(error);
-    next();
+      await Game.create(newGame);
+
+      res.redirect("/games");
+    } catch (error) {
+      console.log(error);
+      next();
+    }
   }
-});
+);
 
 router.get("/:id/edit", async (req, res, next) => {
   try {
@@ -78,25 +97,38 @@ router.get("/:id/edit", async (req, res, next) => {
   }
 });
 
-router.post("/:id/edit", async (req, res, next) => {
-  try {
-    const id = req.params.id;
-    let { name, emoji, description, isPrivate, ownerLeagues } = req.body;
-    isPrivate = isPrivate === "on";
-    const newGame = {
-      name,
-      description,
-      isPrivate,
-      ownerLeagues,
-      emoji,
-    };
+router.post(
+  "/:id/edit",
+  fileUploader.single("coverPicture"),
+  async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      let { name, emoji, description, isPrivate, ownerLeagues } = req.body;
+      isPrivate = isPrivate === "on";
+      const newGame = {
+        name,
+        description,
+        isPrivate,
+        ownerLeagues,
+        emoji,
+      };
+      if (req.file) {
+        let newImageUrl = cloudinary.url(req.file.filename, {
+          width: 400,
+          height: 260,
+          gravity: "auto",
+          crop: "fill",
+        });
+        newGame.imageUrl = newImageUrl;
+      }
 
-    await Game.findByIdAndUpdate(id, newGame);
-    res.redirect(`/games`);
-  } catch {
-    next();
+      await Game.findByIdAndUpdate(id, newGame);
+      res.redirect(`/games`);
+    } catch {
+      next();
+    }
   }
-});
+);
 
 router.get("/:id/delete", async (req, res, next) => {
   try {

@@ -13,4 +13,3 @@ window.addEventListener("DOMContentLoaded", async (event) => { //otherwise the D
     }
     menuButton.addEventListener('click', menuClick);
   });
-
