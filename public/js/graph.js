@@ -1,4 +1,4 @@
-console.log('this is graph.js')
+console.log("this is graph.js");
 let GlobalLeagueID; //leagueID is a variable set in leagueSelectClick callback of an event listener. I use GlobalLeagueID to make leagueID persist out of the function
 
 //Parameters for the line chart
@@ -6,17 +6,32 @@ let lineLabelsArray = [];
 let lineDatasArrayLine = [];
 const lineData = {
   labels: lineLabelsArray,
-  datasets: [{
-    label: 'League Activity',
-    data: lineDatasArrayLine,
-    fill: false,
-    borderColor: 'rgb(75, 192, 192)',
-    tension: 0.1
-  }]
+  datasets: [
+    {
+      label: "League Activity",
+      data: lineDatasArrayLine,
+      fill: false,
+      borderColor: "rgb(75, 192, 192)",
+      tension: 0.1,
+    },
+  ],
 };
 const lineConfig = {
-  type: 'line',
+  type: "line",
   data: lineData,
+  options: {
+    scales: {
+      xAxes: [
+        {
+          ticks: {
+            autoSkip: false,
+            maxRotation: 90,
+            minRotation: 90,
+          },
+        },
+      ],
+    },
+  },
 };
 
 //Parameters for the web chart
@@ -24,34 +39,37 @@ let webLabelsArray = [];
 let webDatasArrayLine = [];
 const webData = {
   labels: webLabelsArray,
-  datasets: [{
-    label: 'Total score per game',
-    data: webDatasArrayLine,
-    fill: false,
-    borderColor: 'rgb(75, 192, 192)',
-    tension: 0.1
-  }]
+  datasets: [
+    {
+      label: "Total score per game",
+      data: webDatasArrayLine,
+      fill: false,
+      borderColor: "rgb(75, 192, 192)",
+      tension: 0.1,
+    },
+  ],
 };
 const webConfig = {
-  type: 'radar',
+  type: "radar",
   data: webData,
   options: {
     elements: {
       line: {
-        borderWidth: 3
-      }
-    }
+        borderWidth: 3,
+      },
+    },
   },
 };
 
-async function getUsersFromLeague (leagueID) {
-  const response = await axios({ //we need to return a promise
-    method: 'GET',
-    baseURL: 'http://localhost:3000/graphs/leagueobj/',
+async function getUsersFromLeague(leagueID) {
+  const response = await axios({
+    //we need to return a promise
+    method: "GET",
+    baseURL: "http://localhost:3000/graphs/leagueobj/",
     url: leagueID,
   });
-  const membersObjArray = response.data.members
-  return membersObjArray
+  const membersObjArray = response.data.members;
+  return membersObjArray;
 
   /*
   Array(3) [ {…}, {…}, {…} ]
@@ -59,32 +77,34 @@ async function getUsersFromLeague (leagueID) {
 1: Object { _id: "6242e8b08c623fa3f3698e0e", email: "ahn@gmail.com", username: "ahn", … }
 2: Object { _id: "6242e8b08c623fa3f3698e0f", email: "brian@gmail.com", username: "brian", … }
   */
-};
+}
 
-async function getStakeOverTimeFromLeague (leagueID) {
-  const response = await axios({ //we need to return a promise
-    method: 'GET',
-    baseURL: 'http://localhost:3000/graphs/leaguestat/',
+async function getStakeOverTimeFromLeague(leagueID) {
+  const response = await axios({
+    //we need to return a promise
+    method: "GET",
+    baseURL: "http://localhost:3000/graphs/leaguestat/",
     url: leagueID,
   });
-  const stakesObjArray = response.data
-  return stakesObjArray
+  const stakesObjArray = response.data;
+  return stakesObjArray;
 
   /*
   Array [ {…}, {…} ]
 0: Object { _id: "2022-03-29T11:08:32.559Z", totalStake: 40 }
 1: Object { _id: "2022-03-29T11:08:32.561Z", totalStake: 42 }
   */
-};
+}
 
-async function getStakePerGameForAGivenUserAndLeague (leagueID, userID) {
-  const response = await axios({ //we need to return a promise
-    method: 'GET',
-    baseURL: 'http://localhost:3000/graphs/userstat/',
+async function getStakePerGameForAGivenUserAndLeague(leagueID, userID) {
+  const response = await axios({
+    //we need to return a promise
+    method: "GET",
+    baseURL: "http://localhost:3000/graphs/userstat/",
     url: `${leagueID}/${userID}`,
   });
-  const stakePerGameObjArray = response.data
-  return stakePerGameObjArray
+  const stakePerGameObjArray = response.data;
+  return stakePerGameObjArray;
 
   /*
 Array(4) [ {…}, {…}, {…}, {…} ]
@@ -104,31 +124,28 @@ totalGame: 1
 totalStake: 20
 updatedAt: "2022-03-31T10:12:45.452Z"
  */
+}
 
-};
-
-window.addEventListener("DOMContentLoaded", async (event) => { //otherwise the DOM is not loaded and menuButton returns null
-    const nameSelectElt = document.querySelector('#nameSelect');
-    if(nameSelectElt){
-
+window.addEventListener("DOMContentLoaded", async (event) => {
+  //otherwise the DOM is not loaded and menuButton returns null
+  const nameSelectElt = document.querySelector("#nameSelect");
+  if (nameSelectElt) {
     //we draw empty chart first
     const lineChart = new Chart(
-      document.getElementById('lineChart'),
+      document.getElementById("lineChart"),
       lineConfig
     );
-    const webChart = new Chart(
-      document.getElementById('webChart'),
-      webConfig
-    );
+    const webChart = new Chart(document.getElementById("webChart"), webConfig);
 
-    const leagueSelectElt = document.querySelector('#leagueSelect');
+    const leagueSelectElt = document.querySelector("#leagueSelect");
 
     /*
     When we click on the dropdown selector of league, we fill the line chart with data from the league
     */
-    const leagueSelectClick = async (event)=>{
+    const leagueSelectClick = async (event) => {
       const leagueID = leagueSelectElt.value;
-      if(leagueID){ //make a check otherwise the below code will try to run in other views
+      if (leagueID) {
+        //make a check otherwise the below code will try to run in other views
         GlobalLeagueID = leagueID;
         //get data for the graph
         const stakesObjArray = await getStakeOverTimeFromLeague(leagueID);
@@ -138,56 +155,55 @@ window.addEventListener("DOMContentLoaded", async (event) => { //otherwise the D
         lineDatasArrayLine = [];
 
         //populate graph with updated data
-        stakesObjArray.forEach(obj =>{
+        stakesObjArray.forEach((obj) => {
           lineLabelsArray.push(obj._id);
           lineDatasArrayLine.push(obj.totalStake);
-          });
-        
+        });
+
         lineChart.data.labels = lineLabelsArray;
         lineChart.data.datasets.forEach((dataset) => {
           dataset.data = lineDatasArrayLine;
-          });
+        });
         //update the chart
         lineChart.update();
 
         //fill the members in the name drop down
         const membersObjArray = await getUsersFromLeague(leagueID);
         nameSelectElt.innerHTML = "";
-        membersObjArray.forEach(obj => {
-          const optionElt = document.createElement('option');
+        membersObjArray.forEach((obj) => {
+          const optionElt = document.createElement("option");
           optionElt.value = obj._id;
           optionElt.innerText = obj.username;
           nameSelectElt.appendChild(optionElt);
-          });
+        });
+      } else {
+        GlobalLeagueID = "";
       }
-      else{GlobalLeagueID=''}
-    }
+    };
 
-     /*
+    /*
     When we click on the dropdown selector of user, we fill the web chart with data from the user
     */
-    const nameSelectClick = async (event)=>{
+    const nameSelectClick = async (event) => {
       const userID = nameSelectElt.value;
-      if(userID){
-        const stakePerGameObjArray = await getStakePerGameForAGivenUserAndLeague(GlobalLeagueID,userID);
+      if (userID) {
+        const stakePerGameObjArray =
+          await getStakePerGameForAGivenUserAndLeague(GlobalLeagueID, userID);
         webLabelsArray = [];
         webDatasArrayLine = [];
-        stakePerGameObjArray.forEach(obj =>{
+        stakePerGameObjArray.forEach((obj) => {
           webLabelsArray.push(obj.name);
           webDatasArrayLine.push(obj.totalStake);
-        })
+        });
 
         webChart.data.labels = webLabelsArray;
         webChart.data.datasets.forEach((dataset) => {
           dataset.data = webDatasArrayLine;
-          });
+        });
         webChart.update();
-      };
-
+      }
     };
-    leagueSelectElt.addEventListener('click', leagueSelectClick);
-    nameSelectElt.addEventListener('click', nameSelectClick);
+    leagueSelectElt.addEventListener("click", leagueSelectClick);
+    nameSelectElt.addEventListener("click", nameSelectClick);
   }
-}  
-);
-
+});

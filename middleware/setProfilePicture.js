@@ -1,8 +1,13 @@
 module.exports = (req, res, next) => {
-  if (!req.user) {
+  try {
+    if (!req.session.user) {
+      res.locals.profilePicture = process.env.DEFAULT_PROFILE;
+    } else {
+      res.locals.profilePicture = req.session.user.pictureUrl;
+    }
+    next();
+  } catch {
     res.locals.profilePicture = process.env.DEFAULT_PROFILE;
-  } else {
-    res.locals.profilePicture = req.session.user.pictureUrl;
+    next();
   }
-  next();
 };

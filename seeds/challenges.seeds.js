@@ -18,21 +18,21 @@ const users = [
     email: "alexandre@gmail.com",
     password: "$2b$10$HaYr5pczWlGBayK1XxoYpuJoarEHbmmc3S6/k.T5/JtR8Jh2Fsh3W", // hashed : password
     pictureUrl:
-      "https://www.pngkit.com/png/full/336-3369016_attaque-des-titans-png-attack-on-titan-kapten.png",
+      "http://res.cloudinary.com/dwfrbljbo/image/upload/ar_1.0,c_thumb,g_face,w_0.6,z_0.7/r_max/co_black,e_outline/v1/challengr/kmynmzlrmkc5ifecqtvx",
   },
   {
     username: "ahn",
     email: "ahn@gmail.com",
     password: "$2b$10$HaYr5pczWlGBayK1XxoYpuJoarEHbmmc3S6/k.T5/JtR8Jh2Fsh3W", // hashed : password
     pictureUrl:
-      "https://i.skyrock.net/6045/101456045/pics/3303167034_1_2_Ak7g2fQD.png",
+      "http://res.cloudinary.com/dwfrbljbo/image/upload/ar_1.0,c_thumb,g_face,w_0.6,z_0.7/r_max/co_black,e_outline/v1/challengr/fzfv6acsgpi2ab07byb8",
   },
   {
     username: "brian",
     email: "brian@gmail.com",
     password: "$2b$10$HaYr5pczWlGBayK1XxoYpuJoarEHbmmc3S6/k.T5/JtR8Jh2Fsh3W", // hashed : password
     pictureUrl:
-      "https://nintendolesite.com/images/tests/l_attaque_des_titan_2-0-28gkuhpsjn.png",
+      "http://res.cloudinary.com/dwfrbljbo/image/upload/ar_1.0,c_thumb,g_face,w_0.6,z_0.7/r_max/co_black,e_outline/v1/challengr/yv9jpxk7ltepsrd5pkdp",
   },
 ];
 
