@@ -1,10 +1,8 @@
 const router = require("express").Router();
-
 const Challenge = require("../models/Challenge.model");
 const Game = require("../models/Game.model");
 const League = require("../models/League.model");
 const User = require("../models/User.model");
-
 const isLoggedIn = require("../middleware/isLoggedIn");
 const { redirect } = require("express/lib/response");
 const mongoose = require("mongoose");
@@ -16,15 +14,17 @@ router.get("/", isLoggedIn, async (req, res, next) => {
   res.render('graphs/graph',{leagues});
 });
 
+//return the league object, populated with members (for one league).
+//used for axios calls only
 router.get("/leagueobj/:InputLeagueID", isLoggedIn, async (req, res, next) => {
-  //return the object of the league, populated with members
   const  {InputLeagueID}= req.params;
   const league = await League.findById(InputLeagueID).populate('members');
   res.send(league);
 });
 
+//return an list of object, each object being the sum stake for a given timestamp (for one league)
+//used for axios calls only
 router.get("/leaguestat/:InputLeagueID", isLoggedIn, async (req, res, next) => {
-  //return an list of object, each object being the sum stake for a given timestamp
   const  {InputLeagueID}= req.params;
   const league = await League.findById(InputLeagueID).populate('members');
   const leagueIDObject = mongoose.Types.ObjectId(InputLeagueID);
@@ -47,6 +47,8 @@ router.get("/leaguestat/:InputLeagueID", isLoggedIn, async (req, res, next) => {
   res.send(stakeOverTime);
 });
 
+//returns a list of object, each object being the sum stake and count for a given game name (for one user in a specific league)
+//used for axios calls only
 router.get("/userstat/:InputLeagueID/:InputUserID", isLoggedIn, async (req, res, next) => {
   try {
     let  {InputLeagueID, InputUserID}= req.params;
