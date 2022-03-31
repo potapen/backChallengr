@@ -13,7 +13,9 @@ const User = require("../models/User.model");
 // Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
 const isLoggedOut = require("../middleware/isLoggedOut");
 const isLoggedIn = require("../middleware/isLoggedIn");
+const fileUploader = require("../config/cloudinary.config");
 const app = require("../app");
+const cloudinary = require("cloudinary").v2;
 
 router.get("/signup", isLoggedOut, (req, res) => {
   try {
@@ -24,23 +26,27 @@ router.get("/signup", isLoggedOut, (req, res) => {
   }
 });
 
-router.post("/signup", isLoggedOut, (req, res) => {
-  const { email, username, password, pictureUrl, targetUrl } = req.body;
+router.post(
+  "/signup",
+  fileUploader.single("coverPicture"),
+  isLoggedOut,
+  (req, res) => {
+    const { email, username, password, pictureUrl, targetUrl } = req.body;
 
-  if (!email) {
-    return res.status(400).render("auth/signup", {
-      errorMessage: "Please provide your email.",
-    });
-  }
+    if (!email) {
+      return res.status(400).render("auth/signup", {
+        errorMessage: "Please provide your email.",
+      });
+    }
 
-  if (password.length < 8) {
-    return res.status(400).render("auth/signup", {
-      errorMessage: "Your password needs to be at least 8 characters long.",
-    });
-  }
+    if (password.length < 8) {
+      return res.status(400).render("auth/signup", {
+        errorMessage: "Your password needs to be at least 8 characters long.",
+      });
+    }
 
-  //   ! This use case is using a regular expression to control for special characters and min length
-  /*
+    //   ! This use case is using a regular expression to control for special characters and min length
+    /*
   const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
 
   if (!regex.test(password)) {
@@ -51,55 +57,74 @@ router.post("/signup", isLoggedOut, (req, res) => {
   }
   */
 
-  // Search the database for a user with the username submitted in the form
-  User.findOne({ email }).then((found) => {
-    // If the user is found, send the message username is taken
-    if (found) {
-      return res
-        .status(400)
-        .render("auth/signup", { errorMessage: "email already taken." });
-    }
-
-    // if user is not found, create a new user - start with hashing the password
-    return bcrypt
-      .genSalt(saltRounds)
-      .then((salt) => bcrypt.hash(password, salt))
-      .then((hashedPassword) => {
-        // Create a user and save it in the database
-        return User.create({
-          email,
-          username,
-          password: hashedPassword,
-          pictureUrl,
-        });
-      })
-      .then((user) => {
-        // Bind the user to the session object
-        req.session.user = user;
-
-        if (targetUrl) {
-          return res.redirect(targetUrl);
-        }
-        return res.redirect("/");
-      })
-      .catch((error) => {
-        if (error instanceof mongoose.Error.ValidationError) {
-          return res
-            .status(400)
-            .render("auth/signup", { errorMessage: error.message });
-        }
-        if (error.code === 11000) {
-          return res.status(400).render("auth/signup", {
-            errorMessage:
-              "Username need to be unique. The username you chose is already in use.",
-          });
-        }
+    // Search the database for a user with the username submitted in the form
+    User.findOne({ email }).then((found) => {
+      // If the user is found, send the message username is taken
+      if (found) {
         return res
-          .status(500)
-          .render("auth/signup", { errorMessage: error.message });
-      });
-  });
-});
+          .status(400)
+          .render("auth/signup", { errorMessage: "email already taken." });
+      }
+
+      // if user is not found, create a new user - start with hashing the password
+      return bcrypt
+        .genSalt(saltRounds)
+        .then((salt) => bcrypt.hash(password, salt))
+        .then((hashedPassword) => {
+          // Create a user and save it in the database
+          if (req.file) {
+            let newImageUrl = cloudinary.url(req.file.filename, {
+              transformation: [
+                {
+                  aspect_ratio: "1.0",
+                  gravity: "face",
+                  width: "0.6",
+                  zoom: "0.7",
+                  crop: "thumb",
+                },
+                { radius: "max" },
+                { color: "black", effect: "outline" },
+              ],
+            });
+          }
+          let pictureUrl = newImageUrl | process.env.DEFAULT_PROFILE;
+          req.app.locals.profilePicture = pictureUrl;
+
+          return User.create({
+            email,
+            username,
+            password: hashedPassword,
+            pictureUrl,
+          });
+        })
+        .then((user) => {
+          // Bind the user to the session object
+          req.session.user = user;
+
+          if (targetUrl) {
+            return res.redirect(targetUrl);
+          }
+          return res.redirect("/");
+        })
+        .catch((error) => {
+          if (error instanceof mongoose.Error.ValidationError) {
+            return res
+              .status(400)
+              .render("auth/signup", { errorMessage: error.message });
+          }
+          if (error.code === 11000) {
+            return res.status(400).render("auth/signup", {
+              errorMessage:
+                "Username need to be unique. The username you chose is already in use.",
+            });
+          }
+          return res
+            .status(500)
+            .render("auth/signup", { errorMessage: error.message });
+        });
+    });
+  }
+);
 
 router.get("/login", isLoggedOut, (req, res) => {
   try {
@@ -145,6 +170,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           });
         }
         req.session.user = user;
+        req.app.locals.profilePicture = user.pictureUrl;
 
         if (targetUrl) {
           return res.redirect(targetUrl);

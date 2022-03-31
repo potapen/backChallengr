@@ -23,6 +23,7 @@ const projectName = "challengr";
 
 //locals is reachable from hbs views. You can edit add res.locals from the middleware
 app.locals.appTitle = `Project ${capitalized(projectName)} by Ze !Dream Team`;
+app.locals.profilePicture = process.env.DEFAULT_PROFILE;
 
 // 👇 Start handling routes here
 const index = require("./routes/index.routes");
