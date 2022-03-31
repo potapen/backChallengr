@@ -3402,6 +3402,7 @@ nav .collapsible > label {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 1rem;
 }
 
 /* pour le menu deroulant */
@@ -3471,7 +3472,7 @@ nav a {
 }
 
 .menu-icon img {
-  width: 4rem;
+  width: 3.5rem;
   border: none;
   filter: drop-shadow(0 0 0.1rem black);
 }
