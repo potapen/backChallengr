@@ -3471,7 +3471,7 @@ nav a {
 }
 
 .menu-icon img {
-  width: 1.8rem;
+  width: 4rem;
   border: none;
   filter: drop-shadow(0 0 0.1rem black);
 }
@@ -3482,8 +3482,18 @@ nav a {
 
 .topnav a {
   color: black;
-  height: 3rem;
-  line-height: 1.5rem;
+  height: 5rem;
+  line-height: 4rem;
+  font-size: 2rem;
+}
+
+#menuButton img {
+  width: 4rem;
+  border-radius: 50%;
+}
+
+h1 {
+  margin: 0;
 }
 /*
 

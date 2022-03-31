@@ -4,6 +4,7 @@ const User = require("../models/User.model");
 const League = require("../models/League.model");
 const isLoggedIn = require("../middleware/isLoggedIn");
 const fileUploader = require("../config/cloudinary.config");
+const app = require("../app");
 const cloudinary = require("cloudinary").v2;
 
 router.get("/", isLoggedIn, async (req, res, next) => {
@@ -56,6 +57,7 @@ router.post(
       console.log(newImageUrl);
       if (newImageUrl) {
         newUser.pictureUrl = newImageUrl;
+        req.app.locals.profilePicture = newImageUrl;
       }
       await User.findByIdAndUpdate(id, newUser);
       res.redirect(`/profile`);
