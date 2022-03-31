@@ -3404,10 +3404,9 @@ nav .collapsible > label {
   align-items: center;
 }
 
-
 /* pour le menu deroulant */
-nav{
-  display:flex;
+nav {
+  display: flex;
   flex-direction: row;
 }
 
@@ -3433,7 +3432,7 @@ nav{
 }
 
 .topnav a.active {
-  background-color: #04AA6D;
+  background-color: #04aa6d;
   color: white;
 }
 
@@ -3442,7 +3441,9 @@ nav{
 }
 
 @media screen and (max-width: 600px) {
-  .topnav a:not(:first-child) {display: none;}
+  .topnav a:not(:first-child) {
+    display: none;
+  }
   .topnav a.icon {
     float: right;
     display: block;
@@ -3450,7 +3451,9 @@ nav{
 }
 
 @media screen and (max-width: 600px) {
-  .topnav.responsive {position: relative;}
+  .topnav.responsive {
+    position: relative;
+  }
   .topnav.responsive .icon {
     position: absolute;
     right: 0;
@@ -3463,6 +3466,41 @@ nav{
   }
 }
 
-/* *{
-  border: solid black 1px;
+nav a {
+  border-bottom-style: none;
+}
+
+.menu-icon img {
+  width: 1.8rem;
+  border: none;
+  filter: drop-shadow(0 0 0.1rem black);
+}
+
+.topnav {
+  text-align: center;
+}
+
+.topnav a {
+  color: black;
+  height: 3rem;
+  line-height: 1.5rem;
+}
+/*
+
+
+#myTopnav {
+  color: black;
+  border-color: black;
+  border: solid;
+  background-color: white;
+}
+
+.paper-btn {
+  color: black;
+  border-color: black;
+}
+
+.paper-btn a {
+  color: black;
+  border-color: black;
 } */
