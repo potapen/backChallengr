@@ -6,7 +6,7 @@ const User = require("../models/User.model");
 
 const isLoggedIn = require("../middleware/isLoggedIn");
 const { redirect } = require("express/lib/response");
-
+const mongoose = require("mongoose");
 router.get("/main", isLoggedIn, async (req, res, next) => {
   try {
     res.redirect(`/boards/${req.session.user._id}`);
@@ -52,7 +52,6 @@ router.get("/:id", isLoggedIn, async (req, res, next) => {
       countPerLeague = await League.populate(countPerLeague, {
         path: "_id",
       });
-      // console.log('------------------------countPerLeague after populate:', countPerLeague)
       
       // Stats per User
       let countPerUser = await Challenge.aggregate([
@@ -199,6 +198,7 @@ router.get("/:id", isLoggedIn, async (req, res, next) => {
         rankingPerLeague,
         noWinners,
       });
+
     }
 
     res.render("boards/main", { user, statsPerLeague });
@@ -208,4 +208,54 @@ router.get("/:id", isLoggedIn, async (req, res, next) => {
   }
 });
 
+router.get("/graph", isLoggedIn, async (req, res, next) => {
+  const leagues = await League.find({
+    members: req.session.user._id,
+  });
+  res.render('boards/graph',{leagues});
+});
+
+router.get("/stats/:InputLeagueID", isLoggedIn, async (req, res, next) => {
+  const  {InputLeagueID}= req.params;
+  const league = await League.findById(InputLeagueID).populate('members');
+  console.log('----------------------------league:', league)
+  res.send(league);
+});
+
+router.get("/:InputLeagueID/:InputUserID", isLoggedIn, async (req, res, next) => {
+  try {
+    let  {InputLeagueID, InputUserID}= req.params;
+    const userObject = await User.findById(InputUserID);
+    const leagueIDObject = mongoose.Types.ObjectId(InputLeagueID);
+
+    let countPerLeague = await Challenge.aggregate([
+      {
+        $match: {
+          league: leagueIDObject,
+        },
+      },
+      {
+        $group: {
+          _id: "$league",
+          count: {
+            $count: {},
+          },
+          totalStake: {
+            $sum: "$stake",
+          },
+        },
+      },
+    ]);
+    console.log('------------------------countPerLeague:', countPerLeague)
+    countPerLeague = countPerLeague[0];
+    countPerLeague = await League.populate(countPerLeague, {
+      path: "_id",
+    });
+
+    res.send('done');
+  } catch (error) {
+    console.log(error);
+    next();
+  }
+});
 module.exports = router;

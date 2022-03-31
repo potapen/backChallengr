@@ -1,0 +1,19 @@
+<label for="leagueSelect">Select a league</label>
+<select name="league" id="leagueSelect">
+    <option value="" selected="true">---select here ---</option>
+    {{#each leagues}}
+        <option value="{{_id}}">{{name}}</option>
+    {{/each}}
+</select>
+
+
+<label for="nameSelect">Select a name</label>
+<select name="name" id="nameSelect">
+</select>
+
+
+<div>
+  <canvas id="myChart"></canvas>
+</div>
+
+
