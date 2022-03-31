@@ -72,6 +72,7 @@ router.post(
         .then((salt) => bcrypt.hash(password, salt))
         .then((hashedPassword) => {
           // Create a user and save it in the database
+          let pictureUrl = process.env.DEFAULT_PROFILE;
           if (req.file) {
             let newImageUrl = cloudinary.url(req.file.filename, {
               transformation: [
@@ -86,8 +87,8 @@ router.post(
                 { color: "black", effect: "outline" },
               ],
             });
+            pictureUrl = newImageUrl;
           }
-          let pictureUrl = newImageUrl | process.env.DEFAULT_PROFILE;
           req.app.locals.profilePicture = pictureUrl;
 
           return User.create({
