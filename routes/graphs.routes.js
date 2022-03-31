@@ -11,6 +11,7 @@ router.get("/", isLoggedIn, async (req, res, next) => {
   const leagues = await League.find({
     members: req.session.user._id,
   });
+  console.log('---------------------leagues', leagues)
   res.render("graphs/graph", { leagues });
 });
 

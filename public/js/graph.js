@@ -19,19 +19,7 @@ const lineData = {
 const lineConfig = {
   type: "line",
   data: lineData,
-  options: {
-    scales: {
-      xAxes: [
-        {
-          ticks: {
-            autoSkip: false,
-            maxRotation: 90,
-            minRotation: 90,
-          },
-        },
-      ],
-    },
-  },
+  options: {},
 };
 
 //Parameters for the web chart
@@ -143,6 +131,7 @@ window.addEventListener("DOMContentLoaded", async (event) => {
     When we click on the dropdown selector of league, we fill the line chart with data from the league
     */
     const leagueSelectClick = async (event) => {
+      console.log("inside leagueSelectClick")
       const leagueID = leagueSelectElt.value;
       if (leagueID) {
         //make a check otherwise the below code will try to run in other views

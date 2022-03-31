@@ -7,6 +7,7 @@ require("dotenv").config();
 // If no env has been set, we dynamically set it to whatever the folder name was upon the creation of the app
 
 const MONGO_URI = require("../utils/consts");
+// const {MONGO_URI} = require("../utils/consts");
 
 mongoose
   .connect(MONGO_URI)
