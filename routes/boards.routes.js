@@ -224,7 +224,7 @@ router.get("/leagueobj/:InputLeagueID", isLoggedIn, async (req, res, next) => {
 });
 
 router.get("/leaguestat/:InputLeagueID", isLoggedIn, async (req, res, next) => {
-  //return the object of the league, populated with members
+  //return an list of object, each object being the sum stake for a given timestamp
   const  {InputLeagueID}= req.params;
   const league = await League.findById(InputLeagueID).populate('members');
   const leagueIDObject = mongoose.Types.ObjectId(InputLeagueID);

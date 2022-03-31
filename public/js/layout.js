@@ -90,25 +90,15 @@ window.addEventListener("DOMContentLoaded", async (event) => { //otherwise the D
         //get data for the graph
         labelsArray = [];
         datasArray = [];
-        console.log('-------------------------stakesObjArray: ', stakesObjArray)
         stakesObjArray.forEach(obj =>{
           labelsArray.push(obj._id);
           datasArray.push(obj.totalStake);
         })
-        console.log('--------------------------labelsArray:', labelsArray);
-        console.log('--------------------------datasArray:', datasArray);
-
-        console.log('-----------------------------myChart:', myChart)
-        console.log('-----------------------------chart.data:', myChart.data)
         
         myChart.data.labels = labelsArray;
         myChart.update();
-        console.log('--------------------------myChart.data.labels:', myChart.data.labels);
         
         
-        
-        console.log('AAAAAAAAAAAAAAAAAAA myChart.data.datasets:', myChart.data.datasets);
-        console.log('--------------------------myChart.data.datasets.data:', myChart.data.datasets.data);
         myChart.data.datasets.forEach((dataset) => {
           dataset.data = datasArray;
       });
