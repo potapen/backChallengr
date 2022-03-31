@@ -1,6 +1,7 @@
 const router = require("express").Router();
 
 const Challenge = require("../models/Challenge.model");
+const Game = require("../models/Game.model");
 const League = require("../models/League.model");
 const User = require("../models/User.model");
 
@@ -208,80 +209,6 @@ router.get("/:id", isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.get("/graph", isLoggedIn, async (req, res, next) => {
-  const leagues = await League.find({
-    members: req.session.user._id,
-  });
-  res.render('boards/graph',{leagues});
-});
 
-router.get("/leagueobj/:InputLeagueID", isLoggedIn, async (req, res, next) => {
-  //return the object of the league, populated with members
-  const  {InputLeagueID}= req.params;
-  const league = await League.findById(InputLeagueID).populate('members');
-  console.log('----------------------------league:', league)
-  res.send(league);
-});
 
-router.get("/leaguestat/:InputLeagueID", isLoggedIn, async (req, res, next) => {
-  //return an list of object, each object being the sum stake for a given timestamp
-  const  {InputLeagueID}= req.params;
-  const league = await League.findById(InputLeagueID).populate('members');
-  const leagueIDObject = mongoose.Types.ObjectId(InputLeagueID);
-  console.log('----------------------------league:', league)
-  let stakeOverTime = await Challenge.aggregate(
-    [
-      {
-        '$match': {
-          'league': leagueIDObject
-        }
-      }, {
-        '$group': {
-          '_id': '$createdAt', 
-          'totalStake': {
-            '$sum': '$stake'
-          }
-        }
-      }
-    ]
-  )
-  res.send(stakeOverTime);
-});
-
-router.get("/:InputLeagueID/:InputUserID", isLoggedIn, async (req, res, next) => {
-  try {
-    let  {InputLeagueID, InputUserID}= req.params;
-    const userObject = await User.findById(InputUserID);
-    const leagueIDObject = mongoose.Types.ObjectId(InputLeagueID);
-
-    let countPerLeague = await Challenge.aggregate([
-      {
-        $match: {
-          league: leagueIDObject,
-        },
-      },
-      {
-        $group: {
-          _id: "$league",
-          count: {
-            $count: {},
-          },
-          totalStake: {
-            $sum: "$stake",
-          },
-        },
-      },
-    ]);
-    console.log('------------------------countPerLeague:', countPerLeague)
-    countPerLeague = countPerLeague[0];
-    countPerLeague = await League.populate(countPerLeague, {
-      path: "_id",
-    });
-
-    res.send('done');
-  } catch (error) {
-    console.log(error);
-    next();
-  }
-});
 module.exports = router;
