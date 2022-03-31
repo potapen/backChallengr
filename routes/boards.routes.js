@@ -215,11 +215,37 @@ router.get("/graph", isLoggedIn, async (req, res, next) => {
   res.render('boards/graph',{leagues});
 });
 
-router.get("/stats/:InputLeagueID", isLoggedIn, async (req, res, next) => {
+router.get("/leagueobj/:InputLeagueID", isLoggedIn, async (req, res, next) => {
+  //return the object of the league, populated with members
   const  {InputLeagueID}= req.params;
   const league = await League.findById(InputLeagueID).populate('members');
   console.log('----------------------------league:', league)
   res.send(league);
+});
+
+router.get("/leaguestat/:InputLeagueID", isLoggedIn, async (req, res, next) => {
+  //return the object of the league, populated with members
+  const  {InputLeagueID}= req.params;
+  const league = await League.findById(InputLeagueID).populate('members');
+  const leagueIDObject = mongoose.Types.ObjectId(InputLeagueID);
+  console.log('----------------------------league:', league)
+  let stakeOverTime = await Challenge.aggregate(
+    [
+      {
+        '$match': {
+          'league': leagueIDObject
+        }
+      }, {
+        '$group': {
+          '_id': '$createdAt', 
+          'totalStake': {
+            '$sum': '$stake'
+          }
+        }
+      }
+    ]
+  )
+  res.send(stakeOverTime);
 });
 
 router.get("/:InputLeagueID/:InputUserID", isLoggedIn, async (req, res, next) => {
