@@ -16,7 +16,10 @@ router.get("/", isLoggedIn, async (req, res, next) => {
     }
 
     const ongoingChallenges = await Challenge.find({
-      $and: [{ contenders: req.session.user._id }, { isCompleted: false }],
+      $and: [
+        { contenders: req.session.user._id },
+        { $or: [{ isCompleted: { $exists: false } }, { isCompleted: false }] },
+      ],
     })
       .sort({ createdAt: -1 })
       .populate("contenders game league")
