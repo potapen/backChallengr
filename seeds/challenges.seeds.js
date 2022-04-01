@@ -21,8 +21,8 @@ const users = [
       "http://res.cloudinary.com/dwfrbljbo/image/upload/ar_1.0,c_thumb,g_face,w_0.6,z_0.7/r_max/co_black,e_outline/v1/challengr/kmynmzlrmkc5ifecqtvx",
   },
   {
-    username: "ahn",
-    email: "ahn@gmail.com",
+    username: "anh",
+    email: "anh@gmail.com",
     password: "$2b$10$HaYr5pczWlGBayK1XxoYpuJoarEHbmmc3S6/k.T5/JtR8Jh2Fsh3W", // hashed : password
     pictureUrl:
       "http://res.cloudinary.com/dwfrbljbo/image/upload/ar_1.0,c_thumb,g_face,w_0.6,z_0.7/r_max/co_black,e_outline/v1/challengr/fzfv6acsgpi2ab07byb8",
@@ -72,6 +72,25 @@ const games = [
     emoji: "🫁",
     imageUrl:
       "https://i0.wp.com/godrunkyourself.com/wp-content/uploads/2020/04/AdobeStock_137721763-1-1440x960.jpeg",
+  },
+  {
+    name: "Bird box challenge",
+    description:
+      "Ce défi est tiré du film Bird Box sorti le 21 décembre 201880. Il consiste, comme dans le film, à se déplacer les yeux bandés d'un point A à un point B",
+    isPrivate: false,
+    ownerLeagues: [],
+    emoji: "😝",
+    imageUrl:
+      "https://d1fmx1rbmqrxrr.cloudfront.net/cnet/i/edit/2019/01/birdbox-netflix-big.jpg",
+  },
+  {
+    name: "Rock Scissors Paper",
+    description: "The classic one",
+    isPrivate: false,
+    ownerLeagues: [],
+    emoji: "⚔️",
+    imageUrl:
+      "https://cdn-europe1.lanmedia.fr/var/europe1/storage/images/europe1/international/la-recette-pour-gagner-a-pierre-feuille-ciseaux-768904/15409112-1-fre-FR/La-recette-pour-gagner-a-pierre-feuille-ciseaux.jpg",
   },
 ];
 
