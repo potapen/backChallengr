@@ -1,7 +1,8 @@
 console.log("this is graph.js");
 
 let GlobalLeagueID; //leagueID is a variable set in leagueSelectClick callback of an event listener. I use GlobalLeagueID to make leagueID persist out of the function
-// let serverURL = '';
+// let serverURL = '' //not used annymore
+
 //Parameters for the line chart
 let lineLabelsArray = [];
 let lineDatasArrayLine = [];
@@ -55,7 +56,7 @@ const webConfig = {
     },
     scales: {
       r: {
-        beginAtZero: true,
+        beginAtZero: true, //not sure this is really working
       }
     },
   },
@@ -133,6 +134,10 @@ async function checkIfLocalComputer() {
     url: "http://localhost:3000/challenge",
   });
   return response.data === "challenge";
+/*
+function to check if we are on local computer (meaning we are not on heroku).
+Not used anymore
+*/
 }
 window.addEventListener("DOMContentLoaded", async (event) => {
   //otherwise the DOM is not loaded and menuButton returns null
@@ -143,10 +148,7 @@ window.addEventListener("DOMContentLoaded", async (event) => {
   const nameSelectElt = document.querySelector("#nameSelect");
   if (nameSelectElt) {
     //we draw empty chart first
-    const lineChart = new Chart(
-      document.getElementById("lineChart"),
-      lineConfig
-    );
+    const lineChart = new Chart(document.getElementById("lineChart"),lineConfig);
     const webChart = new Chart(document.getElementById("webChart"), webConfig);
 
     const leagueSelectElt = document.querySelector("#leagueSelect");

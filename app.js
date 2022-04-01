@@ -21,7 +21,12 @@ require("./config")(app);
 const capitalized = require("./utils/capitalized");
 const projectName = "challengr";
 
-//locals is reachable from hbs views. You can edit add res.locals from the middleware
+//locals is reachable from hbs views. 
+/*
+locals is reachable from hbs views.
+app.locals is reachable everywhere 
+while res.locals in the middleware only live for the duration of the request/response
+*/
 app.locals.appTitle = `Project ${capitalized(projectName)} by Ze !Dream Team`;
 
 app.use(require("./middleware/setProfilePicture"));

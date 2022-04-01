@@ -63,6 +63,8 @@ module.exports = (app) => {
       }),
     })
   );
+
+  //declare a global middleware used in all routes
   const globalParam = require("../middleware/globalParam");
   app.use(globalParam)
 };

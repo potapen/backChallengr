@@ -1,3 +1,4 @@
+//this middleware is called by default in all routes.
 module.exports = (req, res, next) => {
     console.log('globalParams')
 

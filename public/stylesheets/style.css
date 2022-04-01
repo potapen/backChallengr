@@ -1,5 +1,5 @@
 @charset "UTF-8";
-/* DISCLAIMER: on a tout pompé sur https://www.getpapercss.com */
+/* This is website is used papercss from https://www.getpapercss.com */
 /* PaperCSS core */
 /**
   Global PaperCSS Config
@@ -3398,6 +3398,11 @@ nav .collapsible > label {
   }
 }
 
+/*
+--------------------------------------------------------------------------------
+CSS specific to this app 
+--------------------------------------------------------------------------------
+*/
 .indexSection {
   display: flex;
   flex-direction: column;
@@ -3528,22 +3533,3 @@ h6 {
   margin: 1rem;
 }
 
-/*
-
-
-#myTopnav {
-  color: black;
-  border-color: black;
-  border: solid;
-  background-color: white;
-}
-
-.paper-btn {
-  color: black;
-  border-color: black;
-}
-
-.paper-btn a {
-  color: black;
-  border-color: black;
-} */
