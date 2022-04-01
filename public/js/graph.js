@@ -20,7 +20,13 @@ const lineData = {
 const lineConfig = {
   type: "line",
   data: lineData,
-  options: {},
+  options: {
+    scales: {
+      y: {
+        min: 0,
+      }
+    }
+  },
 };
 
 //Parameters for the web chart
@@ -46,6 +52,11 @@ const webConfig = {
       line: {
         borderWidth: 3,
       },
+    },
+    scales: {
+      r: {
+        beginAtZero: true,
+      }
     },
   },
 };
