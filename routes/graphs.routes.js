@@ -11,7 +11,7 @@ router.get("/", isLoggedIn, async (req, res, next) => {
   const leagues = await League.find({
     members: req.session.user._id,
   });
-  console.log('---------------------leagues', leagues)
+  console.log("---------------------leagues", leagues);
   res.render("graphs/graph", { leagues });
 });
 
@@ -45,19 +45,17 @@ router.get("/leaguestat/:InputLeagueID", isLoggedIn, async (req, res, next) => {
     },
     {
       $sort: {
-        _id: -1,
+        _id: 1,
       },
     },
   ]);
-  const stakeOverTimeSimple = stakeOverTime.map(obj => {
+  const stakeOverTimeSimple = stakeOverTime.map((obj) => {
+    let monString = JSON.stringify(obj._id);
 
-    let monString = JSON.stringify(obj._id)
-
-    console.log(monString)
-    monString = monString.substring(6,17)
-    console.log(monString)
-    obj._id = monString
-
+    console.log(monString);
+    monString = monString.substring(6, 17);
+    console.log(monString);
+    obj._id = monString;
   });
   res.send(stakeOverTime);
 });
