@@ -9,6 +9,7 @@ const commentSchema = new Schema(
       required: true,
     },
     content: { type: String },
+    rating: { type: Number, min: 0, max: 5 },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

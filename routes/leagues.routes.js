@@ -1,9 +1,9 @@
 const router = require("express").Router();
 
-const League = require("../../models/League.model");
-const User = require("../../models/User.model");
-const isLoggedIn = require("../../middleware/isLoggedIn");
-const fileUploader = require("../../config/cloudinary.config");
+const League = require("../models/League.model");
+const User = require("../models/User.model");
+const isLoggedIn = require("../middleware/isLoggedIn");
+const fileUploader = require("../config/cloudinary.config");
 const cloudinary = require("cloudinary").v2;
 
 router.get("/", isLoggedIn, async (req, res, next) => {

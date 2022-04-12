@@ -1,15 +1,12 @@
-const isLoggedIn = require("../../middleware/isLoggedIn");
-const League = require("../../models/League.model");
-const Challenge = require("../../models/Challenge.model");
+const isLoggedIn = require("../middleware/isLoggedIn");
+const League = require("../models/League.model");
+const Challenge = require("../models/Challenge.model");
 
 const router = require("express").Router();
 
 /* GET home page */
 router.get("/", isLoggedIn, async (req, res, next) => {
-  console.log(
-    "---------------------------------------------:",
-    process.env.DEFAULT_PROFILE
-  );
+  console.log('---------------------------------------------:', process.env.DEFAULT_PROFILE)
   try {
     let hasNoLeague = false;
     const league = await League.findOne({

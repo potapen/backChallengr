@@ -8,13 +8,13 @@ const mongoose = require("mongoose");
 const saltRounds = 10;
 
 // Require the User model in order to interact with the database
-const User = require("../../models/User.model");
+const User = require("../models/User.model");
 
 // Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
-const isLoggedOut = require("../../middleware/isLoggedOut");
-const isLoggedIn = require("../../middleware/isLoggedIn");
-const fileUploader = require("../../config/cloudinary.config");
-const app = require("../../app");
+const isLoggedOut = require("../middleware/isLoggedOut");
+const isLoggedIn = require("../middleware/isLoggedIn");
+const fileUploader = require("../config/cloudinary.config");
+const app = require("../app");
 const cloudinary = require("cloudinary").v2;
 
 router.get("/signup", isLoggedOut, (req, res) => {

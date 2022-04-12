@@ -1,8 +1,8 @@
 const router = require("express").Router();
 
-const Game = require("../../models/Game.model");
-const League = require("../../models/League.model");
-const fileUploader = require("../../config/cloudinary.config");
+const Game = require("../models/Game.model");
+const League = require("../models/League.model");
+const fileUploader = require("../config/cloudinary.config");
 const cloudinary = require("cloudinary").v2;
 
 router.get("/", async (req, res, next) => {
