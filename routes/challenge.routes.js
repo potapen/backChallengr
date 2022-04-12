@@ -1,10 +1,10 @@
 const router = require("express").Router();
-const Challenge = require("../../models/Challenge.model");
-const Game = require("../../models/Game.model");
-const League = require("../../models/League.model");
-const User = require("../../models/User.model");
+const Challenge = require("../models/Challenge.model");
+const Game = require("../models/Game.model");
+const League = require("../models/League.model");
+const User = require("../models/User.model");
 const mongoose = require("mongoose");
-const isLoggedIn = require("../../middleware/isLoggedIn");
+const isLoggedIn = require("../middleware/isLoggedIn");
 /* GET home page */
 
 router.get("/", (req, res, next) => {

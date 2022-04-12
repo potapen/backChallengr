@@ -1,11 +1,11 @@
 const router = require("express").Router();
 
-const User = require("../../models/User.model");
-const League = require("../../models/League.model");
-const isLoggedIn = require("../../middleware/isLoggedIn");
-const fileUploader = require("../../config/cloudinary.config");
-const app = require("../../app");
-const setProfilePicture = require("../../middleware/setProfilePicture");
+const User = require("../models/User.model");
+const League = require("../models/League.model");
+const isLoggedIn = require("../middleware/isLoggedIn");
+const fileUploader = require("../config/cloudinary.config");
+const app = require("../app");
+const setProfilePicture = require("../middleware/setProfilePicture");
 const cloudinary = require("cloudinary").v2;
 
 router.get("/", isLoggedIn, async (req, res, next) => {
@@ -17,6 +17,15 @@ router.get("/", isLoggedIn, async (req, res, next) => {
     res.render("profile/view-profile", { user, leagues });
   } catch (error) {
     console.log(error);
+    next();
+  }
+});
+
+router.get("/edit", isLoggedIn, async (req, res, next) => {
+  try {
+    const user = await User.findById(req.session.user._id);
+    res.render("profile/edit-profile", { user });
+  } catch {
     next();
   }
 });

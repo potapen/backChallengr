@@ -1,11 +1,11 @@
 const router = require("express").Router();
 
-const Challenge = require("../../models/Challenge.model");
-const Game = require("../../models/Game.model");
-const League = require("../../models/League.model");
-const User = require("../../models/User.model");
+const Challenge = require("../models/Challenge.model");
+const Game = require("../models/Game.model");
+const League = require("../models/League.model");
+const User = require("../models/User.model");
 
-const isLoggedIn = require("../../middleware/isLoggedIn");
+const isLoggedIn = require("../middleware/isLoggedIn");
 const { redirect } = require("express/lib/response");
 const mongoose = require("mongoose");
 router.get("/main", isLoggedIn, async (req, res, next) => {
