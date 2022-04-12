@@ -6,11 +6,21 @@ const userSchema = new Schema(
     email: {
       type: String,
       unique: true,
+      required: true,
     },
-    username: String,
-    password: String,
+    username: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
     pictureUrl: String,
-    isAdmin: Boolean,
+    favoriteLeague: {
+      type: Schema.Types.ObjectId,
+      ref: "League",
+    },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
