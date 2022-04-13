@@ -2,6 +2,7 @@ const router = require("express").Router();
 
 const League = require("../../models/League.model");
 const Game = require("../../models/Game.model");
+const Challenge = require("../../models/Challenge.model");
 const Point = require("../../models/Point.model");
 const getUser = require("../../middleware/getUser");
 const fileUploader = require("../../config/cloudinary.config");
@@ -156,7 +157,7 @@ router.patch("/join", getUser, async (req, res, next) => {
 // Removes the logged user from the league in the url
 router.delete("/:leagueId", getUser, isLeagueMember, async (req, res, next) => {
   try {
-    const league = await League.findByIdAndDelete(req.league._id);
+    await League.findByIdAndDelete(req.league._id);
     res.status(200).send("Successfully deleted the league");
   } catch (error) {
     console.log(error);

@@ -6,7 +6,8 @@ const challengeSchema = new Schema(
     league: { type: Schema.Types.ObjectId, ref: "League", required: true },
     game: { type: Schema.Types.ObjectId, ref: "Game", required: true },
     winners: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    isCompleted: { type: Boolean },
+    isCompleted: { type: Boolean, default: false },
+    points: { type: Number, default: 0 },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

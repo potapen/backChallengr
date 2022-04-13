@@ -47,8 +47,11 @@ app.use("/api/games", isAuthenticated, gamesRoutesApi);
 const leaguesRoutesApi = require("./routes/api/leagues.routes");
 app.use("/api/leagues", isAuthenticated, leaguesRoutesApi);
 
+const pointsRoutesApi = require("./routes/api/points.routes");
+app.use("/api/points", isAuthenticated, pointsRoutesApi);
+
 const boardsRoutesApi = require("./routes/api/boards.routes");
-app.use("/api/boards", isAuthenticated, boardsRoutesApi);
+app.use("/api/boards", boardsRoutesApi);
 
 const graphsRoutesApi = require("./routes/api/graphs.routes");
 app.use("/api/graphs", isAuthenticated, graphsRoutesApi);
