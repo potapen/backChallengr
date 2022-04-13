@@ -4,7 +4,7 @@ const pointSchema = new Schema(
   {
     game: { type: Schema.Types.ObjectId, ref: "Game", required: true },
     league: { type: Schema.Types.ObjectId, ref: "League", required: true },
-    weight: {},
+    points: { type: Number, default: 1 },
   },
   {
     timestamps: true,

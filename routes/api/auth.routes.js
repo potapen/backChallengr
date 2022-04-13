@@ -10,10 +10,6 @@ const { isAuthenticated } = require("./../../middleware/jwt.middleware.js");
 // How many rounds should bcrypt run the salt (default [10 - 12 rounds])
 const saltRounds = 10;
 
-// Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
-const isLoggedOut = require("../../middleware/isLoggedOut");
-const isLoggedIn = require("../../middleware/isLoggedIn");
-
 router.post("/signup", (req, res, next) => {
   const { email, password, username } = req.body;
 
@@ -117,7 +113,7 @@ router.post("/login", (req, res, next) => {
     .catch((err) => res.status(500).json({ message: "Internal Server Error" }));
 });
 
-router.get("/logout", isLoggedIn, (req, res) => {
+router.get("/logout", isAuthenticated, (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       return res
