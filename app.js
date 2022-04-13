@@ -21,7 +21,9 @@ require("./config")(app);
 const capitalized = require("./utils/capitalized");
 const projectName = "challengr";
 
-//locals is reachable from hbs views. 
+const { isAuthenticated } = require("./middleware/jwt.middleware");
+
+//locals is reachable from hbs views.
 /*
 locals is reachable from hbs views.
 app.locals is reachable everywhere 
@@ -32,32 +34,52 @@ app.locals.appTitle = `Project ${capitalized(projectName)} by Ze !Dream Team`;
 app.use(require("./middleware/setProfilePicture"));
 app.use(require("./middleware/setLoginState"));
 
-// 👇 Start handling routes here
-const index = require("./routes/index.routes");
-app.use("/", index);
+// 👇 api routes
+const authRoutesApi = require("./routes/api/auth.routes");
+app.use("/api/auth", authRoutesApi);
 
-const authRoutes = require("./routes/auth.routes");
-app.use("/auth", authRoutes);
+const challengeRoutesApi = require("./routes/api/challenge.routes");
+app.use("/api/challenge", isAuthenticated, challengeRoutesApi);
 
-const challengeRoutes = require("./routes/challenge.routes");
-app.use("/challenge", challengeRoutes);
+const gamesRoutesApi = require("./routes/api/games.routes");
+app.use("/api/games", isAuthenticated, gamesRoutesApi);
 
-const gamesRoutes = require("./routes/games.routes");
-app.use("/games", gamesRoutes);
+const leaguesRoutesApi = require("./routes/api/leagues.routes");
+app.use("/api/leagues", isAuthenticated, leaguesRoutesApi);
 
-const leaguesRoutes = require("./routes/leagues.routes");
-app.use("/leagues", leaguesRoutes);
+const boardsRoutesApi = require("./routes/api/boards.routes");
+app.use("/api/boards", isAuthenticated, boardsRoutesApi);
 
-const boardsRoutes = require("./routes/boards.routes");
-app.use("/boards", boardsRoutes);
+const graphsRoutesApi = require("./routes/api/graphs.routes");
+app.use("/api/graphs", isAuthenticated, graphsRoutesApi);
 
+const profileRoutesApi = require("./routes/api/profile.routes");
+app.use("/api/profile", isAuthenticated, profileRoutesApi);
 
-const graphsRoutes = require("./routes/graphs.routes");
-app.use("/graphs", graphsRoutes);
+// 👇 v1 routes
+const index = require("./routes/v1/index.routes");
+app.use("/v1/", index);
 
-const profileRoutes = require("./routes/profile.routes");
-app.use("/profile", profileRoutes);
+const authRoutes = require("./routes/v1/auth.routes");
+app.use("/v1/auth", authRoutes);
 
+const challengeRoutes = require("./routes/v1/challenge.routes");
+app.use("/v1/challenge", challengeRoutes);
+
+const gamesRoutes = require("./routes/v1/games.routes");
+app.use("/v1/games", gamesRoutes);
+
+const leaguesRoutes = require("./routes/v1/leagues.routes");
+app.use("/v1/leagues", leaguesRoutes);
+
+const boardsRoutes = require("./routes/v1/boards.routes");
+app.use("/v1/boards", boardsRoutes);
+
+const graphsRoutes = require("./routes/v1/graphs.routes");
+app.use("/v1/graphs", graphsRoutes);
+
+const profileRoutes = require("./routes/v1/profile.routes");
+app.use("/v1/profile", profileRoutes);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);

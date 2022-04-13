@@ -25,6 +25,8 @@ const session = require("express-session");
 // https://www.npmjs.com/package/connect-mongo
 const MongoStore = require("connect-mongo");
 
+const cors = require("cors");
+
 // Connects the mongo uri to maintain the same naming structure
 // const {MONGO_URI} = require("../utils/consts");
 const MONGO_URI = require("../utils/consts");
@@ -64,7 +66,14 @@ module.exports = (app) => {
     })
   );
 
+  // ADD CORS MIDDLEWARE INSIDE module.exports TO ALLOW CROSS-ORIGIN INTERACTION:
+  app.use(
+    cors({
+      origin: ["http://localhost:3000"], // <== URL of our future React app
+    })
+  );
+
   //declare a global middleware used in all routes
   const globalParam = require("../middleware/globalParam");
-  app.use(globalParam)
+  app.use(globalParam);
 };
