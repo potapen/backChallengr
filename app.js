@@ -38,8 +38,8 @@ app.use(require("./middleware/setLoginState"));
 const authRoutesApi = require("./routes/api/auth.routes");
 app.use("/api/auth", authRoutesApi);
 
-const challengeRoutesApi = require("./routes/api/challenge.routes");
-app.use("/api/challenge", isAuthenticated, challengeRoutesApi);
+const challengeRoutesApi = require("./routes/api/challenges.routes");
+app.use("/api/challenges", isAuthenticated, challengeRoutesApi);
 
 const gamesRoutesApi = require("./routes/api/games.routes");
 app.use("/api/games", isAuthenticated, gamesRoutesApi);

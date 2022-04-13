@@ -5,22 +5,30 @@ const League = require("../../models/League.model");
 const User = require("../../models/User.model");
 const mongoose = require("mongoose");
 const isLoggedIn = require("../../middleware/isLoggedIn");
+const getUser = require('../../middleware/getUser')
 /* GET home page */
 
-router.get("/", (req, res, next) => {
-  res.send("challenge");
-});
 
 /*
 ----------------------------------------------------------------------------------------------------------------
 -----  LIST
+http://localhost:3000/api/challenge/
+returns a list of leagues.
+or
+http://localhost:3000/api/challenge/?league=62568ec9a6714fef61e70657
+returns a list of challenges for a league.
 ----------------------------------------------------------------------------------------------------------------
 */
-router.get("/list", isLoggedIn, async (req, res, next) => {
+
+router.get("/",getUser, async (req, res, next) => {
   try {
     //if there a league in the query, we can show all the challenges of that league
-    const { league } = req.query;
-    if (league) {
+    const { leagueID } = req.query;
+    if (leagueID) {
+      const league = await League.findById(leagueID)
+      
+      console.log("league.members", league.members)
+      console.log("req.user._id", req.user._id)
       const challenges = await Challenge.find({ league })
         .sort({ createdAt: -1 })
         .populate("league game contenders winners");
@@ -28,30 +36,43 @@ router.get("/list", isLoggedIn, async (req, res, next) => {
       const data = {
         challenges,
       };
-      console.log("---------------------------------------- data: ", data);
-      res.render("challenge/listWithLeagueID", data);
+      // res.render("challenge/list", data);
+      res.json(data);
     } else {
       const leagues = await League.find({
-        members: req.session.user._id,
+        members: req.user._id,
       });
+      const challenges = await Challenge.find({ leagues })
+        .sort({ createdAt: -1 })
+        .populate("league game contenders winners");
       const data = {
-        leagues,
+        challenges,
       };
-      res.render("challenge/list", data);
+      // res.render("challenge/list", data);
+      res.json(data);
     }
   } catch (error) {
     console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee get /list");
     console.error(error);
-    next();
+    next(error);
   }
 });
 
 /*
 ----------------------------------------------------------------------------------------------------------------
 -----  CREATE
+http://localhost:3000/api/challenge/create
+returns
+  leagues
+
+http://localhost:3000/api/challenge/create?league=62568ec9a6714fef61e70657
+returns
+  games,
+  users,
+  league (the link in the param)
 ----------------------------------------------------------------------------------------------------------------
 */
-router.get("/create", isLoggedIn, async (req, res, next) => {
+router.get("/create", getUser, async (req, res, next) => {//to be deleted?
   try {
     //if there a league in the query, we can show the right options for that league
     console.log("req.query: ", req.query);
@@ -66,34 +87,33 @@ router.get("/create", isLoggedIn, async (req, res, next) => {
         users,
         league,
       };
-      res.render("challenge/createWithLeagueID", data);
+      // res.render("challenge/createWithLeagueID", data);
+      res.json(data);
     } else {
       //show a page to click on a league first. Once the user selects a league, there is a get with league in the query
       const leagues = await League.find({
-        members: req.session.user._id,
+        members: req.user._id,
       });
       const data = {
         leagues,
       };
-      res.render("challenge/create", data);
+      res.json(data);
     }
   } catch (error) {
-    next();
+    next(error);
   }
 });
 
-router.post("/create", async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
-    console.log("req.body :", req.body);
-    const { league, game, users, stake } = req.body;
-    const challengeToCreate = { league, game, contenders: users, stake };
-    console.log("challengeToCreate: ", challengeToCreate);
+    const { league, game, contenders } = req.body;
+    const challengeToCreate = { league, game, contenders };
     const challengeCreated = await Challenge.create(challengeToCreate);
-    console.log("challengeCreated: ", challengeCreated);
-    res.redirect("/");
+    // res.redirect("/");
+    res.json(challengeCreated)
   } catch (error) {
     console.error(error);
-    next();
+    next(error);
   }
 });
 
@@ -102,15 +122,14 @@ router.post("/create", async (req, res, next) => {
 -----  EDIT/:challengeID
 ----------------------------------------------------------------------------------------------------------------
 */
-router.post("/edit/:challengeID", async (req, res, next) => {
+router.put("/:id", async (req, res, next) => {
   try {
     const {
-      challengeID,
+      id,
       contenders,
       league,
       game,
       winners,
-      stake,
       isCompleted,
     } = req.body;
     const challengeToEdit = {
@@ -118,33 +137,31 @@ router.post("/edit/:challengeID", async (req, res, next) => {
       league,
       game,
       winners,
-      stake,
       isCompleted: Boolean(isCompleted),
     };
     const challengeUpdated = await Challenge.findByIdAndUpdate(
-      challengeID,
+      id,
       challengeToEdit,
       { new: true }
     );
     // res.send(challengeUpdated);
-    res.redirect("/");
+    // res.redirect("/");
+    res.json(challengeUpdated);
   } catch (error) {
     console.error(error);
-    next();
+    next(error);
   }
 });
 
-router.get("/edit/:challengeID", async (req, res, next) => {
+router.get("/edit/:id", getUser,async (req, res, next) => {//to be deleted?
   try {
-    const { challengeID } = req.params;
-    const challengeToEdit = await Challenge.findById(challengeID)
+    const { id } = req.params;
+    const challengeToEdit = await Challenge.findById(id)
       .populate("contenders")
       .populate("league")
       .populate("game")
       .populate("winners")
-      .populate("stake")
       .populate("isCompleted");
-    // console.log('---------------------------challengeToEdit: ',challengeToEdit)
 
     const usersContender = await User.find(); //pas besoin de .lean()...c'est magigue...
     usersContender.forEach((person1) => {
@@ -167,7 +184,7 @@ router.get("/edit/:challengeID", async (req, res, next) => {
     });
 
     const leagues = await League.find({
-      members: req.session.user._id,
+      members: req.user._id,
     }); //pas besoin de .lean()...c'est magigue...
 
     leagues.forEach((league1) => {
@@ -180,7 +197,7 @@ router.get("/edit/:challengeID", async (req, res, next) => {
     });
 
     const userLeagues = await League.find({
-      members: req.session.user._id,
+      members: req.user._id,
     }).select("_id");
     leagueIdsArray = userLeagues.map((league) => league._id);
 
@@ -202,12 +219,11 @@ router.get("/edit/:challengeID", async (req, res, next) => {
       games,
       challenge: challengeToEdit,
     };
-    console.log("-----------------------------------------data: ", data);
-    res.render("challenge/edit", data);
+    res.json(data);
   } catch (error) {
     console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee get /edit/:challengeID");
     console.error(error);
-    next();
+    next(error);
   }
 });
 /*
@@ -215,20 +231,15 @@ router.get("/edit/:challengeID", async (req, res, next) => {
 -----  UPDATE/:challengeID
 ----------------------------------------------------------------------------------------------------------------
 */
-router.get("/update/:challengeID", async (req, res, next) => {
+router.get("/update/:id", async (req, res, next) => {//to be deleted?
   try {
-    const { challengeID } = req.params;
-    const challengeToEdit = await Challenge.findById(challengeID)
+    const { id } = req.params;
+    const challengeToEdit = await Challenge.findById(id)
       .populate("contenders")
       .populate("league")
       .populate("game")
       .populate("winners")
-      .populate("stake")
       .populate("isCompleted");
-    console.log(
-      "---------------------------challengeToEdit: ",
-      challengeToEdit
-    );
 
     const contenders = challengeToEdit.contenders;
 
@@ -236,42 +247,42 @@ router.get("/update/:challengeID", async (req, res, next) => {
       contenders,
       challenge: challengeToEdit,
     };
-    console.log("-----------------------------------------data: ", data);
-    res.render("challenge/update", data);
+    // res.render("challenge/update", data);
+    res.json(data);
   } catch (error) {
     console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee get /edit/:challengeID");
     console.error(error);
-    next();
+    next(error);
   }
 });
 /*
 ----------------------------------------------------------------------------------------------------------------
------  EDIT/:challengeID
+-----  DELETE/:challengeID
 ----------------------------------------------------------------------------------------------------------------
 */
-router.get("/delete/:challengeID", async (req, res, next) => {
+router.get("/delete/:id", async (req, res, next) => { //to be deleted?
   try {
-    const { challengeID } = req.params;
-    console.log("---------------------------challengeID: ", challengeID);
-    const challenge = await Challenge.findById(challengeID);
-    console.log("--------------------------------challenge:", challenge);
+    const { id } = req.params;
+    const challenge = await Challenge.findById(id);
     data = { challenge };
-    res.render("challenge/delete", data);
+    // res.render("challenge/delete", data);
+    res.json(data);
   } catch (error) {
-    console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee get /delete/:challengeID");
+    console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee get /delete/:id");
     console.error(error);
-    next();
+    next(error);
   }
 });
 
-router.post("/delete/:challengeID", async (req, res, next) => {
+router.delete("/:id", async (req, res, next) => {
   try {
-    const { challengeID } = req.body;
-    const challengeDeleted = await Challenge.findByIdAndDelete(challengeID);
-    res.redirect("/");
+    const { id } = req.body;
+    const challengeDeleted = await Challenge.findByIdAndDelete(id);
+    // res.redirect("/");
+    res.json(challengeDeleted);
   } catch (error) {
     console.error(error);
-    next();
+    next(error);
   }
 });
 
