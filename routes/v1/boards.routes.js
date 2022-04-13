@@ -53,7 +53,7 @@ router.get("/:id", isLoggedIn, async (req, res, next) => {
       countPerLeague = await League.populate(countPerLeague, {
         path: "_id",
       });
-      
+
       // Stats per User
       let countPerUser = await Challenge.aggregate([
         {
@@ -199,7 +199,6 @@ router.get("/:id", isLoggedIn, async (req, res, next) => {
         rankingPerLeague,
         noWinners,
       });
-
     }
 
     res.render("boards/main", { user, statsPerLeague });
@@ -208,7 +207,5 @@ router.get("/:id", isLoggedIn, async (req, res, next) => {
     next();
   }
 });
-
-
 
 module.exports = router;
