@@ -21,7 +21,7 @@
     "dotenv": "^16.0.0",
     "emoji-button": "^2.2.2",
     "express": "^4.17.3",
-    "express-jwt": "^6.1.1",
+    "express-jwt": "^1.2.0",
     "express-session": "^1.17.2",
     "hbs": "^4.2.0",
     "jsonwebtoken": "^8.5.1",
