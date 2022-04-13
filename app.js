@@ -53,11 +53,14 @@ app.use("/api/points", isAuthenticated, pointsRoutesApi);
 const boardsRoutesApi = require("./routes/api/boards.routes");
 app.use("/api/boards", boardsRoutesApi);
 
-const graphsRoutesApi = require("./routes/api/graphs.routes");
-app.use("/api/graphs", isAuthenticated, graphsRoutesApi);
+const statsRoutesApi = require("./routes/api/stats.routes");
+app.use("/api/stats", isAuthenticated, statsRoutesApi);
 
 const profileRoutesApi = require("./routes/api/profile.routes");
 app.use("/api/profile", isAuthenticated, profileRoutesApi);
+
+const commentsRoutesApi = require("./routes/api/comments.routes");
+app.use("/api/comments", isAuthenticated, commentsRoutesApi);
 
 // 👇 v1 routes
 const index = require("./routes/v1/index.routes");

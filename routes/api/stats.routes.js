@@ -7,21 +7,10 @@ const isLoggedIn = require("../../middleware/isLoggedIn");
 const { redirect } = require("express/lib/response");
 const mongoose = require("mongoose");
 
-router.get("/", isLoggedIn, async (req, res, next) => {
-  const leagues = await League.find({
-    members: req.session.user._id,
-  });
-  console.log("---------------------leagues", leagues);
-  res.render("graphs/graph", { leagues });
+router.get("/", async (req, res, next) => {
+  res.send('stats home')
 });
 
-//return the league object, populated with members (for one league).
-//used for axios calls only
-router.get("/leagueobj/:InputLeagueID", isLoggedIn, async (req, res, next) => {
-  const { InputLeagueID } = req.params;
-  const league = await League.findById(InputLeagueID).populate("members");
-  res.send(league);
-});
 
 //return an list of object, each object being the sum stake for a given timestamp (for one league)
 //used for axios calls only
