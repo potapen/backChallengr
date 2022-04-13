@@ -8,10 +8,21 @@ const User = require("../../models/User.model");
 const isLoggedIn = require("../../middleware/isLoggedIn");
 const { redirect } = require("express/lib/response");
 const mongoose = require("mongoose");
-router.get("/main", isLoggedIn, async (req, res, next) => {
+
+router.get("/test/", async (req, res, next) => {
   try {
-    res.redirect(`/boards/${req.session.user._id}`);
-  } catch {
+    let challenge1 = await Challenge.findOne().populate("points");
+
+    challenge1.points = challenge1.points.filter((point) => {
+      return point.league.equals(challenge1.league);
+    });
+    console.log(challenge1.points[0].points);
+    challenge1.stake = challenge1.points[0].points;
+    console.log(challenge1);
+
+    res.json({ challenge1 });
+  } catch (error) {
+    console.log(error);
     next();
   }
 });
