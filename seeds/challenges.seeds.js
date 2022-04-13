@@ -6,11 +6,12 @@ const League = require("../models/League.model");
 const Game = require("../models/Game.model");
 const Challenge = require("../models/Challenge.model");
 const Comment = require("../models/Comment.model");
+const Point = require("../models/Point.model");
 
 // ℹ️ Sets the MongoDB URI for our app to have access to it.
 // If no env has been set, we dynamically set it to whatever the folder name was upon the creation of the app
 
-const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost/challengr";
+const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost/challengr-v2";
 
 const users = [
   {
@@ -59,17 +60,12 @@ const games = [
   {
     name: "Beer pong",
     description: "Le jeu du beerpong, classique",
-    isPrivate: false,
-    emoji: "🍻",
     imageUrl:
       "https://www.jeux-alcool.com/wp-content/uploads/2017/03/beerPong.jpeg",
   },
   {
     name: "Torse pong",
     description: "Utilise ton torse pour mettre la balle dans le gobelet",
-    isPrivate: true,
-    ownerLeagues: [],
-    emoji: "🫁",
     imageUrl:
       "https://i0.wp.com/godrunkyourself.com/wp-content/uploads/2020/04/AdobeStock_137721763-1-1440x960.jpeg",
   },
@@ -77,18 +73,12 @@ const games = [
     name: "Bird box challenge",
     description:
       "Ce défi est tiré du film Bird Box sorti le 21 décembre 201880. Il consiste, comme dans le film, à se déplacer les yeux bandés d'un point A à un point B",
-    isPrivate: false,
-    ownerLeagues: [],
-    emoji: "😝",
     imageUrl:
       "https://d1fmx1rbmqrxrr.cloudfront.net/cnet/i/edit/2019/01/birdbox-netflix-big.jpg",
   },
   {
     name: "Rock Scissors Paper",
     description: "The classic one",
-    isPrivate: false,
-    ownerLeagues: [],
-    emoji: "⚔️",
     imageUrl:
       "https://cdn-europe1.lanmedia.fr/var/europe1/storage/images/europe1/international/la-recette-pour-gagner-a-pierre-feuille-ciseaux-768904/15409112-1-fre-FR/La-recette-pour-gagner-a-pierre-feuille-ciseaux.jpg",
   },
@@ -98,37 +88,31 @@ const challenges = [
   {
     contenders: [],
     winners: [],
-    stake: 40,
     isCompleted: true,
   },
   {
     contenders: [],
     winners: [],
-    stake: 30,
     isCompleted: true,
   },
   {
     contenders: [],
     winners: [],
-    stake: 20,
     isCompleted: true,
   },
   {
     contenders: [],
     winners: [],
-    stake: 15,
     isCompleted: true,
   },
   {
     contenders: [],
     winners: [],
-    stake: 22,
     isCompleted: false,
   },
   {
     contenders: [],
     winners: [],
-    stake: 30,
     isCompleted: false,
   },
 ];
@@ -136,19 +120,15 @@ const challenges = [
 const comments = [
   {
     content: "Awesome ! I'll never lose at this game !",
-    rating: 5,
   },
   {
     content: "Damned ! I suck at beerpong !",
-    rating: 2,
   },
   {
     content: "Oh yeah ! This game was intense",
-    rating: 4,
   },
   {
     content: "Let's do this again soon",
-    rating: 5,
   },
 ];
 
@@ -174,6 +154,8 @@ async function seedDB() {
   console.log("Challenges deleted");
   await Comment.deleteMany();
   console.log("Comments deleted");
+  await Point.deleteMany();
+  console.log("Points deleted");
 
   // Seed Users
   const usersDoc = await User.insertMany(users);
@@ -194,48 +176,101 @@ async function seedDB() {
   leaguesDocs = await League.insertMany(leaguesDocs);
   console.log("Leagues inserted with invite key");
 
+  await User.updateOne(
+    { _id: usersDoc[0]._id },
+    { $set: { favoriteLeague: leaguesDocs[0]._id } }
+  );
+  await User.updateOne(
+    { _id: usersDoc[1]._id },
+    { $set: { favoriteLeague: leaguesDocs[1]._id } }
+  );
+  await User.updateOne(
+    { _id: usersDoc[2]._id },
+    { $set: { favoriteLeague: leaguesDocs[0]._id } }
+  );
+  console.log("Users updated with favorite league");
+
   // Seed Games
-  games[1].ownerLeagues.push(leaguesDocs[1]._id);
-  const GamesDoc = await Game.insertMany(games);
+  const gamesDoc = await Game.insertMany(games);
   console.log("Games inserted");
+
+  // Seed Point
+  const points = [
+    {
+      game: gamesDoc[0]._id,
+      league: leaguesDocs[0]._id,
+    },
+    {
+      game: gamesDoc[0]._id,
+      league: leaguesDocs[1]._id,
+      points: 2,
+    },
+    {
+      game: gamesDoc[1]._id,
+      league: leaguesDocs[0]._id,
+      points: 2,
+    },
+    {
+      game: gamesDoc[1]._id,
+      league: leaguesDocs[1]._id,
+    },
+    {
+      game: gamesDoc[2]._id,
+      league: leaguesDocs[0]._id,
+    },
+    {
+      game: gamesDoc[2]._id,
+      league: leaguesDocs[1]._id,
+    },
+    {
+      game: gamesDoc[3]._id,
+      league: leaguesDocs[0]._id,
+    },
+    {
+      game: gamesDoc[3]._id,
+      league: leaguesDocs[1]._id,
+    },
+  ];
+  const pointsDoc = await Point.insertMany(points);
+  console.log("Points inserted");
 
   // Seed Challenges
   challenges[0].contenders.push(usersDoc[0]._id);
   challenges[0].contenders.push(usersDoc[1]._id);
   challenges[0].contenders.push(usersDoc[2]._id);
   challenges[0].league = leaguesDocs[0]._id;
-  challenges[0].game = GamesDoc[0]._id;
+  challenges[0].game = gamesDoc[0]._id;
   challenges[0].winners.push(usersDoc[1]._id);
 
   challenges[1].contenders.push(usersDoc[0]._id);
   challenges[1].contenders.push(usersDoc[1]._id);
   challenges[1].league = leaguesDocs[1]._id;
-  challenges[1].game = GamesDoc[1]._id;
+  challenges[1].game = gamesDoc[1]._id;
   challenges[1].winners.push(usersDoc[1]._id);
 
   challenges[2].contenders.push(usersDoc[0]._id);
   challenges[2].contenders.push(usersDoc[1]._id);
   challenges[2].contenders.push(usersDoc[2]._id);
   challenges[2].league = leaguesDocs[0]._id;
-  challenges[2].game = GamesDoc[0]._id;
+  challenges[2].game = gamesDoc[0]._id;
   challenges[2].winners.push(usersDoc[0]._id);
 
   challenges[3].contenders.push(usersDoc[0]._id);
   challenges[3].contenders.push(usersDoc[1]._id);
   challenges[3].league = leaguesDocs[1]._id;
-  challenges[3].game = GamesDoc[1]._id;
+  challenges[3].game = gamesDoc[1]._id;
   challenges[3].winners.push(usersDoc[0]._id);
 
   challenges[4].contenders.push(usersDoc[0]._id);
   challenges[4].contenders.push(usersDoc[1]._id);
   challenges[4].contenders.push(usersDoc[2]._id);
   challenges[4].league = leaguesDocs[0]._id;
-  challenges[4].game = GamesDoc[0]._id;
+  challenges[4].game = gamesDoc[0]._id;
 
   challenges[5].contenders.push(usersDoc[0]._id);
   challenges[5].contenders.push(usersDoc[1]._id);
   challenges[5].league = leaguesDocs[1]._id;
-  challenges[5].game = GamesDoc[1]._id;
+  challenges[5].game = gamesDoc[1]._id;
 
   challengesDocs = await Challenge.insertMany(challenges);
   console.log("Challenges inserted");
