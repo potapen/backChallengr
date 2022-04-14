@@ -248,6 +248,8 @@ async function seedDB() {
   challenges[1].league = leaguesDocs[1]._id;
   challenges[1].game = gamesDoc[1]._id;
   challenges[1].winners.push(usersDoc[1]._id);
+  challenges[1].points = 20;
+
 
   challenges[2].contenders.push(usersDoc[0]._id);
   challenges[2].contenders.push(usersDoc[1]._id);
@@ -255,12 +257,14 @@ async function seedDB() {
   challenges[2].league = leaguesDocs[0]._id;
   challenges[2].game = gamesDoc[0]._id;
   challenges[2].winners.push(usersDoc[0]._id);
+  challenges[2].points = 30;
 
   challenges[3].contenders.push(usersDoc[0]._id);
   challenges[3].contenders.push(usersDoc[1]._id);
   challenges[3].league = leaguesDocs[1]._id;
   challenges[3].game = gamesDoc[1]._id;
   challenges[3].winners.push(usersDoc[0]._id);
+  challenges[3].points = 40;
 
   challenges[4].contenders.push(usersDoc[0]._id);
   challenges[4].contenders.push(usersDoc[1]._id);
