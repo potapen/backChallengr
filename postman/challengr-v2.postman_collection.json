@@ -6,94 +6,695 @@
 	},
 	"item": [
 		{
-			"name": "creat user",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\": \"alexandre@gmail.com\",\n    \"password\": \"Passw0rd\",\n    \"username\": \"Alex\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "auth",
+			"item": [
+				{
+					"name": "creat user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"alexandreBeta@gmail.com\",\n    \"password\": \"Passw0rd\",\n    \"username\": \"AlexBeta\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"signup"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:3000/api/auth/signup",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"api",
-						"auth",
-						"signup"
-					]
+				{
+					"name": "login user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"alexandre@gmail.com\",\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verify user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2OGRiZmI1ZTY4NjE5NmQ2OTcyYzUiLCJlbWFpbCI6ImFsZXhhbmRyZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFsZXhhbmRyZSIsImlhdCI6MTY0OTg0MTcyOSwiZXhwIjoxNjQ5ODYzMzI5fQ.2_ZPZ150R1c7ifsi5Ayw37o43tqQ-w12bvXWD4yXM5w",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/verify",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2OGRiZmI1ZTY4NjE5NmQ2OTcyYzUiLCJlbWFpbCI6ImFsZXhhbmRyZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFsZXhhbmRyaW5vIiwiaWF0IjoxNjQ5OTI3NzMxLCJleHAiOjE2NDk5NDkzMzF9.RB9Vag9ZIWZn4VTwL7vV9oBrgj_6RQJ98Zgh-erD8nQ",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "edit user",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2YzM2ZTc3MmZmMTBjMzNlOTJlMzciLCJlbWFpbCI6ImFsZXhhbmRyZUJldGFAZ21haWwuY29tIiwidXNlcm5hbWUiOiJBbGV4QmV0YSIsImlhdCI6MTY0OTg1MzMxNiwiZXhwIjoxNjQ5ODc0OTE2fQ.yw_q5c4WnmGdergfBkZakdW46uGdvkEXNasnPLI9e8c",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"alexandrino\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2YzM2ZTc3MmZmMTBjMzNlOTJlMzciLCJlbWFpbCI6ImFsZXhhbmRyZUJldGFAZ21haWwuY29tIiwidXNlcm5hbWUiOiJBbGV4QmV0YSIsImlhdCI6MTY0OTg1MzMxNiwiZXhwIjoxNjQ5ODc0OTE2fQ.yw_q5c4WnmGdergfBkZakdW46uGdvkEXNasnPLI9e8c",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "login user",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\": \"alexandre@gmail.com\",\n    \"password\": \"Passw0rd\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "leagues",
+			"item": [
+				{
+					"name": "get leagues",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2OGRiZmI1ZTY4NjE5NmQ2OTcyYzUiLCJlbWFpbCI6ImFsZXhhbmRyZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFsZXhhbmRyZSIsImlhdCI6MTY0OTg0MTcyOSwiZXhwIjoxNjQ5ODYzMzI5fQ.2_ZPZ150R1c7ifsi5Ayw37o43tqQ-w12bvXWD4yXM5w",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/leagues",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"leagues"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:3000/api/auth/login",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"api",
-						"auth",
-						"login"
-					]
+				{
+					"name": "create league",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2OGRiZmI1ZTY4NjE5NmQ2OTcyYzUiLCJlbWFpbCI6ImFsZXhhbmRyZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFsZXhhbmRyZSIsImlhdCI6MTY0OTg0MTcyOSwiZXhwIjoxNjQ5ODYzMzI5fQ.2_ZPZ150R1c7ifsi5Ayw37o43tqQ-w12bvXWD4yXM5w",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test league creation\",\n    \"description\": \"Hope it works\"\n    }\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/leagues",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"leagues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "edit league",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2YzM2ZTc3MmZmMTBjMzNlOTJlMzciLCJlbWFpbCI6ImFsZXhhbmRyZUJldGFAZ21haWwuY29tIiwidXNlcm5hbWUiOiJBbGV4QmV0YSIsImlhdCI6MTY0OTg1MzMxNiwiZXhwIjoxNjQ5ODc0OTE2fQ.yw_q5c4WnmGdergfBkZakdW46uGdvkEXNasnPLI9e8c",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test league creations !!!\",\n    \"description\": \"Hope it still works\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/leagues/6256c19147e9908607bb8628",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"leagues",
+								"6256c19147e9908607bb8628"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "leave league",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2OGRiZmI1ZTY4NjE5NmQ2OTcyYzUiLCJlbWFpbCI6ImFsZXhhbmRyZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFsZXhhbmRyZSIsImlhdCI6MTY0OTg0MTcyOSwiZXhwIjoxNjQ5ODYzMzI5fQ.2_ZPZ150R1c7ifsi5Ayw37o43tqQ-w12bvXWD4yXM5w",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/leagues/6256c19147e9908607bb8628/leave",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"leagues",
+								"6256c19147e9908607bb8628",
+								"leave"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "join league",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2OGRiZmI1ZTY4NjE5NmQ2OTcyYzUiLCJlbWFpbCI6ImFsZXhhbmRyZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFsZXhhbmRyZSIsImlhdCI6MTY0OTg0MTcyOSwiZXhwIjoxNjQ5ODYzMzI5fQ.2_ZPZ150R1c7ifsi5Ayw37o43tqQ-w12bvXWD4yXM5w",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"inviteKey\": \"6256c19147e9908607bb8628\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/leagues/join",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"leagues",
+								"join"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete league",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2OGRiZmI1ZTY4NjE5NmQ2OTcyYzUiLCJlbWFpbCI6ImFsZXhhbmRyZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFsZXhhbmRyZSIsImlhdCI6MTY0OTg0MTcyOSwiZXhwIjoxNjQ5ODYzMzI5fQ.2_ZPZ150R1c7ifsi5Ayw37o43tqQ-w12bvXWD4yXM5w",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/leagues/6256c8f0ffd2d237a0325e1d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"leagues",
+								"6256c8f0ffd2d237a0325e1d"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "verify user",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\": \"alexandre@gmail.com\",\n    \"password\": \"Passw0rd\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "games",
+			"item": [
+				{
+					"name": "get games",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2OGRiZmI1ZTY4NjE5NmQ2OTcyYzUiLCJlbWFpbCI6ImFsZXhhbmRyZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFsZXhhbmRyZSIsImlhdCI6MTY0OTg0MTcyOSwiZXhwIjoxNjQ5ODYzMzI5fQ.2_ZPZ150R1c7ifsi5Ayw37o43tqQ-w12bvXWD4yXM5w",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/games",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"games"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:3000/api/auth/verify",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"api",
-						"auth",
-						"verify"
-					]
+				{
+					"name": "create game",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2OGRiZmI1ZTY4NjE5NmQ2OTcyYzUiLCJlbWFpbCI6ImFsZXhhbmRyZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFsZXhhbmRyZSIsImlhdCI6MTY0OTg0MTcyOSwiZXhwIjoxNjQ5ODYzMzI5fQ.2_ZPZ150R1c7ifsi5Ayw37o43tqQ-w12bvXWD4yXM5w",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Darts\",\n    \"description\": \"Play the darts\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/games",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "edit game",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2OGRiZmI1ZTY4NjE5NmQ2OTcyYzUiLCJlbWFpbCI6ImFsZXhhbmRyZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFsZXhhbmRyZSIsImlhdCI6MTY0OTg0MTcyOSwiZXhwIjoxNjQ5ODYzMzI5fQ.2_ZPZ150R1c7ifsi5Ayw37o43tqQ-w12bvXWD4yXM5w",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Edited dartsssss\",\n    \"description\": \"Hope it works\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/games/6256cd80ee8a7ea960ac6b1b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"games",
+								"6256cd80ee8a7ea960ac6b1b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete game",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2OGRiZmI1ZTY4NjE5NmQ2OTcyYzUiLCJlbWFpbCI6ImFsZXhhbmRyZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFsZXhhbmRyZSIsImlhdCI6MTY0OTg0MTcyOSwiZXhwIjoxNjQ5ODYzMzI5fQ.2_ZPZ150R1c7ifsi5Ayw37o43tqQ-w12bvXWD4yXM5w",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Edited dartsssss\",\n    \"description\": \"Hope it works\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/games/6256cd80ee8a7ea960ac6b1b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"games",
+								"6256cd80ee8a7ea960ac6b1b"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "points",
+			"item": [
+				{
+					"name": "get points for a league",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2OGRiZmI1ZTY4NjE5NmQ2OTcyYzUiLCJlbWFpbCI6ImFsZXhhbmRyZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFsZXhhbmRyaW5vIiwiaWF0IjoxNjQ5ODU5MDI1LCJleHAiOjE2NDk4ODA2MjV9.12fFnbX8ML1MAFg9SRvwChxun7Y2T2dPZzzJcGniUWo",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/points/game/62568dbfb5e686196d6972d2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"points",
+								"game",
+								"62568dbfb5e686196d6972d2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get points for a game",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2OGRiZmI1ZTY4NjE5NmQ2OTcyYzUiLCJlbWFpbCI6ImFsZXhhbmRyZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFsZXhhbmRyaW5vIiwiaWF0IjoxNjQ5ODU5MDI1LCJleHAiOjE2NDk4ODA2MjV9.12fFnbX8ML1MAFg9SRvwChxun7Y2T2dPZzzJcGniUWo",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/points/league/62568dbfb5e686196d6972c9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"points",
+								"league",
+								"62568dbfb5e686196d6972c9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "edit a point",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2OGRiZmI1ZTY4NjE5NmQ2OTcyYzUiLCJlbWFpbCI6ImFsZXhhbmRyZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFsZXhhbmRyaW5vIiwiaWF0IjoxNjQ5ODU5MDI1LCJleHAiOjE2NDk4ODA2MjV9.12fFnbX8ML1MAFg9SRvwChxun7Y2T2dPZzzJcGniUWo",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"game\": \"62568dbfb5e686196d6972d2\",\n    \"league\": \"62568dbfb5e686196d6972c9\",\n    \"points\":10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/points/62568dbfb5e686196d6972d7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"points",
+								"62568dbfb5e686196d6972d7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "stats",
+			"item": [
+				{
+					"name": "get profile stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU3ZThiZTUzYmJmNzIxMzc3M2VhZDIiLCJlbWFpbCI6ImFsZXhhbmRyZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFsZXhhbmRyZSIsImlhdCI6MTY0OTkyODM5MCwiZXhwIjoxNjQ5OTQ5OTkwfQ.K3wl59jio7ZMjQGychHTpNMW6oqB5Rd40PRw-Oaite4",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/boards/profile/6257e9e194e18ef0efdc0271",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"boards",
+								"profile",
+								"6257e9e194e18ef0efdc0271"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
