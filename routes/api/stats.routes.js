@@ -14,10 +14,10 @@ router.get("/", async (req, res, next) => {
 
 //return an list of object, each object being the sum stake for a given timestamp (for one league)
 //used for axios calls only
-router.get("/leaguestat/:InputLeagueID", isLoggedIn, async (req, res, next) => {
-  const { InputLeagueID } = req.params;
-  const league = await League.findById(InputLeagueID).populate("members");
-  const leagueIDObject = mongoose.Types.ObjectId(InputLeagueID);
+router.get("/league/:leagueId", isLoggedIn, async (req, res, next) => {
+  const { leagueId } = req.params;
+  const league = await League.findById(leagueId).populate("members");
+  const leagueIDObject = mongoose.Types.ObjectId(leagueId);
   let stakeOverTime = await Challenge.aggregate([
     {
       $match: {
