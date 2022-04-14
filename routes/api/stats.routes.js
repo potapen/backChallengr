@@ -6,6 +6,8 @@ const User = require("../../models/User.model");
 const isLoggedIn = require("../../middleware/isLoggedIn");
 const { redirect } = require("express/lib/response");
 const mongoose = require("mongoose");
+const isLeagueMember = require("../../middleware/isLeagueMember");
+const getUser = require("../../middleware/getUser")
 
 router.get("/", async (req, res, next) => {
   res.send('stats home')
@@ -13,61 +15,98 @@ router.get("/", async (req, res, next) => {
 
 
 //return an list of object, each object being the sum stake for a given timestamp (for one league)
-//used for axios calls only
-router.get("/league/:leagueId", isLoggedIn, async (req, res, next) => {
+/*
+[
+    {
+        "_id": "04-14T08:13",
+        "totalPoints": 10
+    },
+    {
+        "_id": "04-14T08:13",
+        "totalPoints": 30
+    }
+]
+*/
+router.get("/lineChart/league/:leagueId",getUser,isLeagueMember, async (req, res, next) => {
   const { leagueId } = req.params;
-  const league = await League.findById(leagueId).populate("members");
   const leagueIDObject = mongoose.Types.ObjectId(leagueId);
-  let stakeOverTime = await Challenge.aggregate([
+  let pointsOverTime = await Challenge.aggregate([
     {
       $match: {
         league: leagueIDObject,
+        isCompleted: true
       },
     },
     {
       $group: {
-        _id: "$createdAt",
-        totalStake: {
-          $sum: "$stake",
+        _id: "$createdAt",//groups documents by the same ID $createdAt, the grouping will have ID $createdAt
+        totalPoints: {
+          $sum: "$points",//sum the points for a given grouping
         },
       },
     },
     {
       $sort: {
-        _id: 1,
+        _id: 1, //sort by _id
       },
     },
   ]);
-  const stakeOverTimeSimple = stakeOverTime.map((obj) => {
+  //shorten the dates string
+  pointsOverTime.forEach((obj) => {
     let monString = JSON.stringify(obj._id);
-
-    console.log(monString);
     monString = monString.substring(6, 17);
-    console.log(monString);
     obj._id = monString;
   });
-  res.send(stakeOverTime);
+  res.json(pointsOverTime);
 });
 
 //returns a list of object, each object being the sum stake and count for a given game name (for one user in a specific league)
 //used for axios calls only
+
+/*
+[
+    {
+        "_id": "6257d7a7e8b2c54dbd502d22",
+        "name": "Beer pong",
+        "description": "Le jeu du beerpong, classique",
+        "imageUrl": "https://www.jeux-alcool.com/wp-content/uploads/2017/03/beerPong.jpeg",
+        "__v": 0,
+        "createdAt": "2022-04-14T08:13:27.661Z",
+        "updatedAt": "2022-04-14T08:13:27.661Z",
+        "totalPoints": 10
+    },
+    {
+        "_id": "6257d7a7e8b2c54dbd502d23",
+        "name": "Torse pong",
+        "description": "Utilise ton torse pour mettre la balle dans le gobelet",
+        "imageUrl": "https://i0.wp.com/godrunkyourself.com/wp-content/uploads/2020/04/AdobeStock_137721763-1-1440x960.jpeg",
+        "__v": 0,
+        "createdAt": "2022-04-14T08:13:27.661Z",
+        "updatedAt": "2022-04-14T08:13:27.661Z",
+        "totalPoints": 0,
+        "totalGames": 0
+    }
+]
+*/
+
 router.get(
-  "/userstat/:InputLeagueID/:InputUserID",
-  isLoggedIn,
+  // "/radarChart/league/:leagueId/user/:userId",
+  "/radarChart/league/:leagueId/user/:userId",
   async (req, res, next) => {
     try {
-      let { InputLeagueID, InputUserID } = req.params;
-      const userObjectID = mongoose.Types.ObjectId(InputUserID);
-      const leagueObjectID = mongoose.Types.ObjectId(InputLeagueID);
+      let { leagueId, userId } = req.params;
+      const userObjectID = mongoose.Types.ObjectId(userId);
+      const leagueObjectID = mongoose.Types.ObjectId(leagueId);
 
-      let stakePerGame = await Challenge.aggregate([
+      let pointsPerGame = await Challenge.aggregate([
         {
-          $match: {
+          $match: { //get all completed challenges for a league
             league: leagueObjectID,
+            isCompleted:true,
           },
         },
         {
-          $unwind: {
+          $unwind: { //in case a document contains multiple winners, created a separate doc for each winner. It also adds an index
             path: "$winners",
             includeArrayIndex: "index",
             preserveNullAndEmptyArrays: true,
@@ -75,46 +114,60 @@ router.get(
         },
         {
           $match: {
-            winners: userObjectID,
+            winners: userObjectID, //only keep the documents for a given user
           },
         },
         {
           $group: {
-            _id: "$game",
-            totalStake: {
-              $sum: "$stake",
+            _id: "$game", //group all documents corresponding to a game
+            totalPoints: {
+              $sum: "$points", //compute the sum of points
             },
-            totalGame: {
-              $count: {},
+            totalGames: {
+              $count: {}, //count the number of docs
             },
           },
         },
       ]);
 
-      stakePerGame = await Game.populate(stakePerGame, {
+      // The documents look like this
+      /*
+        {
+        _id:6257d7a7e8b2c54dbd502d22,
+          totalPoints:30,
+          totalGames:1
+        }
+
+      */
+     //populate the documents with info from Game
+      pointsPerGame = await Game.populate(pointsPerGame, {
         path: "_id",
       });
 
+      //get list of all games. .lean() allows the objects to be modified
       allGames = await Game.find().lean();
+      
+      //populate the allGames list with info from pointsPerGame. For a matching game, we want to add the totalPoints and the totalGames
       allGames.forEach((game1) => {
-        const correctGame2 = stakePerGame.filter((game2) => {
+        const correctGame2 = pointsPerGame.filter((game2) => {
           const sameGame =
             JSON.stringify(game1._id) === JSON.stringify(game2._id._id);
           return sameGame;
         });
         if (correctGame2[0]) {
-          game1.totalStake = correctGame2[0].totalStake;
-          game1.totalGame = correctGame2[0].totalGame;
+          game1.totalPoints = correctGame2[0].totalPoints;
+          game1.totalGames = correctGame2[0].totalGames;
         } else {
-          game1.totalStake = 0;
-          game1.totalGame = 0;
+          game1.totalPoints = 0;
+          game1.totalGames = 0;
         }
       });
 
-      res.send(allGames);
+      
+      res.json(allGames);
     } catch (error) {
       console.log(error);
-      next();
+      next(error);
     }
   }
 );
