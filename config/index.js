@@ -69,7 +69,7 @@ module.exports = (app) => {
   // ADD CORS MIDDLEWARE INSIDE module.exports TO ALLOW CROSS-ORIGIN INTERACTION:
   app.use(
     cors({
-      origin: ["http://localhost:3000"], // <== URL of our future React app
+      origin: ["http://localhost:3001"], // <== URL of our future React app
     })
   );
 
