@@ -51,7 +51,7 @@ const pointsRoutesApi = require("./routes/api/points.routes");
 app.use("/api/points", isAuthenticated, pointsRoutesApi);
 
 const boardsRoutesApi = require("./routes/api/boards.routes");
-app.use("/api/boards", boardsRoutesApi);
+app.use("/api/boards", isAuthenticated, boardsRoutesApi);
 
 const graphsRoutesApi = require("./routes/api/graphs.routes");
 app.use("/api/graphs", isAuthenticated, graphsRoutesApi);

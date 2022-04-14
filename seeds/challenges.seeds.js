@@ -241,6 +241,7 @@ async function seedDB() {
   challenges[0].league = leaguesDocs[0]._id;
   challenges[0].game = gamesDoc[0]._id;
   challenges[0].winners.push(usersDoc[1]._id);
+  challenges[0].points = 3;
 
   challenges[1].contenders.push(usersDoc[0]._id);
   challenges[1].contenders.push(usersDoc[1]._id);
