@@ -4,6 +4,7 @@ const League = require("../../models/League.model");
 const Game = require("../../models/Game.model");
 const Challenge = require("../../models/Challenge.model");
 const Point = require("../../models/Point.model");
+const User = require("../../models/User.model");
 const getUser = require("../../middleware/getUser");
 const fileUploader = require("../../config/cloudinary.config");
 const isLeagueMember = require("../../middleware/isLeagueMember");
@@ -16,6 +17,16 @@ router.get("/", getUser, async (req, res, next) => {
       members: req.user._id,
     }).populate("members");
     res.json({ leagues });
+  } catch {
+    next();
+  }
+});
+
+// Returns a league by ID
+router.get("/:leagueId", getUser, isLeagueMember, async (req, res, next) => {
+  try {
+    const league = await League.findById(req.league._id).populate("members");
+    res.json({ league });
   } catch {
     next();
   }
@@ -87,6 +98,10 @@ router.put(
         description,
       };
       if (members) {
+        membersDoc = await User.find({ _id: { $in: members.split(",") } });
+        members = membersDoc.map((memberDoc) => {
+          return memberDoc._id;
+        });
         updatedLeague.members = members;
       }
       if (req.file) {
