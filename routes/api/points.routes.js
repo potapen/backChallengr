@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 const League = require("../../models/League.model");
-const Game = require("../../models/Game.model");
+const Challenge = require("../../models/Challenge.model");
 const Point = require("../../models/Point.model");
 const getUser = require("../../middleware/getUser");
 const isLeagueMember = require("../../middleware/isLeagueMember");
@@ -70,7 +70,21 @@ router.patch(
         new: true,
       });
 
-      res.status(201).json({ updatedPointDoc });
+      // Updated all points in related Challenges
+      const updatedChallengesDoc = await Challenge.updateMany(
+        {
+          $and: [
+            { league: updatedPointDoc.league },
+            { game: updatedPointDoc.game },
+          ],
+        },
+        { points: points },
+        {
+          new: true,
+        }
+      );
+
+      res.status(201).json({ updatedPointDoc, updatedChallengesDoc });
     } catch (error) {
       console.log(error);
       next();
