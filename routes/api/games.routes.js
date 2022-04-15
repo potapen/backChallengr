@@ -14,6 +14,16 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.get("/:gameId", async (req, res, next) => {
+  try {
+    const id = req.params.gameId;
+    const game = await Game.findById(id);
+    res.json({ game });
+  } catch {
+    next();
+  }
+});
+
 router.post(
   "/",
   fileUploader.single("coverPicture"),
