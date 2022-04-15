@@ -7,12 +7,19 @@ const isLoggedIn = require("../../middleware/isLoggedIn");
 const { redirect } = require("express/lib/response");
 const mongoose = require("mongoose");
 const isLeagueMember = require("../../middleware/isLeagueMember");
-const getUser = require("../../middleware/getUser")
+const getUser = require("../../middleware/getUser");
+const getUserLeagues = require("../../middleware/getUserLeagues");
+
+const {
+  getCountPerLeague,
+  getCountPerUser,
+  getCountPerWinner,
+  getFullRankingPerLeague,
+} = require("../../db/helpers/statsQueries");
 
 router.get("/", async (req, res, next) => {
-  res.send('stats home')
+  res.send("stats home");
 });
-
 
 //return an list of object, each object being the sum stake for a given timestamp (for one league)
 /*
@@ -27,38 +34,43 @@ router.get("/", async (req, res, next) => {
     }
 ]
 */
-router.get("/lineChart/league/:leagueId",getUser,isLeagueMember, async (req, res, next) => {
-  const { leagueId } = req.params;
-  const leagueIDObject = mongoose.Types.ObjectId(leagueId);
-  let pointsOverTime = await Challenge.aggregate([
-    {
-      $match: {
-        league: leagueIDObject,
-        isCompleted: true
-      },
-    },
-    {
-      $group: {
-        _id: "$createdAt",//groups documents by the same ID $createdAt, the grouping will have ID $createdAt
-        totalPoints: {
-          $sum: "$points",//sum the points for a given grouping
+router.get(
+  "/lineChart/league/:leagueId",
+  getUser,
+  isLeagueMember,
+  async (req, res, next) => {
+    const { leagueId } = req.params;
+    const leagueIDObject = mongoose.Types.ObjectId(leagueId);
+    let pointsOverTime = await Challenge.aggregate([
+      {
+        $match: {
+          league: leagueIDObject,
+          isCompleted: true,
         },
       },
-    },
-    {
-      $sort: {
-        _id: 1, //sort by _id
+      {
+        $group: {
+          _id: "$createdAt", //groups documents by the same ID $createdAt, the grouping will have ID $createdAt
+          totalPoints: {
+            $sum: "$points", //sum the points for a given grouping
+          },
+        },
       },
-    },
-  ]);
-  //shorten the dates string
-  pointsOverTime.forEach((obj) => {
-    let monString = JSON.stringify(obj._id);
-    monString = monString.substring(6, 17);
-    obj._id = monString;
-  });
-  res.json(pointsOverTime);
-});
+      {
+        $sort: {
+          _id: 1, //sort by _id
+        },
+      },
+    ]);
+    //shorten the dates string
+    pointsOverTime.forEach((obj) => {
+      let monString = JSON.stringify(obj._id);
+      monString = monString.substring(6, 17);
+      obj._id = monString;
+    });
+    res.json(pointsOverTime);
+  }
+);
 
 //returns a list of object, each object being the sum stake and count for a given game name (for one user in a specific league)
 //used for axios calls only
@@ -100,13 +112,15 @@ router.get(
 
       let pointsPerGame = await Challenge.aggregate([
         {
-          $match: { //get all completed challenges for a league
+          $match: {
+            //get all completed challenges for a league
             league: leagueObjectID,
-            isCompleted:true,
+            isCompleted: true,
           },
         },
         {
-          $unwind: { //in case a document contains multiple winners, created a separate doc for each winner. It also adds an index
+          $unwind: {
+            //in case a document contains multiple winners, created a separate doc for each winner. It also adds an index
             path: "$winners",
             includeArrayIndex: "index",
             preserveNullAndEmptyArrays: true,
@@ -139,14 +153,14 @@ router.get(
         }
 
       */
-     //populate the documents with info from Game
+      //populate the documents with info from Game
       pointsPerGame = await Game.populate(pointsPerGame, {
         path: "_id",
       });
 
       //get list of all games. .lean() allows the objects to be modified
       allGames = await Game.find().lean();
-      
+
       //populate the allGames list with info from pointsPerGame. For a matching game, we want to add the totalPoints and the totalGames
       allGames.forEach((game1) => {
         const correctGame2 = pointsPerGame.filter((game2) => {
@@ -163,7 +177,6 @@ router.get(
         }
       });
 
-      
       res.json(allGames);
     } catch (error) {
       console.log(error);
@@ -171,4 +184,40 @@ router.get(
     }
   }
 );
+
+router.get(
+  "/profile/:profileId",
+  getUser,
+  getUserLeagues,
+  async (req, res, next) => {
+    try {
+      const profileId = req.params.profileId;
+      const userLeaguesIds = req.userLeaguesIds;
+      const statsPerLeague = [];
+      console.log("profileId",profileId)
+
+      for (let i = 0; i < userLeaguesIds.length; i++) {
+        const leagueId = userLeaguesIds[i];
+
+        const countPerLeague = await getCountPerLeague(leagueId);
+        const countPerUser = await getCountPerUser(leagueId, profileId);
+        const countPerWinner = await getCountPerWinner(leagueId, profileId);
+        const fullRankingPerLeague = await getFullRankingPerLeague(leagueId);
+
+        statsPerLeague.push({
+          countPerLeague,
+          countPerUser,
+          countPerWinner,
+          fullRankingPerLeague,
+        });
+      }
+
+      res.json({ statsPerLeague });
+    } catch (error) {
+      console.log(error);
+      next();
+    }
+  }
+);
+
 module.exports = router;
