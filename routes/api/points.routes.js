@@ -7,6 +7,17 @@ const getUser = require("../../middleware/getUser");
 const isLeagueMember = require("../../middleware/isLeagueMember");
 const getParentLeague = require("../../middleware/getParentLeague");
 
+// Returns the points by Id
+router.get("/:pointId", async (req, res, next) => {
+  try {
+    const id = req.params.pointId;
+    const point = await Point.findById(id).populate("game league");
+    res.json({ point });
+  } catch {
+    next();
+  }
+});
+
 // Returns the points for a league the logged user is part of
 router.get(
   "/league/:leagueId",
@@ -43,7 +54,7 @@ router.get("/game/:gameId", getUser, async (req, res, next) => {
 });
 
 // Edit a point, making sure the user is part of the league the point belongs to
-router.put(
+router.patch(
   "/:pointId",
   getUser,
   getParentLeague,
@@ -51,10 +62,8 @@ router.put(
   async (req, res, next) => {
     try {
       const id = req.params.pointId;
-      let { league, game, points } = req.body;
+      let { points } = req.body;
       const updatedPoint = {
-        league,
-        game,
         points,
       };
       const updatedPointDoc = await Point.findByIdAndUpdate(id, updatedPoint, {
