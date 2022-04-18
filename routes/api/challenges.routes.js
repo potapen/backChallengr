@@ -5,13 +5,15 @@ const League = require("../../models/League.model");
 const User = require("../../models/User.model");
 const mongoose = require("mongoose");
 const isLoggedIn = require("../../middleware/isLoggedIn");
-const getUser = require('../../middleware/getUser')
+const getUser = require('../../middleware/getUser');
 /* GET home page */
 
 
 /*
 ----------------------------------------------------------------------------------------------------------------
------  GET
+-----  GET all challenges
+for all leagues: http://localhost:5005/api/challenges/?leagueId=6257d7a7e8b2c54dbd502d19
+for a specific league : http://localhost:5005/api/challenges
 ----------------------------------------------------------------------------------------------------------------
 */
 
@@ -20,22 +22,20 @@ router.get("/",getUser, async (req, res, next) => {
     //if there a league in the query, we can show all the challenges of that league
     const { leagueId } = req.query;
     if (leagueId) {
-      const league = await League.findById(leagueId)
-      
-      console.log("league.members", league.members)
-      console.log("req.user._id", req.user._id)
-      let challenges = []
-      if (league.members.includes(req.user._id)) {
+      const league = await League.findById(leagueId);
+      let challenges = [];
+      if (league.members.includes(req.user._id)) { //we check that the user is part of the league
         challenges = await Challenge.find({ league })
           .sort({ createdAt: -1 })
           .populate("league game contenders winners");
+        const data = {
+          challenges,
+        };
+        res.json(data);
       }
-      
-      const data = {
-        challenges,
-      };
-      // res.render("challenge/list", data);
-      res.json(data);
+      else{
+        res.status(401).send('unauthorized, you are not part of the league requested');
+      }
     } else {
       const leagues = await League.find({
         members: req.user._id,
@@ -50,12 +50,42 @@ router.get("/",getUser, async (req, res, next) => {
       res.json(data);
     }
   } catch (error) {
-    console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee get /list");
     console.error(error);
     next(error);
   }
 });
 
+/*
+----------------------------------------------------------------------------------------------------------------
+-----  GET a single challenge from its id
+http://localhost:5005/api/challenges/6257d7a7e8b2c54dbd502d30
+----------------------------------------------------------------------------------------------------------------
+*/
+
+router.get("/:challengeId",getUser, async (req, res, next) => {
+  try {
+    //if there a league in the query, we can show all the challenges of that league
+    const { challengeId } = req.params;
+
+    const challenge = await Challenge.findById(challengeId)
+    console.log('challenge', challenge);
+
+    if (challenge.contenders.includes(req.user._id)) { //we check that the user is part of the challenge
+      //we populate afterwards to prevent breaking the check if the if
+      await challenge.populate('league game contenders winners');
+      const data = {
+        challenge
+      };
+      res.json(data);
+    }
+    else{
+      res.status(401).send('unauthorized, you are not part of the challenge requested');
+    }  
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
 /*
 ----------------------------------------------------------------------------------------------------------------
 -----  POST
@@ -107,8 +137,6 @@ router.put("/:challengeId", async (req, res, next) => {
       challengeToEdit,
       { new: true }
     );
-    // res.send(challengeUpdated);
-    // res.redirect("/");
     res.json(challengeUpdated);
   } catch (error) {
     console.error(error);
