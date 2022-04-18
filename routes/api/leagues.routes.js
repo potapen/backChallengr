@@ -130,6 +130,29 @@ router.put(
   }
 );
 
+// Set the league to favorite of the user
+router.patch(
+  "/:leagueId/favorite",
+  getUser,
+  isLeagueMember,
+  async (req, res, next) => {
+    try {
+      console.log("hello");
+      const updatedUser = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+          favoriteLeague: req.league._id,
+        },
+        { new: true }
+      );
+      res.json({ updatedUser });
+    } catch (error) {
+      console.log(error);
+      next();
+    }
+  }
+);
+
 // Remove the logged user from the league in the url
 router.patch(
   "/:leagueId/leave",
@@ -155,8 +178,12 @@ router.patch(
 router.patch("/join", getUser, async (req, res, next) => {
   try {
     const { inviteKey } = req.body;
-    const league = await League.findOne({ inviteKey: inviteKey });
-
+    const league = await League.findOne({
+      $and: [{ inviteKey: inviteKey }, { members: { $ne: req.user._id } }],
+    });
+    if (!league) {
+      res.status(401).send("Invite key was already used or not valid");
+    }
     league.members.push(req.user._id);
     joinedLeague = await League.findByIdAndUpdate(inviteKey, league, {
       new: true,
