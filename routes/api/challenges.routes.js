@@ -93,6 +93,7 @@ router.get("/:challengeId",getUser, async (req, res, next) => {
 */
 
 router.post("/", async (req, res, next) => {
+  console.log('inside post to create')
   try {
     const { league, game, contenders } = req.body;
     const challengeToCreate = { 
@@ -101,6 +102,7 @@ router.post("/", async (req, res, next) => {
       contenders,
       isCompleted:false
     };
+    console.log('challengeToCreate', challengeToCreate)
     const challengeCreated = await Challenge.create(challengeToCreate);
     // res.redirect("/");
     res.json(challengeCreated)
@@ -112,10 +114,10 @@ router.post("/", async (req, res, next) => {
 
 /*
 ----------------------------------------------------------------------------------------------------------------
------  PUT/:challengeID
+-----  PATCH/:challengeID
 ----------------------------------------------------------------------------------------------------------------
 */
-router.put("/:challengeId", async (req, res, next) => {
+router.patch("/:challengeId", async (req, res, next) => {
   try {
     const {
       id,
