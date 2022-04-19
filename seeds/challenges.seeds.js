@@ -8,11 +8,16 @@ const Challenge = require("../models/Challenge.model");
 const Comment = require("../models/Comment.model");
 const Point = require("../models/Point.model");
 
-// ℹ️ Sets the MongoDB URI for our app to have access to it.
-// If no env has been set, we dynamically set it to whatever the folder name was upon the creation of the app
+// ℹ️ Gets access to environment variables/settings
+// https://www.npmjs.com/package/dotenv
+require("dotenv/config");
+// require('dotenv').config();
+const {MONGO_URI} = require("../utils/consts");
 
-const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost/challengr-v2";
 
+
+// const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost/challengr-v2";
+console.log('MONGO_URI', MONGO_URI)
 const users = [
   {
     username: "alexandre",

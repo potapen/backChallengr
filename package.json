@@ -24,6 +24,7 @@
     "express-jwt": "^1.2.0",
     "express-session": "^1.17.2",
     "hbs": "^4.2.0",
+    "heroku": "^7.60.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.8",
     "morgan": "^1.10.0",
