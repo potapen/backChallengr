@@ -28,8 +28,8 @@ const MongoStore = require("connect-mongo");
 const cors = require("cors");
 
 // Connects the mongo uri to maintain the same naming structure
-// const {MONGO_URI} = require("../utils/consts");
-const MONGO_URI = require("../utils/consts");
+// const MONGO_URI = require("../utils/consts");
+const {MONGO_URI} = require("../utils/consts");
 const app = require("../app");
 
 // Middleware configuration

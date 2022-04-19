@@ -6,8 +6,11 @@ require("dotenv").config();
 // ℹ️ Sets the MongoDB URI for our app to have access to it.
 // If no env has been set, we dynamically set it to whatever the folder name was upon the creation of the app
 
-const MONGO_URI = require("../utils/consts");
-// const {MONGO_URI} = require("../utils/consts");
+// const MONGO_URI = require("../utils/consts");
+const {MONGO_URI} = require("../utils/consts");
+console.log('---------------------------------------------------------------')
+console.log("MONGO_URI", MONGO_URI)
+console.log("typeof MONGO_URI", typeof MONGO_URI)
 
 mongoose
   .connect(MONGO_URI)
