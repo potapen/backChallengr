@@ -67,12 +67,18 @@ module.exports = (app) => {
   );
 
   // ADD CORS MIDDLEWARE INSIDE module.exports TO ALLOW CROSS-ORIGIN INTERACTION:
+  // app.use(
+  //   cors({
+  //     origin: ["http://localhost:3000"], // <== URL of our future React app
+  //   })
+  // );
   app.use(
     cors({
-      origin: ["http://localhost:3000"], // <== URL of our future React app
+      origin: process.env.FRONTEND_URL,  
+      credentials: true
     })
   );
-
+  
   //declare a global middleware used in all routes
   const globalParam = require("../middleware/globalParam");
   app.use(globalParam);

@@ -10,7 +10,7 @@ require("dotenv").config();
 const {MONGO_URI} = require("../utils/consts");
 console.log('---------------------------------------------------------------')
 console.log("MONGO_URI", MONGO_URI)
-console.log("typeof MONGO_URI", typeof MONGO_URI)
+console.log("process.env.FRONTEND_URL", process.env.FRONTEND_URL)
 
 mongoose
   .connect(MONGO_URI)
