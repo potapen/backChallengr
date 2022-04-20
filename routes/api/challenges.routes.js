@@ -5,9 +5,8 @@ const League = require("../../models/League.model");
 const User = require("../../models/User.model");
 const mongoose = require("mongoose");
 const isLoggedIn = require("../../middleware/isLoggedIn");
-const getUser = require('../../middleware/getUser');
+const getUser = require("../../middleware/getUser");
 /* GET home page */
-
 
 /*
 ----------------------------------------------------------------------------------------------------------------
@@ -17,14 +16,15 @@ for a specific league : http://localhost:5005/api/challenges
 ----------------------------------------------------------------------------------------------------------------
 */
 
-router.get("/",getUser, async (req, res, next) => {
+router.get("/", getUser, async (req, res, next) => {
   try {
     //if there a league in the query, we can show all the challenges of that league
     const { leagueId } = req.query;
     if (leagueId) {
       const league = await League.findById(leagueId);
       let challenges = [];
-      if (league.members.includes(req.user._id)) { //we check that the user is part of the league
+      if (league.members.includes(req.user._id)) {
+        //we check that the user is part of the league
         challenges = await Challenge.find({ league })
           .sort({ createdAt: -1 })
           .populate("league game contenders winners");
@@ -32,9 +32,10 @@ router.get("/",getUser, async (req, res, next) => {
           challenges,
         };
         res.json(data);
-      }
-      else{
-        res.status(401).send('unauthorized, you are not part of the league requested');
+      } else {
+        res
+          .status(401)
+          .send("unauthorized, you are not part of the league requested");
       }
     } else {
       const leagues = await League.find({
@@ -57,30 +58,53 @@ router.get("/",getUser, async (req, res, next) => {
 
 /*
 ----------------------------------------------------------------------------------------------------------------
+-----  ONGOING
+----------------------------------------------------------------------------------------------------------------
+*/
+router.get("/ongoing", getUser, async (req, res, next) => {
+  try {
+    challenges = await Challenge.find({
+      contenders: req.user._id,
+      isCompleted: false,
+    })
+      .sort({ createdAt: -1 })
+      .populate("league game contenders winners");
+
+    res.json({ challenges });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+/*
+----------------------------------------------------------------------------------------------------------------
 -----  GET a single challenge from its id
 http://localhost:5005/api/challenges/6257d7a7e8b2c54dbd502d30
 ----------------------------------------------------------------------------------------------------------------
 */
 
-router.get("/:challengeId",getUser, async (req, res, next) => {
+router.get("/:challengeId", getUser, async (req, res, next) => {
   try {
     //if there a league in the query, we can show all the challenges of that league
     const { challengeId } = req.params;
 
-    const challenge = await Challenge.findById(challengeId)
-    console.log('challenge', challenge);
+    const challenge = await Challenge.findById(challengeId);
+    console.log("challenge", challenge);
 
-    if (challenge.contenders.includes(req.user._id)) { //we check that the user is part of the challenge
+    if (challenge.contenders.includes(req.user._id)) {
+      //we check that the user is part of the challenge
       //we populate afterwards to prevent breaking the check if the if
-      await challenge.populate('league game contenders winners');
+      await challenge.populate("league game contenders winners");
       const data = {
-        challenge
+        challenge,
       };
       res.json(data);
+    } else {
+      res
+        .status(401)
+        .send("unauthorized, you are not part of the challenge requested");
     }
-    else{
-      res.status(401).send('unauthorized, you are not part of the challenge requested');
-    }  
   } catch (error) {
     console.error(error);
     next(error);
@@ -93,19 +117,19 @@ router.get("/:challengeId",getUser, async (req, res, next) => {
 */
 
 router.post("/", async (req, res, next) => {
-  console.log('inside post to create')
+  console.log("inside post to create");
   try {
     const { league, game, contenders } = req.body;
-    const challengeToCreate = { 
+    const challengeToCreate = {
       league,
       game,
       contenders,
-      isCompleted:false
+      isCompleted: false,
     };
-    console.log('challengeToCreate', challengeToCreate)
+    console.log("challengeToCreate", challengeToCreate);
     const challengeCreated = await Challenge.create(challengeToCreate);
     // res.redirect("/");
-    res.json(challengeCreated)
+    res.json(challengeCreated);
   } catch (error) {
     console.error(error);
     next(error);
@@ -117,16 +141,9 @@ router.post("/", async (req, res, next) => {
 -----  PATCH/:challengeID
 ----------------------------------------------------------------------------------------------------------------
 */
-router.patch("/:challengeId", async (req, res, next) => {
+router.patch("/:challengeId", getUser, async (req, res, next) => {
   try {
-    const {
-      id,
-      contenders,
-      league,
-      game,
-      winners,
-      isCompleted,
-    } = req.body;
+    const { id, contenders, league, game, winners, isCompleted } = req.body;
     const challengeToEdit = {
       contenders,
       league,
@@ -158,25 +175,6 @@ router.delete("/:challengeId", async (req, res, next) => {
     const challengeDeleted = await Challenge.findByIdAndDelete(challengeId);
     // res.redirect("/");
     res.json(challengeDeleted);
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-});
-
-
-/*
-----------------------------------------------------------------------------------------------------------------
------  ONGOING
-----------------------------------------------------------------------------------------------------------------
-*/
-router.get("/ongoing", async (req, res, next) => {
-  try {
-    challenges = await Challenge.find({ contenders: req.user,isCompleted:false})
-    .sort({ createdAt: -1 })
-    .populate("league game contenders winners");
-
-    res.json();
   } catch (error) {
     console.error(error);
     next(error);
