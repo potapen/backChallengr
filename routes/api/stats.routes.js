@@ -194,17 +194,19 @@ router.get(
       const profileId = req.params.profileId;
       const userLeaguesIds = req.userLeaguesIds;
       const statsPerLeague = [];
-      console.log("profileId",profileId)
+      console.log("profileId", profileId);
 
       for (let i = 0; i < userLeaguesIds.length; i++) {
         const leagueId = userLeaguesIds[i];
 
+        const league = await League.findById(leagueId).populate("members");
         const countPerLeague = await getCountPerLeague(leagueId);
         const countPerUser = await getCountPerUser(leagueId, profileId);
         const countPerWinner = await getCountPerWinner(leagueId, profileId);
         const fullRankingPerLeague = await getFullRankingPerLeague(leagueId);
 
         statsPerLeague.push({
+          league,
           countPerLeague,
           countPerUser,
           countPerWinner,
