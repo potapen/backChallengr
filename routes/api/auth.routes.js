@@ -93,10 +93,10 @@ router.post("/login", (req, res, next) => {
 
       if (passwordCorrect) {
         // Deconstruct the user object to omit the password
-        const { _id, email, username } = foundUser;
+        const { _id, email, username, pictureUrl } = foundUser;
 
         // Create an object that will be set as the token payload
-        const payload = { _id, email, username };
+        const payload = { _id, email, username, pictureUrl };
 
         // Create and sign the token
         const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
@@ -107,10 +107,14 @@ router.post("/login", (req, res, next) => {
         // Send the token as the response
         res.status(200).json({ authToken: authToken });
       } else {
-        res.status(401).json({ message: "Unable to authenticate the user, wrong password" });
+        res
+          .status(401)
+          .json({ message: "Unable to authenticate the user, wrong password" });
       }
     })
-    .catch((err) => res.status(500).json({ message: "Login: Internal Server Error" }));
+    .catch((err) =>
+      res.status(500).json({ message: "Login: Internal Server Error" })
+    );
 });
 
 router.get("/logout", isAuthenticated, (req, res) => {

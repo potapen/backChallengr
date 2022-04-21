@@ -54,6 +54,9 @@ router.post(
           crop: "fill",
         });
         newLeague.imageUrl = newImageUrl;
+      } else {
+        newLeague.imageUrl =
+          "https://res.cloudinary.com/dwfrbljbo/image/upload/v1648648579/challengr/i7xfdmnxgwaf7yv0qogm.jpg";
       }
 
       // Add current user as the first member
@@ -161,6 +164,15 @@ router.patch(
   async (req, res, next) => {
     try {
       const league = req.league;
+      if (league.members.length === 1) {
+        console.log("Last member wants to leave");
+        res.status(401).send({
+          message:
+            "You cannot leave a league where you are the only member left. Please delete the league instead.",
+        });
+        return;
+      }
+      console.log("Let's keep going");
       league.members = league.members.filter(
         (member) => !member.equals(req.user._id)
       );
@@ -183,6 +195,7 @@ router.patch("/join", getUser, async (req, res, next) => {
     });
     if (!league) {
       res.status(401).send("Invite key was already used or not valid");
+      return;
     }
     league.members.push(req.user._id);
     joinedLeague = await League.findByIdAndUpdate(inviteKey, league, {

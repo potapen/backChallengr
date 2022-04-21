@@ -6,6 +6,7 @@ const User = require("../../models/User.model");
 const mongoose = require("mongoose");
 const isLoggedIn = require("../../middleware/isLoggedIn");
 const getUser = require("../../middleware/getUser");
+const Point = require("../../models/Point.model");
 /* GET home page */
 
 /*
@@ -126,9 +127,12 @@ router.post("/", async (req, res, next) => {
       contenders,
       isCompleted: false,
     };
-    console.log("challengeToCreate", challengeToCreate);
+
+    // Set points
+    const point = await Point.findOne({ league: league, game: game });
+    challengeToCreate.points = point.points;
+
     const challengeCreated = await Challenge.create(challengeToCreate);
-    // res.redirect("/");
     res.json(challengeCreated);
   } catch (error) {
     console.error(error);
