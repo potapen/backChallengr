@@ -23,6 +23,7 @@ router.get("/", getUser, async (req, res, next) => {
     const { leagueId } = req.query;
     if (leagueId) {
       const league = await League.findById(leagueId);
+      console.log('if league', league)
       let challenges = [];
       if (league.members.includes(req.user._id)) {
         //we check that the user is part of the league
@@ -39,10 +40,12 @@ router.get("/", getUser, async (req, res, next) => {
           .send("unauthorized, you are not part of the league requested");
       }
     } else {
+  
       const leagues = await League.find({
         members: req.user._id,
       });
-      const challenges = await Challenge.find({ leagues })
+      console.log('else leagues', leagues)
+      const challenges = await Challenge.find({ league:leagues })
         .sort({ createdAt: -1 })
         .populate("league game contenders winners");
       const data = {
