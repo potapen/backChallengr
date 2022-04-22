@@ -20,21 +20,21 @@ const {MONGO_URI} = require("../utils/consts");
 console.log('MONGO_URI', MONGO_URI)
 const users = [
   {
-    username: "alexandre",//0
+    username: "alexandre",
     email: "alexandre@gmail.com",
     password: "$2b$10$HaYr5pczWlGBayK1XxoYpuJoarEHbmmc3S6/k.T5/JtR8Jh2Fsh3W", // hashed : password
     pictureUrl:
       "http://res.cloudinary.com/dwfrbljbo/image/upload/ar_1.0,c_thumb,g_face,w_0.6,z_0.7/r_max/co_black,e_outline/v1/challengr/kmynmzlrmkc5ifecqtvx",
   },
   {
-    username: "anh",//1
+    username: "anh",
     email: "anh@gmail.com",
     password: "$2b$10$HaYr5pczWlGBayK1XxoYpuJoarEHbmmc3S6/k.T5/JtR8Jh2Fsh3W", // hashed : password
     pictureUrl:
       "http://res.cloudinary.com/dwfrbljbo/image/upload/ar_1.0,c_thumb,g_face,w_0.6,z_0.7/r_max/co_black,e_outline/v1/challengr/fzfv6acsgpi2ab07byb8",
   },
   {
-    username: "brian",//2
+    username: "brian",
     email: "brian@gmail.com",
     password: "$2b$10$HaYr5pczWlGBayK1XxoYpuJoarEHbmmc3S6/k.T5/JtR8Jh2Fsh3W", // hashed : password
     pictureUrl:
@@ -63,26 +63,26 @@ const leagues = [
 
 const games = [
   {
-    name: "Beer pong",//0
+    name: "Beer pong",
     description: "Le jeu du beerpong, classique",
     imageUrl:
       "https://www.jeux-alcool.com/wp-content/uploads/2017/03/beerPong.jpeg",
   },
   {
-    name: "Torse pong",//1
+    name: "Torse pong",
     description: "Utilise ton torse pour mettre la balle dans le gobelet",
     imageUrl:
       "https://i0.wp.com/godrunkyourself.com/wp-content/uploads/2020/04/AdobeStock_137721763-1-1440x960.jpeg",
   },
   {
-    name: "Bird box challenge",//2
+    name: "Bird box challenge",
     description:
       "Ce défi est tiré du film Bird Box sorti le 21 décembre 201880. Il consiste, comme dans le film, à se déplacer les yeux bandés d'un point A à un point B",
     imageUrl:
       "https://d1fmx1rbmqrxrr.cloudfront.net/cnet/i/edit/2019/01/birdbox-netflix-big.jpg",
   },
   {
-    name: "Rock Scissors Paper",//3
+    name: "Rock Scissors Paper",
     description: "The classic one",
     imageUrl:
       "https://cdn-europe1.lanmedia.fr/var/europe1/storage/images/europe1/international/la-recette-pour-gagner-a-pierre-feuille-ciseaux-768904/15409112-1-fre-FR/La-recette-pour-gagner-a-pierre-feuille-ciseaux.jpg",
@@ -90,14 +90,36 @@ const games = [
 ];
 
 const challenges = [
-  {contenders: [], winners: [], isCompleted: true,}, //0
-  {contenders: [], winners: [], isCompleted: true,}, //1
-  {contenders: [], winners: [], isCompleted: true,}, //2
-  {contenders: [], winners: [], isCompleted: true,}, //3
-  {contenders: [], winners: [], isCompleted: false,}, //4
-  {contenders: [], winners: [], isCompleted: false,}, //5
-  {contenders: [], winners: [], isCompleted: true,}, //6
-  {contenders: [], winners: [], isCompleted: true,}, //7
+  {
+    contenders: [],
+    winners: [],
+    isCompleted: true,
+  },
+  {
+    contenders: [],
+    winners: [],
+    isCompleted: true,
+  },
+  {
+    contenders: [],
+    winners: [],
+    isCompleted: true,
+  },
+  {
+    contenders: [],
+    winners: [],
+    isCompleted: true,
+  },
+  {
+    contenders: [],
+    winners: [],
+    isCompleted: false,
+  },
+  {
+    contenders: [],
+    winners: [],
+    isCompleted: false,
+  },
 ];
 
 const comments = [
@@ -224,14 +246,14 @@ async function seedDB() {
   challenges[0].league = leaguesDocs[0]._id;
   challenges[0].game = gamesDoc[0]._id;
   challenges[0].winners.push(usersDoc[1]._id);
-  challenges[0].points = 1;
+  challenges[0].points = 3;
 
   challenges[1].contenders.push(usersDoc[0]._id);
   challenges[1].contenders.push(usersDoc[1]._id);
   challenges[1].league = leaguesDocs[1]._id;
   challenges[1].game = gamesDoc[1]._id;
   challenges[1].winners.push(usersDoc[1]._id);
-  challenges[1].points = 1;
+  challenges[1].points = 20;
 
 
   challenges[2].contenders.push(usersDoc[0]._id);
@@ -240,14 +262,14 @@ async function seedDB() {
   challenges[2].league = leaguesDocs[0]._id;
   challenges[2].game = gamesDoc[0]._id;
   challenges[2].winners.push(usersDoc[0]._id);
-  challenges[2].points = 1;
+  challenges[2].points = 30;
 
   challenges[3].contenders.push(usersDoc[0]._id);
   challenges[3].contenders.push(usersDoc[1]._id);
   challenges[3].league = leaguesDocs[1]._id;
   challenges[3].game = gamesDoc[1]._id;
   challenges[3].winners.push(usersDoc[0]._id);
-  challenges[3].points = 1;
+  challenges[3].points = 40;
 
   challenges[4].contenders.push(usersDoc[0]._id);
   challenges[4].contenders.push(usersDoc[1]._id);
@@ -259,22 +281,6 @@ async function seedDB() {
   challenges[5].contenders.push(usersDoc[1]._id);
   challenges[5].league = leaguesDocs[1]._id;
   challenges[5].game = gamesDoc[1]._id;
-
-  challenges[6].contenders.push(usersDoc[0]._id);
-  challenges[6].contenders.push(usersDoc[1]._id);
-  challenges[6].contenders.push(usersDoc[2]._id);
-  challenges[6].league = leaguesDocs[0]._id;
-  challenges[6].game = gamesDoc[3]._id;
-  challenges[6].winners.push(usersDoc[1]._id);
-  challenges[6].points = 1;
-
-  challenges[7].contenders.push(usersDoc[0]._id);
-  challenges[7].contenders.push(usersDoc[1]._id);
-  challenges[7].contenders.push(usersDoc[2]._id);
-  challenges[7].league = leaguesDocs[0]._id;
-  challenges[7].game = gamesDoc[1]._id;
-  challenges[7].winners.push(usersDoc[1]._id);
-  challenges[7].points = 2;
 
   challengesDocs = await Challenge.insertMany(challenges);
   console.log("Challenges inserted");
