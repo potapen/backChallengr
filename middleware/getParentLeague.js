@@ -7,9 +7,7 @@ module.exports = async (req, res, next) => {
     const id = req.params.pointId;
     try {
       const point = await Point.findById(id);
-      console.log("found point", point);
       const league = await League.findById(point.league);
-      console.log("found league", league);
       req.league = league;
       next();
     } catch {

@@ -16,7 +16,6 @@ const {MONGO_URI} = require("../utils/consts");
 
 
 
-// const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost/challengr-v2";
 console.log('MONGO_URI', MONGO_URI)
 const users = [
   {
@@ -117,7 +116,7 @@ const comments = [
 
 async function connectToDB() {
   return mongoose.connect(MONGO_URI).then((x) => {
-    console.log(
+    (
       `Connected to Mongo! Database name: "${x.connections[0].name}"`
     );
   });

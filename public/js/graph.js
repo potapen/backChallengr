@@ -1,5 +1,3 @@
-console.log("this is graph.js");
-
 let GlobalLeagueID; //leagueID is a variable set in leagueSelectClick callback of an event listener. I use GlobalLeagueID to make leagueID persist out of the function
 // let serverURL = '' //not used annymore
 
@@ -141,10 +139,6 @@ Not used anymore
 }
 window.addEventListener("DOMContentLoaded", async (event) => {
   //otherwise the DOM is not loaded and menuButton returns null
-  // const onLocalComputer = await checkIfLocalComputer()
-  // serverURL = onLocalComputer?'http://localhost:3000':'https://ironhackchallengr.herokuapp.com'
-  // console.log('serverURL is :', serverURL)
-  // console.log('onLocalComputer', onLocalComputer)
   const nameSelectElt = document.querySelector("#nameSelect");
   if (nameSelectElt) {
     //we draw empty chart first
@@ -157,7 +151,6 @@ window.addEventListener("DOMContentLoaded", async (event) => {
     When we click on the dropdown selector of league, we fill the line chart with data from the league
     */
     const leagueSelectClick = async (event) => {
-      console.log("inside leagueSelectClick");
       const leagueID = leagueSelectElt.value;
       if (leagueID) {
         //make a check otherwise the below code will try to run in other views

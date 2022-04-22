@@ -59,8 +59,7 @@ router.post(
 
       res.json({ newGameDoc });
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );
@@ -102,8 +101,7 @@ router.delete("/:id", async (req, res, next) => {
     await Game.findByIdAndDelete(id);
     res.status(200).send("Successfully deleted the game");
   } catch (error) {
-    console.log(error);
-    next();
+    next(error);
   }
 });
 

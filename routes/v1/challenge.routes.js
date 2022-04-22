@@ -28,7 +28,6 @@ router.get("/list", isLoggedIn, async (req, res, next) => {
       const data = {
         challenges,
       };
-      console.log("---------------------------------------- data: ", data);
       res.render("challenge/listWithLeagueID", data);
     } else {
       const leagues = await League.find({
@@ -40,9 +39,8 @@ router.get("/list", isLoggedIn, async (req, res, next) => {
       res.render("challenge/list", data);
     }
   } catch (error) {
-    console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee get /list");
     console.error(error);
-    next();
+    next(error);
   }
 });
 
@@ -54,7 +52,6 @@ router.get("/list", isLoggedIn, async (req, res, next) => {
 router.get("/create", isLoggedIn, async (req, res, next) => {
   try {
     //if there a league in the query, we can show the right options for that league
-    console.log("req.query: ", req.query);
     const { league } = req.query;
     if (league) {
       const games = await Game.find({
@@ -84,12 +81,9 @@ router.get("/create", isLoggedIn, async (req, res, next) => {
 
 router.post("/create", async (req, res, next) => {
   try {
-    console.log("req.body :", req.body);
     const { league, game, users, stake } = req.body;
     const challengeToCreate = { league, game, contenders: users, stake };
-    console.log("challengeToCreate: ", challengeToCreate);
     const challengeCreated = await Challenge.create(challengeToCreate);
-    console.log("challengeCreated: ", challengeCreated);
     res.redirect("/");
   } catch (error) {
     console.error(error);
@@ -144,7 +138,6 @@ router.get("/edit/:challengeID", async (req, res, next) => {
       .populate("winners")
       .populate("stake")
       .populate("isCompleted");
-    // console.log('---------------------------challengeToEdit: ',challengeToEdit)
 
     const usersContender = await User.find(); //pas besoin de .lean()...c'est magigue...
     usersContender.forEach((person1) => {
@@ -202,12 +195,9 @@ router.get("/edit/:challengeID", async (req, res, next) => {
       games,
       challenge: challengeToEdit,
     };
-    console.log("-----------------------------------------data: ", data);
     res.render("challenge/edit", data);
   } catch (error) {
-    console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee get /edit/:challengeID");
-    console.error(error);
-    next();
+    next(error);
   }
 });
 /*
@@ -225,10 +215,6 @@ router.get("/update/:challengeID", async (req, res, next) => {
       .populate("winners")
       .populate("stake")
       .populate("isCompleted");
-    console.log(
-      "---------------------------challengeToEdit: ",
-      challengeToEdit
-    );
 
     const contenders = challengeToEdit.contenders;
 
@@ -236,12 +222,9 @@ router.get("/update/:challengeID", async (req, res, next) => {
       contenders,
       challenge: challengeToEdit,
     };
-    console.log("-----------------------------------------data: ", data);
     res.render("challenge/update", data);
   } catch (error) {
-    console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee get /edit/:challengeID");
-    console.error(error);
-    next();
+    next(error);
   }
 });
 /*
@@ -252,15 +235,11 @@ router.get("/update/:challengeID", async (req, res, next) => {
 router.get("/delete/:challengeID", async (req, res, next) => {
   try {
     const { challengeID } = req.params;
-    console.log("---------------------------challengeID: ", challengeID);
     const challenge = await Challenge.findById(challengeID);
-    console.log("--------------------------------challenge:", challenge);
     data = { challenge };
     res.render("challenge/delete", data);
   } catch (error) {
-    console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee get /delete/:challengeID");
-    console.error(error);
-    next();
+    next(error);
   }
 });
 

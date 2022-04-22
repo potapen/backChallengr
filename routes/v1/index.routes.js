@@ -6,10 +6,6 @@ const router = require("express").Router();
 
 /* GET home page */
 router.get("/", isLoggedIn, async (req, res, next) => {
-  console.log(
-    "---------------------------------------------:",
-    process.env.DEFAULT_PROFILE
-  );
   try {
     let hasNoLeague = false;
     const league = await League.findOne({
@@ -32,12 +28,10 @@ router.get("/", isLoggedIn, async (req, res, next) => {
     ongoingChallenges.forEach((challenge) => {
       challenge.createdAt = challenge.createdAt.toLocaleDateString();
     });
-    console.log(ongoingChallenges);
 
     res.render("index", { hasNoLeague, ongoingChallenges });
   } catch (error) {
-    console.log(error);
-    next();
+    next(error);
   }
 });
 

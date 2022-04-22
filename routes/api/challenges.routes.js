@@ -23,7 +23,6 @@ router.get("/", getUser, async (req, res, next) => {
     const { leagueId } = req.query;
     if (leagueId) {
       const league = await League.findById(leagueId);
-      console.log('if league', league)
       let challenges = [];
       if (league.members.includes(req.user._id)) {
         //we check that the user is part of the league
@@ -44,7 +43,6 @@ router.get("/", getUser, async (req, res, next) => {
       const leagues = await League.find({
         members: req.user._id,
       });
-      console.log('else leagues', leagues)
       const challenges = await Challenge.find({ league:leagues })
         .sort({ createdAt: -1 })
         .populate("league game contenders winners");
@@ -94,7 +92,6 @@ router.get("/:challengeId", getUser, async (req, res, next) => {
     const { challengeId } = req.params;
 
     const challenge = await Challenge.findById(challengeId);
-    console.log("challenge", challenge);
 
     if (challenge.contenders.includes(req.user._id)) {
       //we check that the user is part of the challenge
@@ -121,7 +118,6 @@ router.get("/:challengeId", getUser, async (req, res, next) => {
 */
 
 router.post("/", async (req, res, next) => {
-  console.log("inside post to create");
   try {
     const { league, game, contenders } = req.body;
     const challengeToCreate = {

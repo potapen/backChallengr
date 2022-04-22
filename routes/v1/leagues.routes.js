@@ -62,8 +62,7 @@ router.post(
 
       res.redirect(`/leagues/${newLeagueDoc._id}/invite`);
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );
@@ -98,15 +97,13 @@ router.post(
         gravity: "faces",
         crop: "fill",
       });
-      console.log(newImageUrl);
       if (newImageUrl) {
         newLeague.imageUrl = newImageUrl;
       }
       await League.findByIdAndUpdate(id, newLeague);
       res.redirect(`/leagues`);
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );
@@ -114,19 +111,16 @@ router.post(
 router.get("/:id/delete", isLoggedIn, async (req, res, next) => {
   try {
     const id = req.params.id;
-    console.log(id);
     const league = await League.findByIdAndDelete(id);
     res.redirect("/leagues");
   } catch (error) {
-    console.log(error);
-    next();
+    next(error);
   }
 });
 
 router.get("/:id/leave", isLoggedIn, async (req, res, next) => {
   try {
     const id = req.params.id;
-    console.log(id);
     const league = await League.findById(id);
     league.members = league.members.filter(
       (member) => !member.equals(req.session.user._id)
@@ -135,8 +129,7 @@ router.get("/:id/leave", isLoggedIn, async (req, res, next) => {
 
     res.redirect("/leagues");
   } catch (error) {
-    console.log(error);
-    next();
+    next(error);
   }
 });
 
@@ -146,8 +139,7 @@ router.get("/:id/invite", isLoggedIn, async (req, res, next) => {
     const league = await League.findById(id);
     res.render("leagues/invite-league", { league });
   } catch (error) {
-    console.log(error);
-    next();
+    next(error);
   }
 });
 
@@ -155,19 +147,16 @@ router.get("/join", isLoggedIn, async (req, res, next) => {
   try {
     res.render("leagues/join-league");
   } catch (error) {
-    console.log(error);
-    next();
+    next(error);
   }
 });
 
 router.get("/join/:id", isLoggedIn, async (req, res, next) => {
   try {
     const inviteKey = req.params.id;
-    console.log(inviteKey);
     res.render("leagues/join-league", { inviteKey });
   } catch (error) {
-    console.log(error);
-    next();
+    next(error);
   }
 });
 
@@ -183,8 +172,7 @@ router.post("/join", isLoggedIn, async (req, res, next) => {
 
     res.redirect("/");
   } catch (error) {
-    console.log(error);
-    next();
+    next(error);
   }
 });
 
