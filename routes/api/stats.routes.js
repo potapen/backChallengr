@@ -179,7 +179,6 @@ router.get(
 
       res.json(allGames);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -219,8 +218,7 @@ router.get(
 
       res.json({ statsPerLeague });
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );

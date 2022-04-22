@@ -2,7 +2,6 @@ const router = require("express").Router();
 
 const League = require("../../models/League.model");
 const Game = require("../../models/Game.model");
-const Challenge = require("../../models/Challenge.model");
 const Point = require("../../models/Point.model");
 const User = require("../../models/User.model");
 const getUser = require("../../middleware/getUser");
@@ -80,8 +79,7 @@ router.post(
 
       res.status(201).json({ newLeagueDoc });
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );
@@ -127,8 +125,7 @@ router.put(
       );
       res.json({ updatedLeagueDoc });
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );
@@ -140,7 +137,6 @@ router.patch(
   isLeagueMember,
   async (req, res, next) => {
     try {
-      console.log("hello");
       const updatedUser = await User.findByIdAndUpdate(
         req.user._id,
         {
@@ -150,8 +146,7 @@ router.patch(
       );
       res.json({ updatedUser });
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );
@@ -165,14 +160,12 @@ router.patch(
     try {
       const league = req.league;
       if (league.members.length === 1) {
-        console.log("Last member wants to leave");
         res.status(401).send({
           message:
             "You cannot leave a league where you are the only member left. Please delete the league instead.",
         });
         return;
       }
-      console.log("Let's keep going");
       league.members = league.members.filter(
         (member) => !member.equals(req.user._id)
       );
@@ -180,8 +173,7 @@ router.patch(
 
       res.status(200).send("Successfully left the league");
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );
@@ -204,8 +196,7 @@ router.patch("/join", getUser, async (req, res, next) => {
 
     res.status(200).send({ joinedLeague });
   } catch (error) {
-    console.log(error);
-    next();
+    next(error);
   }
 });
 
@@ -215,8 +206,7 @@ router.delete("/:leagueId", getUser, isLeagueMember, async (req, res, next) => {
     await League.findByIdAndDelete(req.league._id);
     res.status(200).send("Successfully deleted the league");
   } catch (error) {
-    console.log(error);
-    next();
+    next(error);
   }
 });
 

@@ -16,8 +16,7 @@ router.get("/", isLoggedIn, async (req, res, next) => {
     });
     res.render("profile/view-profile", { user, leagues });
   } catch (error) {
-    console.log(error);
-    next();
+    next(error);
   }
 });
 
@@ -63,8 +62,7 @@ router.post(
       req.session.user = user;
       res.redirect(`/profile`);
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );

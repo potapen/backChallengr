@@ -86,8 +86,7 @@ router.patch(
 
       res.status(201).json({ updatedPointDoc, updatedChallengesDoc });
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );

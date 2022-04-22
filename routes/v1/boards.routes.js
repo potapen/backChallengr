@@ -48,7 +48,6 @@ router.get("/:id", isLoggedIn, async (req, res, next) => {
           },
         },
       ]);
-      // console.log('------------------------countPerLeague:', countPerLeague)
       countPerLeague = countPerLeague[0];
       countPerLeague = await League.populate(countPerLeague, {
         path: "_id",
@@ -203,8 +202,7 @@ router.get("/:id", isLoggedIn, async (req, res, next) => {
 
     res.render("boards/main", { user, statsPerLeague });
   } catch (error) {
-    console.log(error);
-    next();
+    next(error);
   }
 });
 

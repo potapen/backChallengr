@@ -68,8 +68,7 @@ router.post(
 
       res.redirect("/games");
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );
@@ -136,8 +135,7 @@ router.get("/:id/delete", async (req, res, next) => {
     const game = await Game.findByIdAndDelete(id);
     res.redirect("/games");
   } catch (error) {
-    console.log(error);
-    next();
+    next(error);
   }
 });
 

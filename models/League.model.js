@@ -14,9 +14,6 @@ const leagueSchema = new Schema(
   }
 );
 
-// schema.post('remove', function(doc) {
-//   console.log('%s has been removed', doc._id);
-// });
 
 const League = model("League", leagueSchema);
 

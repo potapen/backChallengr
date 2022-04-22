@@ -27,7 +27,6 @@ const getCountPerLeague = async (leagueId) => {
 
 const getCountPerUser = async (leagueId, profileId) => {
   const profile = await User.findById(profileId);
-  console.log("profile", profile);
 
   let countPerUser = await Challenge.aggregate([
     {

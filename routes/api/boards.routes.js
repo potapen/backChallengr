@@ -38,8 +38,7 @@ router.get(
 
       res.json({ statsPerLeague });
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );
