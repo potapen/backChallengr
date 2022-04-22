@@ -2,6 +2,7 @@ const router = require("express").Router();
 
 const Game = require("../../models/Game.model");
 const League = require("../../models/League.model");
+const Point = require("../../models/Point.model");
 const fileUploader = require("../../config/cloudinary.config");
 const cloudinary = require("cloudinary").v2;
 
@@ -47,6 +48,14 @@ router.post(
           "https://res.cloudinary.com/dwfrbljbo/image/upload/v1648648579/challengr/i7xfdmnxgwaf7yv0qogm.jpg";
       }
       newGameDoc = await Game.create(newGame);
+
+      // Set new Points for the new game
+      const leagues = await League.find();
+      await Promise.all(
+        leagues.map((league) => {
+          return Point.create({ game: newGameDoc._id, league: league._id });
+        })
+      );
 
       res.json({ newGameDoc });
     } catch (error) {
