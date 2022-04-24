@@ -16,8 +16,8 @@ router.get("/", getUser, async (req, res, next) => {
       members: req.user._id,
     }).populate("members");
     res.json({ leagues });
-  } catch {
-    next();
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -26,8 +26,8 @@ router.get("/:leagueId", getUser, isLeagueMember, async (req, res, next) => {
   try {
     const league = await League.findById(req.league._id).populate("members");
     res.json({ league });
-  } catch {
-    next();
+  } catch (error) {
+    next(error);
   }
 });
 
