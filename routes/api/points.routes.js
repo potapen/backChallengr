@@ -13,8 +13,8 @@ router.get("/:pointId", async (req, res, next) => {
     const id = req.params.pointId;
     const point = await Point.findById(id).populate("game league");
     res.json({ point });
-  } catch {
-    next();
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -30,7 +30,7 @@ router.get(
       }).populate("game");
       res.json({ points });
     } catch {
-      next();
+      next(error);
     }
   }
 );
@@ -48,8 +48,8 @@ router.get("/game/:gameId", getUser, async (req, res, next) => {
     }).populate("league");
 
     res.json({ points });
-  } catch {
-    next();
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -86,8 +86,7 @@ router.patch(
 
       res.status(201).json({ updatedPointDoc, updatedChallengesDoc });
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );

@@ -2,7 +2,6 @@ const router = require("express").Router();
 
 const League = require("../../models/League.model");
 const Game = require("../../models/Game.model");
-const Challenge = require("../../models/Challenge.model");
 const Point = require("../../models/Point.model");
 const User = require("../../models/User.model");
 const getUser = require("../../middleware/getUser");
@@ -17,8 +16,8 @@ router.get("/", getUser, async (req, res, next) => {
       members: req.user._id,
     }).populate("members");
     res.json({ leagues });
-  } catch {
-    next();
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -27,8 +26,8 @@ router.get("/:leagueId", getUser, isLeagueMember, async (req, res, next) => {
   try {
     const league = await League.findById(req.league._id).populate("members");
     res.json({ league });
-  } catch {
-    next();
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -80,8 +79,7 @@ router.post(
 
       res.status(201).json({ newLeagueDoc });
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );
@@ -127,8 +125,7 @@ router.put(
       );
       res.json({ updatedLeagueDoc });
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );
@@ -150,8 +147,7 @@ router.patch(
       );
       res.json({ updatedUser });
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );
@@ -180,8 +176,7 @@ router.patch(
 
       res.status(200).send("Successfully left the league");
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );
@@ -204,8 +199,7 @@ router.patch("/join", getUser, async (req, res, next) => {
 
     res.status(200).send({ joinedLeague });
   } catch (error) {
-    console.log(error);
-    next();
+    next(error);
   }
 });
 

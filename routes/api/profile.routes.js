@@ -49,8 +49,7 @@ router.put(
 
       res.json({ updatedUserDoc });
     } catch (error) {
-      console.log(error);
-      next();
+      next(error);
     }
   }
 );
@@ -60,8 +59,7 @@ router.delete("/", getUser, async (req, res, next) => {
     await User.findByIdAndDelete(req.user._id);
     res.status(200).send("Successfully deleted the user");
   } catch (error) {
-    console.log(error);
-    next();
+    next(error);
   }
 });
 
